@@ -104,21 +104,24 @@
 
         <!-- نوار ناوبری -->
         <nav class="card flex justify-between items-center mb-8 sticky top-4 z-10 backdrop-blur-md bg-white/70">
-            <div class="flex items-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-3 sm:gap-6">
                 <div class="bg-slate-100 p-2 rounded-full">
-                    <!-- آیکون پروفایل کاربر: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
+                    <!-- آیکون پروفایل کاربر -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <a href="#about" class="font-semibold text-blue-600 border-b-2 border-blue-600 pb-1 text-sm sm:text-base">درباره من</a>
-                <a href="#resume" class="font-semibold text-slate-500 hover:text-blue-600 transition-colors text-sm sm:text-base">رزومه</a>
-                <a href="#portfolio" class="font-semibold text-slate-500 hover:text-blue-600 transition-colors text-sm sm:text-base">نمونه‌کارها</a>
+                <!-- تغییر در gap و font-size برای جلوگیری از شکستن خط در موبایل -->
+                <div class="flex items-center gap-3 sm:gap-5 whitespace-nowrap">
+                    <a href="#about" class="font-semibold text-blue-600 border-b-2 border-blue-600 pb-1 text-sm sm:text-base">درباره من</a>
+                    <a href="#resume" class="font-semibold text-slate-500 hover:text-blue-600 transition-colors text-sm sm:text-base">رزومه</a>
+                    <a href="#portfolio" class="font-semibold text-slate-500 hover:text-blue-600 transition-colors text-sm sm:text-base">نمونه‌کارها</a>
+                </div>
             </div>
             <div class="flex items-center gap-3 text-slate-500">
-                <!-- آیکون اشتراک گذاری: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
-                <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                <!-- آیکون دانلود: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
-                <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <!-- آیکون لینک: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
+                <!-- آیکون اشتراک گذاری: در موبایل مخفی می‌شود -->
+                <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <!-- آیکون دانلود: در موبایل مخفی می‌شود -->
+                <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <!-- آیکون لینک -->
                 <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>
             </div>
         </nav>
@@ -143,40 +146,49 @@
                             <h3 class="text-xl font-bold text-slate-900">معرفی</h3>
                             <p class="text-blue-600 font-semibold mt-1">گرافیستی از رشت</p>
                         </div>
-                        <!-- آیکون فلش رو به پایین: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
                         <svg class="w-6 h-6 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     <div class="flex flex-col sm:flex-row items-start gap-6">
                         <p class="text-slate-600 flex-1 leading-relaxed">
                            با اینکه کارشناسی حقوق دارم ولی همیشه علاقمند به هنر و خلق آثاری بودم که دنیای خودم رو با چیزای که بلدم به دنیا ارائه بدم.
                         </p>
-                        <!-- تصویر بخش معرفی: برای تغییر، آدرس تصویر خود را در ویژگی src جایگزین کنید -->
                         <img src="https://s6.uupload.ir/files/untitled-1_z2v.jpg" alt="تصویرسازی" class="w-full sm:w-1/3 rounded-xl">
                     </div>
                 </div>
 
-                <!-- کارت ارتباط با من -->
+                <!-- کارت ارتباط با من (طراحی جدید) -->
                 <div class="card">
                      <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-bold text-slate-900">ارتباط با من</h3>
-                        <!-- آیکون فلش رو به پایین: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
                         <svg class="w-6 h-6 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <a href="#" class="bg-slate-900 hover:bg-slate-800 transition-colors text-white p-4 rounded-xl flex items-center justify-center gap-3">
-                            <!-- آیکون ایمیل -->
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            <span class="text-sm font-medium">ایمیل</span>
+                    <div class="space-y-3">
+                        <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-slate-800 text-white p-2 rounded-full">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                                <span class="font-semibold text-slate-700">ایمیل</span>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
                         </a>
-                        <a href="#" class="bg-gradient-to-br from-purple-500 to-pink-500 hover:opacity-90 transition-opacity text-white p-4 rounded-xl flex items-center justify-center gap-3">
-                            <!-- آیکون اینستاگرام -->
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                            <span class="text-sm font-medium">اینستاگرام</span>
+                        <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-pink-500 text-white p-2 rounded-full">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                </div>
+                                <span class="font-semibold text-slate-700">اینستاگرام</span>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
                         </a>
-                        <a href="#" class="bg-green-500 hover:bg-green-600 transition-colors text-white p-4 rounded-xl flex items-center justify-center gap-3">
-                            <!-- آیکون واتس‌اپ -->
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.31 20.62C8.75 21.41 10.37 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 9.27 20.92 6.83 19.05 4.96C17.18 3.09 14.74 2 12.04 2ZM12.04 3.67C14.24 3.67 16.3 4.5 17.82 6.02C19.34 7.54 20.18 9.6 20.18 11.91C20.18 16.49 16.57 20.1 12.04 20.1C10.53 20.1 9.09 19.72 7.85 19L7.54 18.82L4.44 19.65L5.28 16.62L5.07 16.29C4.24 14.94 3.8 13.45 3.8 11.91C3.8 7.33 7.41 3.67 12.04 3.67ZM17.39 14.88C17.14 15.44 16.15 15.96 15.66 16.08C15.17 16.2 14.54 16.25 14.08 16.08C13.62 15.91 13.03 15.65 12.55 15.34C11.12 14.41 10.03 13.03 9.88 12.81C9.73 12.59 8.94 11.55 8.94 10.7C8.94 9.85 9.51 9.29 9.73 9.07C9.95 8.85 10.27 8.79 10.56 8.79C10.85 8.79 11.07 8.8 11.26 8.81C11.46 8.82 11.63 8.83 11.82 9.32C12.01 9.81 12.5 11.03 12.6 11.18C12.7 11.33 12.76 11.53 12.65 11.7C12.54 11.87 12.48 11.96 12.3 12.13C12.12 12.3 11.96 12.43 11.83 12.55C11.7 12.67 11.55 12.82 11.69 13.06C11.83 13.3 12.31 13.96 12.98 14.58C13.85 15.39 14.65 15.7 14.94 15.82C15.23 15.94 15.51 15.91 15.7 15.7C15.89 15.49 16.14 15.15 16.36 14.85C16.58 14.55 16.83 14.54 17.14 14.65C17.45 14.76 18.49 15.29 18.73 15.41C18.97 15.53 19.12 15.6 19.15 15.71C19.18 15.82 19.18 16.25 18.93 16.5C18.68 16.75 17.64 17.31 17.39 14.88Z"/></svg>
-                            <span class="text-sm font-medium">واتس‌اپ</span>
+                        <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-green-500 text-white p-2 rounded-full">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.31 20.62C8.75 21.41 10.37 21.82 12.04 21.82C17.5 21.82 21.95 17.37 21.95 11.91C21.95 9.27 20.92 6.83 19.05 4.96C17.18 3.09 14.74 2 12.04 2ZM12.04 3.67C14.24 3.67 16.3 4.5 17.82 6.02C19.34 7.54 20.18 9.6 20.18 11.91C20.18 16.49 16.57 20.1 12.04 20.1C10.53 20.1 9.09 19.72 7.85 19L7.54 18.82L4.44 19.65L5.28 16.62L5.07 16.29C4.24 14.94 3.8 13.45 3.8 11.91C3.8 7.33 7.41 3.67 12.04 3.67ZM17.39 14.88C17.14 15.44 16.15 15.96 15.66 16.08C15.17 16.2 14.54 16.25 14.08 16.08C13.62 15.91 13.03 15.65 12.55 15.34C11.12 14.41 10.03 13.03 9.88 12.81C9.73 12.59 8.94 11.55 8.94 10.7C8.94 9.85 9.51 9.29 9.73 9.07C9.95 8.85 10.27 8.79 10.56 8.79C10.85 8.79 11.07 8.8 11.26 8.81C11.46 8.82 11.63 8.83 11.82 9.32C12.01 9.81 12.5 11.03 12.6 11.18C12.7 11.33 12.76 11.53 12.65 11.7C12.54 11.87 12.48 11.96 12.3 12.13C12.12 12.3 11.96 12.43 11.83 12.55C11.7 12.67 11.55 12.82 11.69 13.06C11.83 13.3 12.31 13.96 12.98 14.58C13.85 15.39 14.65 15.7 14.94 15.82C15.23 15.94 15.51 15.91 15.7 15.7C15.89 15.49 16.14 15.15 16.36 14.85C16.58 14.55 16.83 14.54 17.14 14.65C17.45 14.76 18.49 15.29 18.73 15.41C18.97 15.53 19.12 15.6 19.15 15.71C19.18 15.82 19.18 16.25 18.93 16.5C18.68 16.75 17.64 17.31 17.39 14.88Z"/></svg>
+                                </div>
+                                <span class="font-semibold text-slate-700">واتس‌اپ</span>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
                         </a>
                     </div>
                 </div>
