@@ -26,8 +26,13 @@
             background-color: white;
             border-radius: 1rem; /* 16px */
             border: 1px solid #e2e8f0; /* slate-200 */
-            padding: 1.5rem; /* 24px */
+            padding: 1.25rem; /* 20px */
             box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+        }
+        @media (min-width: 640px) {
+            .card {
+                padding: 1.5rem; /* 24px */
+            }
         }
         .tag {
             background-color: #f1f5f9; /* slate-100 */
@@ -63,25 +68,23 @@
 
         <!-- هدر -->
         <header class="flex justify-between items-center mb-8">
-            <h1 class="font-bold text-xl text-slate-900">امیر جهانی</h1>
+            <h1 class="font-bold text-lg sm:text-xl text-slate-900">امیر جهانی</h1>
             <div class="flex items-center gap-4">
                 <span class="hidden md:inline text-slate-500">نمونه کار طراحی گرافیک</span>
-                <!-- آیکون جستجو: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
+                <!-- آیکون جستجو -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
         </header>
 
         <!-- بخش اصلی (Hero) -->
         <section id="portfolio" class="mb-8">
-            <!-- گرید اصلی هدر: تغییر در نسبت ستون‌ها برای بهبود نمایش در موبایل -->
-            <div class="grid grid-cols-5 gap-4 md:gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <!-- بخش لوگو و تگ‌ها -->
-                <div class="col-span-2 flex flex-col justify-between gap-4">
-                    <!-- تغییر در padding و اندازه تصویر برای موبایل -->
-                    <div class="bg-slate-900 rounded-2xl p-4 sm:p-6 flex items-center justify-center aspect-square">
-                        <img src="https://uploadkon.ir/uploads/5ce108_25arrowright-icon-icons-com-61202-copy.svg" alt="فلش" class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
+                <div class="md:col-span-1 flex flex-col justify-between gap-4">
+                    <div class="bg-slate-900 rounded-2xl p-6 flex items-center justify-center aspect-square">
+                        <img src="https://uploadkon.ir/uploads/5ce108_25arrowright-icon-icons-com-61202-copy.svg" alt="فلش" class="w-20 h-20 object-contain">
                     </div>
-                    <div class="flex flex-wrap gap-2 text-xs sm:text-sm text-slate-600">
+                    <div class="flex flex-wrap gap-2 text-sm text-slate-600">
                         <span>#برندینگ</span><span>#لوگو</span>
                         <span>#شبکه‌های_اجتماعی</span><span>#پوستر</span>
                         <span>#بسته‌بندی</span><span>#تصویرسازی</span>
@@ -89,14 +92,13 @@
                     </div>
                 </div>
                 <!-- بخش تصویر نمونه کار -->
-                <div class="col-span-3 rounded-2xl overflow-hidden min-h-[250px] md:min-h-full">
+                <div class="md:col-span-2 rounded-2xl overflow-hidden min-h-[300px] md:min-h-full">
                     <img src="https://s6.uupload.ir/files/screenshot_2025-07-15_at_18-28-37_google_gemini_copy_yfeo.jpg" alt="نمونه کار" class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="text-center mt-6">
                 <a href="#about" class="inline-flex items-center gap-2 text-slate-500 font-medium">
                     مشاهده بیشتر
-                    <!-- آیکون فلش رو به پایین: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-bounce"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
                 </a>
             </div>
@@ -106,10 +108,8 @@
         <nav class="card flex justify-between items-center mb-8 sticky top-4 z-10 backdrop-blur-md bg-white/70">
             <div class="flex items-center gap-3 sm:gap-6">
                 <div class="bg-slate-100 p-2 rounded-full">
-                    <!-- آیکون پروفایل کاربر -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </div>
-                <!-- تغییر در gap و font-size برای جلوگیری از شکستن خط در موبایل -->
                 <div class="flex items-center gap-3 sm:gap-5 whitespace-nowrap">
                     <a href="#about" class="font-semibold text-blue-600 border-b-2 border-blue-600 pb-1 text-sm sm:text-base">درباره من</a>
                     <a href="#resume" class="font-semibold text-slate-500 hover:text-blue-600 transition-colors text-sm sm:text-base">رزومه</a>
@@ -117,11 +117,8 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 text-slate-500">
-                <!-- آیکون اشتراک گذاری: در موبایل مخفی می‌شود -->
                 <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                <!-- آیکون دانلود: در موبایل مخفی می‌شود -->
                 <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <!-- آیکون لینک -->
                 <svg class="w-6 h-6 hover:text-slate-800 transition-colors cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>
             </div>
         </nav>
@@ -131,7 +128,6 @@
             
             <!-- ستون راست (بخش معرفی با تصویر جدید) -->
             <div class="lg:col-span-1 space-y-8">
-                <!-- تصویر جایگزین شده -->
                 <div class="card p-0 overflow-hidden">
                     <img src="https://s6.uupload.ir/files/photofaceswap_copy_ul9t.png" alt="معرفی امیر جهانی" class="w-full h-full object-cover">
                 </div>
@@ -198,7 +194,6 @@
                 <div class="card">
                     <div class="flex justify-between items-start mb-4">
                         <h3 class="text-xl font-bold text-slate-900">آموزش افترافکت</h3>
-                        <!-- آیکون فلش رو به پایین: برای تغییر، کد SVG زیر را با کد آیکون جدید خود جایگزین کنید -->
                         <svg class="w-6 h-6 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     <div class="bg-purple-600 text-white p-4 rounded-lg">
