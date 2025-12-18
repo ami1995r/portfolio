@@ -63,7 +63,27 @@
             opacity: 1;
         }
 
-        /* Fixing overflow issues */
+        /* Horizontal Scroll for Mobile Projects */
+        @media (max-width: 768px) {
+            .mobile-scroll-container {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 1rem;
+                padding-bottom: 2rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-scroll-container::-webkit-scrollbar {
+                display: none;
+            }
+            .project-item {
+                min-width: 85vw;
+                scroll-snap-align: center;
+            }
+        }
+
         .prevent-select {
             -webkit-user-select: none;
             user-select: none;
@@ -110,34 +130,54 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center px-6 pt-20 overflow-hidden">
+    <section class="relative min-h-screen flex items-center px-6 pt-24 md:pt-20 overflow-hidden">
         <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="flex items-center gap-3 mb-6 md:mb-10">
-                <div class="w-8 md:w-12 h-[1px] bg-indigo-500"></div>
-                <span class="text-indigo-400 font-mono tracking-[0.3em] uppercase text-[10px] md:text-xs leading-none">Creative Developer & Designer</span>
-            </div>
-            
-            <h1 class="text-[14vw] md:text-[10rem] font-black leading-[0.85] mb-8 tracking-tighter uppercase break-words">
-                DESIGN <br> 
-                <span class="text-outline">BEYOND</span> <br>
-                LIMITS
-            </h1>
-            
-            <div class="grid lg:grid-cols-12 gap-10 items-end">
-                <div class="lg:col-span-7">
-                    <p class="text-slate-400 text-lg md:text-2xl max-w-xl leading-relaxed font-light">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="lg:col-span-8 order-2 lg:order-1">
+                    <div class="flex items-center gap-3 mb-6 md:mb-10">
+                        <div class="w-8 md:w-12 h-[1px] bg-indigo-500"></div>
+                        <span class="text-indigo-400 font-mono tracking-[0.3em] uppercase text-[10px] md:text-xs leading-none">Creative Developer & Designer</span>
+                    </div>
+                    
+                    <h1 class="text-[12vw] md:text-[8rem] xl:text-[10rem] font-black leading-[0.85] mb-8 tracking-tighter uppercase break-words">
+                        DESIGN <br> 
+                        <span class="text-outline">BEYOND</span> <br>
+                        LIMITS
+                    </h1>
+                    
+                    <p class="text-slate-400 text-lg md:text-2xl max-w-xl leading-relaxed font-light mb-10">
                         تلاقی هنر و تکنولوژی. من فضاهای دیجیتالی می‌سازم که داستانی <span class="text-white font-medium border-b border-indigo-500">فراموش نشدنی</span> را روایت می‌کنند.
                     </p>
+
+                    <div class="flex flex-wrap gap-4 md:gap-8">
+                        <a href="#work" class="w-full md:w-auto text-center bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
+                            اکتشاف پروژه‌ها
+                        </a>
+                    </div>
                 </div>
-                <div class="lg:col-span-5 flex flex-wrap gap-4 md:gap-8">
-                    <a href="#work" class="w-full md:w-auto text-center bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
-                        اکتشاف پروژه‌ها
-                    </a>
+
+                <!-- Profile Image Component -->
+                <div class="lg:col-span-4 order-1 lg:order-2 flex justify-center lg:justify-end">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-[500px] group">
+                        <!-- Background glow -->
+                        <div class="absolute inset-0 bg-indigo-600/20 blur-[60px] rounded-full group-hover:bg-indigo-600/30 transition duration-700"></div>
+                        <!-- Image Container -->
+                        <div class="relative w-full h-full rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" 
+                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
+                                 alt="[عکس پروفایل شما]">
+                            <!-- Overlay Info -->
+                            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest">Available for Hire</p>
+                                <p class="text-lg font-bold">Your Name Here</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Background decorative text (Fixed for Mobile) -->
         <div class="absolute right-[-5%] bottom-[10%] text-[25vw] font-black text-white/[0.02] select-none pointer-events-none prevent-select hidden md:block">
             STORY
         </div>
@@ -146,7 +186,7 @@
     <!-- Work Section -->
     <section id="work" class="py-24 md:py-40 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 gap-6 px-2 md:px-0">
                 <h2 class="text-5xl md:text-8xl font-black tracking-tighter uppercase">منتخب آثار</h2>
                 <div class="hidden md:block text-right">
                     <p class="text-indigo-500 font-mono mb-2 uppercase tracking-widest text-xs">Selected Works</p>
@@ -154,9 +194,10 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10">
+            <!-- Modified Grid for Mobile Scroll -->
+            <div class="mobile-scroll-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10">
                 <!-- Project 1 (Small) -->
-                <div class="lg:col-span-5 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[400px] md:h-[600px]">
+                <div class="project-item lg:col-span-5 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[450px] md:h-[600px]">
                     <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" 
                          class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition duration-700" alt="[تصویر پروژه یک]">
                     <div class="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
@@ -169,7 +210,7 @@
                 </div>
 
                 <!-- Project 2 (Large) -->
-                <div class="lg:col-span-7 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[400px] md:h-[600px]">
+                <div class="project-item lg:col-span-7 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[450px] md:h-[600px]">
                     <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop" 
                          class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition duration-700" alt="[تصویر پروژه دو]">
                     <div class="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
