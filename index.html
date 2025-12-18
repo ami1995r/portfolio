@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پورتفولیو خلاقانه | نسخه نهایی و ریسپانسیو</title>
+    <title>پورتفولیو خلاقانه | نسخه بهینه و فشرده</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -25,8 +25,8 @@
             height: 100%;
             z-index: -1;
             background: 
-                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 50% 50%, rgba(10, 10, 10, 1) 0%, rgba(5, 5, 5, 1) 100%);
         }
 
@@ -37,22 +37,29 @@
         }
 
         .text-outline {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
             color: transparent;
         }
 
-        .project-card {
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @media (hover: hover) {
-            .project-card:hover {
-                transform: translateY(-12px);
-                box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.6);
+        /* Horizontal Scroll Peek Effect */
+        @media (max-width: 768px) {
+            .mobile-scroll-container {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 12px;
+                padding: 0 20px 20px 20px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-scroll-container::-webkit-scrollbar {
+                display: none;
+            }
+            .project-item {
+                min-width: 75vw; /* این باعث می‌شود بخشی از کارت بعدی دیده شود */
+                scroll-snap-align: start;
             }
         }
 
-        /* Custom Mobile Menu Animation */
         #mobile-menu {
             transition: all 0.4s ease-in-out;
             transform: translateY(-100%);
@@ -63,35 +70,10 @@
             opacity: 1;
         }
 
-        /* Horizontal Scroll for Mobile Projects */
-        @media (max-width: 768px) {
-            .mobile-scroll-container {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                gap: 1rem;
-                padding-bottom: 2rem;
-                padding-left: 1rem;
-                padding-right: 1rem;
-                -webkit-overflow-scrolling: touch;
-            }
-            .mobile-scroll-container::-webkit-scrollbar {
-                display: none;
-            }
-            .project-item {
-                min-width: 85vw;
-                scroll-snap-align: center;
-            }
-        }
-
         .prevent-select {
             -webkit-user-select: none;
             user-select: none;
         }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
     </style>
 </head>
 <body class="relative">
@@ -99,21 +81,19 @@
     <div class="mesh-bg"></div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-[100] px-4 md:px-6 py-4 md:py-8">
-        <div class="max-w-7xl mx-auto flex justify-between items-center glass-nav rounded-full px-6 md:px-10 py-3 md:py-4">
-            <a href="#" class="text-xl md:text-2xl font-black tracking-tighter group flex items-center gap-2">
-                <span class="w-3 h-3 bg-indigo-500 rounded-full"></span> ARTIFEX
+    <nav class="fixed w-full z-[100] px-4 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-nav rounded-full px-6 py-3">
+            <a href="#" class="text-xl font-black tracking-tighter flex items-center gap-2">
+                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> ARTIFEX
             </a>
             
-            <!-- Desktop Links -->
-            <div class="hidden md:flex items-center space-x-reverse space-x-10 text-sm font-medium">
-                <a href="#work" class="hover:text-indigo-400 transition tracking-widest uppercase">Works</a>
-                <a href="#services" class="hover:text-indigo-400 transition tracking-widest uppercase">Expertise</a>
-                <a href="#contact" class="bg-white text-black px-6 py-2.5 rounded-full font-bold hover:bg-indigo-600 hover:text-white transition-all">LET'S TALK</a>
+            <div class="hidden md:flex items-center space-x-reverse space-x-8 text-sm font-medium">
+                <a href="#work" class="hover:text-indigo-400 transition uppercase">Works</a>
+                <a href="#services" class="hover:text-indigo-400 transition uppercase">Expertise</a>
+                <a href="#contact" class="bg-white text-black px-5 py-2 rounded-full font-bold hover:bg-indigo-600 hover:text-white transition-all text-xs">LET'S TALK</a>
             </div>
 
-            <!-- Mobile Toggle -->
-            <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+            <button id="menu-toggle" class="md:hidden text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                 </svg>
@@ -121,104 +101,85 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
+    <!-- Mobile Menu -->
     <div id="mobile-menu" class="fixed inset-0 z-[90] bg-black flex flex-col justify-center items-center space-y-8 text-3xl font-black md:hidden">
         <a href="#work" class="mobile-link">WORKS</a>
         <a href="#services" class="mobile-link">SERVICES</a>
         <a href="#contact" class="mobile-link text-indigo-500">CONTACT</a>
-        <button id="close-menu" class="mt-10 text-sm font-mono text-slate-500 underline uppercase">Close</button>
+        <button id="close-menu" class="text-sm font-mono text-slate-500 underline">CLOSE</button>
     </div>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center px-6 pt-24 md:pt-20 overflow-hidden">
+    <section class="relative min-h-[85vh] md:min-h-screen flex items-center px-4 pt-16 overflow-hidden">
         <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
+            <div class="flex flex-row items-center gap-4 md:gap-12">
                 <!-- Text Content -->
-                <div class="lg:col-span-8 order-2 lg:order-1">
-                    <div class="flex items-center gap-3 mb-6 md:mb-10">
-                        <div class="w-8 md:w-12 h-[1px] bg-indigo-500"></div>
-                        <span class="text-indigo-400 font-mono tracking-[0.3em] uppercase text-[10px] md:text-xs leading-none">Creative Developer & Designer</span>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-[1px] bg-indigo-500"></div>
+                        <span class="text-indigo-400 font-mono tracking-widest uppercase text-[9px] md:text-xs">Creative Developer</span>
                     </div>
                     
-                    <h1 class="text-[12vw] md:text-[8rem] xl:text-[10rem] font-black leading-[0.85] mb-8 tracking-tighter uppercase break-words">
+                    <h1 class="text-[10vw] md:text-[8rem] font-black leading-[0.9] mb-4 tracking-tighter uppercase">
                         DESIGN <br> 
-                        <span class="text-outline">BEYOND</span> <br>
-                        LIMITS
+                        <span class="text-outline">BEYOND</span>
                     </h1>
                     
-                    <p class="text-slate-400 text-lg md:text-2xl max-w-xl leading-relaxed font-light mb-10">
-                        تلاقی هنر و تکنولوژی. من فضاهای دیجیتالی می‌سازم که داستانی <span class="text-white font-medium border-b border-indigo-500">فراموش نشدنی</span> را روایت می‌کنند.
+                    <p class="text-slate-400 text-sm md:text-xl max-w-md leading-relaxed font-light mb-6">
+                        تلاقی هنر و تکنولوژی. فضاهای دیجیتالی <span class="text-white border-b border-indigo-500">ماندگار</span>.
                     </p>
 
-                    <div class="flex flex-wrap gap-4 md:gap-8">
-                        <a href="#work" class="w-full md:w-auto text-center bg-white text-black px-10 py-5 rounded-full text-lg font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
-                            اکتشاف پروژه‌ها
-                        </a>
-                    </div>
+                    <a href="#work" class="inline-block bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full text-sm md:text-lg font-bold hover:bg-indigo-600 hover:text-white transition-all shadow-xl">
+                        اکتشاف
+                    </a>
                 </div>
 
-                <!-- Profile Image Component -->
-                <div class="lg:col-span-4 order-1 lg:order-2 flex justify-center lg:justify-end">
-                    <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-[500px] group">
-                        <!-- Background glow -->
-                        <div class="absolute inset-0 bg-indigo-600/20 blur-[60px] rounded-full group-hover:bg-indigo-600/30 transition duration-700"></div>
-                        <!-- Image Container -->
-                        <div class="relative w-full h-full rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" 
-                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
-                                 alt="[عکس پروفایل شما]">
-                            <!-- Overlay Info -->
-                            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                                <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest">Available for Hire</p>
-                                <p class="text-lg font-bold">Your Name Here</p>
-                            </div>
+                <!-- Profile Image (Small and sleek on mobile) -->
+                <div class="w-32 h-44 md:w-80 md:h-[500px] flex-shrink-0">
+                    <div class="relative w-full h-full rounded-2xl md:rounded-[3rem] overflow-hidden border border-white/10 group shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" 
+                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
+                             alt="[عکس پروفایل]">
+                        <div class="absolute bottom-0 inset-x-0 p-3 md:p-6 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-[8px] md:text-xs font-mono text-indigo-400 uppercase">Art Director</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="absolute right-[-5%] bottom-[10%] text-[25vw] font-black text-white/[0.02] select-none pointer-events-none prevent-select hidden md:block">
-            STORY
         </div>
     </section>
 
     <!-- Work Section -->
-    <section id="work" class="py-24 md:py-40 px-6">
+    <section id="work" class="py-12 md:py-24 px-4">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 gap-6 px-2 md:px-0">
-                <h2 class="text-5xl md:text-8xl font-black tracking-tighter uppercase">منتخب آثار</h2>
-                <div class="hidden md:block text-right">
-                    <p class="text-indigo-500 font-mono mb-2 uppercase tracking-widest text-xs">Selected Works</p>
-                    <p class="text-slate-500 max-w-xs text-[10px] tracking-[0.2em] uppercase leading-relaxed">ترکیبی از استراتژی و خلاقیت بصری</p>
-                </div>
+            <div class="flex flex-row justify-between items-end mb-8 md:mb-16">
+                <h2 class="text-3xl md:text-7xl font-black tracking-tighter uppercase">نمونه آثار</h2>
+                <span class="text-[10px] md:text-xs text-indigo-500 font-mono uppercase tracking-widest mb-1">Portfolio 2024</span>
             </div>
 
-            <!-- Modified Grid for Mobile Scroll -->
-            <div class="mobile-scroll-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-10">
-                <!-- Project 1 (Small) -->
-                <div class="project-item lg:col-span-5 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[450px] md:h-[600px]">
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" 
-                         class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition duration-700" alt="[تصویر پروژه یک]">
-                    <div class="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
-                        <span class="self-start px-4 py-1 rounded-full border border-white/20 text-[10px] font-bold uppercase backdrop-blur-md">Branding</span>
-                        <div>
-                            <h3 class="text-3xl md:text-4xl font-black mb-3">نئوم استودیو</h3>
-                            <p class="text-slate-400 text-sm md:text-base line-clamp-2">خلق یک هویت بصری مدرن برای نسل جدید استارتاپ‌ها.</p>
-                        </div>
+            <!-- Horizontal Scroll with Peek Effect on Mobile -->
+            <div class="mobile-scroll-container md:grid md:grid-cols-2 lg:grid-cols-12 md:gap-8">
+                <!-- Project 1 -->
+                <div class="project-item lg:col-span-4 group relative overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-zinc-900 border border-white/5 h-[350px] md:h-[500px]">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 group-hover:opacity-70 transition duration-500" alt="[پروژه ۱]">
+                    <div class="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+                        <h3 class="text-xl md:text-3xl font-black">نئوم استودیو</h3>
                     </div>
                 </div>
 
-                <!-- Project 2 (Large) -->
-                <div class="project-item lg:col-span-7 project-card group relative overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-zinc-900 border border-white/5 h-[450px] md:h-[600px]">
-                    <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop" 
-                         class="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition duration-700" alt="[تصویر پروژه دو]">
-                    <div class="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
-                        <span class="self-start px-4 py-1 rounded-full border border-white/20 text-[10px] font-bold uppercase backdrop-blur-md">Development</span>
-                        <div>
-                            <h3 class="text-3xl md:text-4xl font-black mb-3">پلتفرم آوانگارد</h3>
-                            <p class="text-slate-400 text-sm md:text-base line-clamp-2">توسعه یک سیستم پیچیده با رابط کاربری مینیمال و کاربرپسند.</p>
-                        </div>
+                <!-- Project 2 -->
+                <div class="project-item lg:col-span-4 group relative overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-zinc-900 border border-white/5 h-[350px] md:h-[500px]">
+                    <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 group-hover:opacity-70 transition duration-500" alt="[پروژه ۲]">
+                    <div class="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+                        <h3 class="text-xl md:text-3xl font-black">آوانگارد</h3>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-item lg:col-span-4 group relative overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-zinc-900 border border-white/5 h-[350px] md:h-[500px]">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 group-hover:opacity-70 transition duration-500" alt="[پروژه ۳]">
+                    <div class="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+                        <h3 class="text-xl md:text-3xl font-black">تکنولوژی لوکس</h3>
                     </div>
                 </div>
             </div>
@@ -226,33 +187,23 @@
     </section>
 
     <!-- Services -->
-    <section id="services" class="py-24 md:py-40 bg-zinc-950/40">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-16 md:gap-32">
+    <section id="services" class="py-12 md:py-24 bg-zinc-950/40">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-10 md:gap-20">
                 <div>
-                    <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase leading-none">حوزه‌های <br> تخصص</h2>
-                    <p class="text-slate-400 text-lg md:text-xl leading-relaxed mb-12">
-                        من به جزئیات اهمیت می‌دهم. هدف من خلق محصولاتی است که کاربران عاشق استفاده از آن‌ها باشند.
+                    <h2 class="text-3xl md:text-6xl font-black mb-4 tracking-tighter uppercase leading-none">تخصص‌ها</h2>
+                    <p class="text-slate-400 text-sm md:text-lg leading-relaxed">
+                        خلق محصولات دیجیتال با تمرکز بر جزئیات و تجربه کاربری.
                     </p>
-                    <div class="flex items-center gap-4 text-indigo-500 font-bold group cursor-pointer">
-                        <span>مشاهده تمام خدمات</span>
-                        <span class="group-hover:translate-x-[-10px] transition-transform">←</span>
-                    </div>
                 </div>
-                <div class="space-y-4 md:space-y-6">
-                    <div class="p-8 md:p-10 rounded-[2rem] glass-nav hover:bg-white/5 transition group cursor-default">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-xl md:text-2xl font-black">طراحی رابط کاربری</h4>
-                            <span class="text-indigo-500 font-mono text-sm opacity-50 group-hover:opacity-100">01</span>
-                        </div>
-                        <p class="text-slate-500 text-sm md:text-base">تمرکز بر تجربه کاربر و خلق محیطی بصری و دلنشین.</p>
+                <div class="space-y-3">
+                    <div class="p-6 md:p-8 rounded-2xl glass-nav hover:bg-white/5 transition flex justify-between items-center">
+                        <h4 class="text-lg md:text-xl font-bold">UI/UX Design</h4>
+                        <span class="text-indigo-500 text-xs font-mono">01</span>
                     </div>
-                    <div class="p-8 md:p-10 rounded-[2rem] glass-nav hover:bg-white/5 transition group cursor-default">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-xl md:text-2xl font-black">توسعه فرانت‌اند</h4>
-                            <span class="text-indigo-500 font-mono text-sm opacity-50 group-hover:opacity-100">02</span>
-                        </div>
-                        <p class="text-slate-500 text-sm md:text-base">پیاده‌سازی ایده‌ها با کدنویسی تمیز، سریع و بهینه.</p>
+                    <div class="p-6 md:p-8 rounded-2xl glass-nav hover:bg-white/5 transition flex justify-between items-center">
+                        <h4 class="text-lg md:text-xl font-bold">Web Development</h4>
+                        <span class="text-indigo-500 text-xs font-mono">02</span>
                     </div>
                 </div>
             </div>
@@ -260,27 +211,26 @@
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="px-4 md:px-6 pt-20 pb-10">
+    <footer id="contact" class="px-4 py-12">
         <div class="max-w-7xl mx-auto">
-            <div class="bg-indigo-600 rounded-[3rem] md:rounded-[5rem] p-10 md:p-32 text-center relative overflow-hidden">
-                <h2 class="text-5xl md:text-[9rem] font-black tracking-tighter mb-10 leading-none uppercase">
-                    LET'S CREATE <br> <span class="text-black/20">TOGETHER</span>
+            <div class="bg-indigo-600 rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-24 text-center relative overflow-hidden">
+                <h2 class="text-4xl md:text-[7rem] font-black tracking-tighter mb-6 leading-none uppercase">
+                    LET'S TALK
                 </h2>
-                <a href="mailto:hi@artifex.com" class="text-xl md:text-4xl font-light hover:opacity-70 transition border-b-2 border-white pb-2 break-all px-4">
+                <a href="mailto:hi@artifex.com" class="text-lg md:text-3xl font-light hover:opacity-70 transition border-b border-white pb-1">
                     HI@ARTIFEX.DESIGN
                 </a>
                 
-                <div class="mt-20 md:mt-32 flex flex-col md:flex-row justify-between items-center gap-8 border-t border-white/10 pt-10">
-                    <div class="flex space-x-reverse space-x-8 text-sm font-bold uppercase tracking-widest">
-                        <a href="#" class="hover:text-black transition">LinkedIn</a>
-                        <a href="#" class="hover:text-black transition">Twitter</a>
-                        <a href="#" class="hover:text-black transition">Dribbble</a>
+                <div class="mt-16 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-8">
+                    <div class="flex space-x-reverse space-x-6 text-[10px] font-bold uppercase tracking-widest">
+                        <a href="#">LinkedIn</a>
+                        <a href="#">Twitter</a>
                     </div>
-                    <p class="text-[10px] md:text-xs opacity-60 uppercase font-mono tracking-widest">Designed by You • 2024</p>
+                    <p class="text-[9px] opacity-60 uppercase font-mono tracking-widest">Designed by You • 2024</p>
                 </div>
             </div>
         </div>
-    </section>
+    </footer>
 
     <script>
         // Mobile Menu Logic
@@ -298,8 +248,7 @@
         closeMenu.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
 
-        // Smooth Appearance on Scroll (Basic Observer)
-        const observerOptions = { threshold: 0.1 };
+        // Reveal on Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -307,12 +256,12 @@
                     entry.target.style.transform = "translateY(0)";
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.project-card, #services > div').forEach(el => {
+        document.querySelectorAll('.project-item, #services > div').forEach(el => {
             el.style.opacity = "0";
-            el.style.transform = "translateY(30px)";
-            el.style.transition = "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+            el.style.transform = "translateY(20px)";
+            el.style.transition = "all 0.6s ease-out";
             observer.observe(el);
         });
     </script>
