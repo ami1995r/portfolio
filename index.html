@@ -1,257 +1,259 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visual Masterpiece | پورتفولیو حرفه‌ای</title>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --accent: #3b82f6;
-            --bg: #050505;
-            --card: #0f0f0f;
-        }
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg);
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-        /* پس‌زمینه نوری متحرک */
-        .glow-mesh {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(59, 130, 246, 0.15) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        .bento-card {
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 2rem;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        @media (min-width: 768px) {
-            .bento-card {
-                border-radius: 2.5rem;
-            }
-        }
-        .bento-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
-            transform: translateX(-100%);
-            transition: 0.8s;
-        }
-        .bento-card:hover::before {
-            transform: translateX(100%);
-        }
-        .bento-card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            transform: scale(1.02);
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
-        }
-        .text-gradient {
-            background: linear-gradient(to bottom right, #fff 30%, rgba(255,255,255,0.4));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .noise {
-            position: absolute;
-            inset: 0;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05;
-            pointer-events: none;
-        }
-        .skill-pill {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 0.5rem 1rem;
-            border-radius: 0.8rem;
-            font-size: 0.7rem;
-            transition: 0.3s;
-        }
-        @media (min-width: 768px) {
-            .skill-pill {
-                padding: 0.6rem 1.2rem;
-                border-radius: 1rem;
-                font-size: 0.75rem;
-            }
-        }
-        .skill-pill:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-        /* اسکرول‌بار مخفی */
-        ::-webkit-scrollbar { width: 0px; }
-    </style>
-</head>
-<body class="p-3 md:p-12">
-    <div class="glow-mesh" id="mesh"></div>
+import React, { useState, useEffect } from 'react';
+import { Menu, X, ArrowRight, MapPin, Phone, Globe, ChevronRight, ChevronLeft } from 'lucide-react';
 
-    <div class="max-w-7xl mx-auto space-y-4 md:space-y-6">
-        
-        <!-- هدر و معرفی (ریسپانسیو شده برای موبایل) -->
-        <div class="grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-6">
-            <!-- بلاک متن معرفی -->
-            <div class="col-span-1 md:col-span-8 bento-card p-6 md:p-16 flex flex-col justify-center min-h-[300px] md:min-h-[500px]">
-                <div class="noise"></div>
-                <div class="hidden md:inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full w-fit mb-8">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                    </span>
-                    <span class="text-[8px] md:text-[10px] font-bold tracking-widest uppercase opacity-70">آماده برای خلق پروژه‌های نو</span>
-                </div>
-                <h1 class="text-2xl md:text-8xl font-black text-gradient leading-tight tracking-tighter">
-                    دیزاین با<br>طعم خلاقیت.
-                </h1>
-                <p class="mt-4 md:mt-8 text-xs md:text-lg text-gray-400 max-w-lg font-light leading-relaxed">
-                    من <span class="text-white font-bold">رضا</span> هستم؛ معمار تجربیات بصری.
-                </p>
-            </div>
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('همه');
 
-            <!-- بلاک تصویر پروفایل -->
-            <div class="col-span-1 md:col-span-4 bento-card group h-[300px] md:h-[500px]">
-                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&q=80&w=800" 
-                     class="absolute inset-0 w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" alt="رضا">
-                <div class="absolute bottom-4 right-4 md:bottom-10 md:right-10 z-10">
-                    <div class="bg-white/10 backdrop-blur-xl p-3 md:p-6 rounded-2xl md:rounded-3xl border border-white/10">
-                        <p class="hidden md:block text-[8px] md:text-[10px] uppercase font-black tracking-widest mb-1 opacity-50">LOCATION</p>
-                        <p class="text-[10px] md:text-sm font-bold">یزد، ایران</p>
-                    </div>
-                </div>
-            </div>
+  // داده‌های نمونه برای شبیه‌سازی محتوای تصویر
+  const categories = ['همه', 'مجسمه‌سازی', 'نقاشی', 'دوره زمانی'];
+  
+  const artworks = [
+    {
+      id: 1,
+      title: "Arcis, Marcus Antonius Primus",
+      date: "۲۱ سپتامبر ۲۰۱۷ - ۱۷ فوریه ۲۰۱۸",
+      category: "مجسمه‌سازی",
+      image: "https://images.unsplash.com/photo-1549887552-cb1071d3e5ca?auto=format&fit=crop&q=80&w=800",
+    },
+    {
+      id: 2,
+      title: "Peyron, Jean François Pierre",
+      date: "۲۴ سپتامبر ۲۰۱۹ - ۱۷ فوریه ۲۰۲۰",
+      category: "نقاشی",
+      image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=800",
+    }
+  ];
+
+  const events = [
+    { title: "نمایشگاه پرتره", price: "۷€", date: "۱۵ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
+    { title: "ورنیساژ BLK", price: "۵€", date: "۳۰ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
+    { title: "نمایشگاه شبانه", price: "۷€", date: "۱۵ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white" dir="rtl">
+      
+      {/* ناوبری موبایل (Overlay) */}
+      <div className={`fixed inset-0 z-50 bg-white transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="p-6 flex justify-between items-start">
+          <div className="text-xl font-bold leading-tight">
+            موزه<br />Augustins
+          </div>
+          <button onClick={() => setIsMenuOpen(false)} className="p-2 border border-black rounded-full">
+            <X size={24} />
+          </button>
         </div>
-
-        <!-- آمار و شبکه‌های اجتماعی -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            <div class="bento-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
-                <h3 class="text-2xl md:text-4xl font-black text-blue-500 mb-1 md:mb-2">+۴ سال</h3>
-                <p class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-50 font-bold">سابقه حرفه‌ای</p>
-            </div>
-            <div class="bento-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
-                <h3 class="text-2xl md:text-4xl font-black text-white mb-1 md:mb-2">+۵۰</h3>
-                <p class="text-[8px] md:text-[10px] uppercase tracking-widest opacity-50 font-bold">پروژه موفق</p>
-            </div>
-            <!-- در موبایل تمام عرض می‌شود -->
-            <div class="col-span-2 md:col-span-2 bento-card p-6 md:p-8 flex items-center justify-between px-6 md:px-12">
-                <div class="flex -space-x-3 md:-space-x-4">
-                    <div class="w-8 h-8 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-card bg-blue-600 flex items-center justify-center font-bold text-xs">L</div>
-                    <div class="w-8 h-8 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-card bg-white text-black flex items-center justify-center font-bold text-xs">B</div>
-                    <div class="w-8 h-8 md:w-12 md:h-12 rounded-full border-2 md:border-4 border-card bg-gray-800 flex items-center justify-center font-bold text-xs">I</div>
-                </div>
-                <p class="text-[10px] md:text-xs font-bold opacity-60">شبکه‌های اجتماعی</p>
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 flex items-center justify-center">↗</div>
-            </div>
+        <nav className="flex flex-col p-10 space-y-8 text-3xl font-bold tracking-tighter">
+          <a href="#" className="hover:line-through">بلیت‌فروشی</a>
+          <a href="#" className="hover:line-through">مجموعه‌ها</a>
+          <a href="#" className="hover:line-through">موزه</a>
+          <a href="#" className="hover:line-through">نحوه دسترسی</a>
+          <a href="#" className="hover:line-through">در حال برگزاری</a>
+        </nav>
+        <div className="absolute bottom-10 left-10 right-10 flex justify-between text-sm border-t pt-6 border-black">
+          <div>همه روزه باز است</div>
+          <div className="text-left font-mono">Google Maps →</div>
         </div>
+      </div>
 
-        <!-- تخصص و تجربه -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-            <!-- مهارت‌ها -->
-            <div class="md:col-span-5 bento-card p-8 md:p-10">
-                <h2 class="text-xl md:text-2xl font-black mb-6 md:mb-10 flex items-center gap-4">
-                    تخصص‌ها <span class="h-[1px] flex-1 bg-white/10"></span>
-                </h2>
-                <div class="flex flex-wrap gap-2 md:gap-3">
-                    <span class="skill-pill">UI/UX Design</span>
-                    <span class="skill-pill">Branding</span>
-                    <span class="skill-pill">3D Illustration</span>
-                    <span class="skill-pill">Motion Graphics</span>
-                    <span class="skill-pill">Typography</span>
-                </div>
-                
-                <div class="mt-8 md:mt-12 space-y-4 md:space-y-6">
-                    <div>
-                        <div class="flex justify-between text-[8px] md:text-[10px] font-black mb-1 md:mb-2 uppercase opacity-50">
-                            <span>Photoshop / Illustrator</span>
-                            <span>95%</span>
-                        </div>
-                        <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 w-[95%]"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-[8px] md:text-[10px] font-black mb-1 md:mb-2 uppercase opacity-50">
-                            <span>After Effects</span>
-                            <span>80%</span>
-                        </div>
-                        <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full bg-white w-[80%]"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      {/* هدر اصلی */}
+      <header className="fixed w-full top-0 bg-white/80 backdrop-blur-md z-40 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+          <div className="flex items-baseline gap-2">
+            <span className="text-xs uppercase tracking-widest font-bold">Musée des</span>
+            <span className="text-2xl font-black tracking-tighter">Augustins</span>
+          </div>
+          
+          <div className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wider">
+            <a href="#collections" className="hover:opacity-50 transition">مجموعه‌ها</a>
+            <a href="#info" className="hover:opacity-50 transition">اطلاعات</a>
+            <a href="#tickets" className="hover:opacity-50 transition">بلیت</a>
+          </div>
 
-            <!-- بیوگرافی و تحصیلات -->
-            <div class="md:col-span-7 bento-card p-8 md:p-10 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-xl md:text-2xl font-black mb-4 md:mb-6">داستان من</h2>
-                    <p class="text-xs md:text-gray-400 leading-7 md:leading-9 text-justify font-light">
-                        از دنیای اعداد و محاسبات مهندسی عمران، به دنیای بی‌انتهای رنگ‌ها و فرم‌ها مهاجرت کردم. من معتقدم دیزاین خوب، فقط زیبا نیست، بلکه مانند یک سازه مهندسی، باید کاربردی و پایدار باشد.
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mt-6 md:mt-10">
-                    <div class="bg-white/5 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5">
-                        <h4 class="text-[10px] md:text-xs font-black mb-1">Bootcamp UI/UX</h4>
-                        <p class="text-[8px] md:text-[10px] opacity-40">دوره پیشرفته ۱۴۰۱</p>
-                    </div>
-                    <div class="bg-white/5 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5">
-                        <h4 class="text-[10px] md:text-xs font-black mb-1">Civil Engineering</h4>
-                        <p class="text-[8px] md:text-[10px] opacity-40">لیسانس سراسری</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- فوتر بزرگ -->
-        <div class="bento-card p-8 md:p-12 bg-blue-600 text-white flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 text-center md:text-right">
-            <h2 class="text-2xl md:text-5xl font-black tracking-tighter">بیایید با هم بسازیم.</h2>
-            <button class="w-full md:w-auto bg-white text-blue-600 px-8 md:px-12 py-4 md:py-5 rounded-full font-black text-sm md:text-lg hover:scale-105 transition-transform shadow-2xl">
-                ارسال پیام
+          <div className="flex items-center gap-4">
+            <button className="bg-black text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition">
+              بلیت‌فروشی
             </button>
+            <button onClick={() => setIsMenuOpen(true)} className="md:hidden">
+              <Menu size={28} />
+            </button>
+          </div>
         </div>
+      </header>
+
+      <main className="pt-20">
+        {/* بخش Hero مشابه موبایل در عکس */}
+        <section className="relative h-[80vh] bg-gray-50 overflow-hidden group">
+          <div className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105">
+            <img 
+              src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=1600" 
+              className="w-full h-full object-cover grayscale contrast-125"
+              alt="Museum Interior"
+            />
+            <div className="absolute inset-0 bg-black/10"></div>
+          </div>
+          
+          <div className="absolute bottom-10 right-6 left-6 md:right-20 md:left-20 text-white z-10">
+            <div className="text-sm font-bold mb-4 flex items-center gap-2">
+              <span className="w-8 h-px bg-white"></span> در حال برگزاری
+            </div>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-6">
+              PEYRON <br />
+              <span className="text-outline-white text-transparent" style={{ WebkitTextStroke: '1px white' }}>JEAN FRANÇOIS</span>
+            </h1>
+            <button className="bg-white text-black px-8 py-4 flex items-center gap-4 font-bold text-sm uppercase hover:bg-black hover:text-white transition-colors">
+              اطلاعات بیشتر <ArrowRight size={18} />
+            </button>
+          </div>
+        </section>
+
+        {/* بخش Collections با تایپوگرافی شکسته */}
+        <section id="collections" className="py-24 px-6 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <h2 className="text-8xl md:text-[12rem] font-black leading-[0.8] tracking-tighter uppercase">
+              collec-<br />tions
+            </h2>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {categories.map(cat => (
+                <button 
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-1 text-xs font-bold uppercase rounded-full border border-black transition-all
+                    ${activeCategory === cat ? 'bg-black text-white' : 'hover:bg-black hover:text-white'}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {artworks.filter(a => activeCategory === 'همه' || a.category === activeCategory).map(art => (
+              <div key={art.id} className="group cursor-pointer">
+                <div className="aspect-[3/4] overflow-hidden mb-6 relative">
+                  <img src={art.image} alt={art.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute top-4 left-4 bg-white px-3 py-1 text-[10px] font-black uppercase">
+                    ۱/۶
+                  </div>
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter mb-2 group-hover:underline">{art.title}</h3>
+                <p className="text-sm font-medium text-gray-500 uppercase">{art.date}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* بخش "Le Musée" مشابه کارت بزرگ در عکس */}
+        <section className="bg-black text-white py-32 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div>
+              <h2 className="text-8xl md:text-[10rem] font-black leading-[0.8] tracking-tighter mb-10">
+                le <br />musée
+              </h2>
+              <p className="text-xl leading-relaxed text-gray-300 mb-10 max-w-md">
+                موزه آگوستین، موزه هنرهای زیبای تولوز، در صومعه سابق آگوستین واقع شده است که معماری آن به تنهایی یک شاهکار است.
+              </p>
+              <button className="border border-white px-8 py-4 flex items-center gap-4 font-bold text-sm uppercase hover:bg-white hover:text-black transition">
+                کشف موزه <ArrowRight size={18} />
+              </button>
+            </div>
+            <div className="relative">
+              <img 
+                src="https://images.unsplash.com/photo-1566121436497-1835d884854e?auto=format&fit=crop&q=80&w=1000" 
+                className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-1000"
+                alt="Museum Building"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* بخش بلیت‌فروشی (Billet-terie) */}
+        <section id="tickets" className="py-24 px-6 max-w-4xl mx-auto">
+          <h2 className="text-7xl md:text-9xl font-black leading-[0.8] tracking-tighter uppercase mb-20">
+            billet-<br />terie
+          </h2>
+          <div className="space-y-0">
+            {events.map((event, idx) => (
+              <div key={idx} className="border-t border-black py-8 flex justify-between items-center group hover:bg-gray-50 px-4 transition-colors cursor-pointer">
+                <div>
+                  <h4 className="text-xl font-black uppercase">{event.title}</h4>
+                  <p className="text-xs text-gray-500 font-bold mt-1">{event.date}</p>
+                </div>
+                <div className="text-2xl font-black">{event.price}</div>
+              </div>
+            ))}
+            <div className="border-t border-b border-black py-8 flex justify-between items-center px-4">
+              <h4 className="text-xl font-black uppercase italic">نمایشگاه دائمی</h4>
+              <div className="text-sm font-bold uppercase">رایگان</div>
+            </div>
+          </div>
+        </section>
+
+        {/* بخش اطلاعات (Information) مشابه فوتر عکس */}
+        <section id="info" className="bg-gray-50 py-24 px-6">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-8xl md:text-[12rem] font-black leading-[0.8] tracking-tighter uppercase mb-20">
+              infor-<br />mation
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 border-t border-black pt-16">
+              <div>
+                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">اطلاعات کاربردی</h5>
+                <p className="text-sm leading-relaxed mb-6 font-medium">
+                  موزه تا بهار ۲۰۲۰ برای بازسازی بسته خواهد بود. <br />
+                  از درک شما سپاسگزاریم.
+                </p>
+                <a href="#" className="text-sm font-black border-b border-black pb-1 inline-flex items-center gap-2">
+                  بیشتر بدانید <ArrowRight size={14} />
+                </a>
+              </div>
+
+              <div>
+                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">تماس با ما</h5>
+                <div className="space-y-4 text-sm font-bold">
+                  <div className="flex items-center gap-3"><MapPin size={16} /> خیابان مِتز ۲۱، تولوز ۳۱۰۰۰</div>
+                  <div className="flex items-center gap-3"><Phone size={16} /> +۳۳ (۰)۵ ۶۱ ۲۲ ۲۱ ۸۲</div>
+                </div>
+              </div>
+
+              <div>
+                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">دسترسی</h5>
+                <div className="space-y-2 text-sm">
+                  <p className="font-black">پارکینگ Vinci Esquirol</p>
+                  <p className="text-gray-600">مترو خط A ایستگاه Esquirol</p>
+                  <p className="text-gray-600">اتوبوس L4, L7, L9 ایستگاه Esquirol</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* فوتر نهایی */}
+      <footer className="py-10 px-6 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-[10px] font-black uppercase tracking-widest">
+            © ۲۰۲۴ MUSÉE DES AUGUSTINS - طراحی شده بر اساس کانسپت بصری
+          </div>
+          <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
+            <a href="#" className="hover:underline">اینستاگرام</a>
+            <a href="#" className="hover:underline">توییتر</a>
+            <a href="#" className="hover:underline">فیسبوک</a>
+          </div>
+        </div>
+      </footer>
+
+      {/* استایل‌های سفارشی برای متن‌های توخالی */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .text-outline-white {
+          -webkit-text-stroke: 1px white;
+        }
+      `}} />
     </div>
+  );
+};
 
-    <footer class="py-10 md:py-12 text-center text-[8px] md:text-[10px] font-bold opacity-30 tracking-[0.5em] uppercase">
-        Visual Identity & Design — 2026 Edition
-    </footer>
-
-    <script>
-        // اثر حرکتی موس برای پس‌زمینه نوری
-        const mesh = document.getElementById('mesh');
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            mesh.style.setProperty('--x', `${x}%`);
-            mesh.style.setProperty('--y', `${y}%`);
-        });
-
-        // انیمیشن ورود کارت‌ها
-        const cards = document.querySelectorAll('.bento-card');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0) scale(1)';
-                    }, i * 50);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px) scale(0.98)';
-            card.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-            observer.observe(card);
-        });
-    </script>
-</body>
-</html>
+export default App;
