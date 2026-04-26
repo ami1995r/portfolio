@@ -1,259 +1,508 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, MapPin, Phone, Globe, ChevronRight, ChevronLeft } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { 
+  Users, 
+  History, 
+  TrendingUp, 
+  Search, 
+  UserPlus, 
+  Settings,
+  Wallet,
+  LayoutDashboard,
+  Plus,
+  FileText,
+  Calculator,
+  Printer,
+  X,
+  Menu,
+  ChevronDown,
+  ArrowUpRight,
+  ArrowDownRight
+} from 'lucide-react';
+
+const INITIAL_CUSTOMERS = [
+  { id: 1, name: 'احمد رضایی', phone: '09121234567', totalSpent: 120000000, balance: 1200000, joinedDate: '1402/05/10' },
+  { id: 2, name: 'سارا کریمی', phone: '09198765432', totalSpent: 45000000, balance: 450000, joinedDate: '1402/08/15' },
+];
+
+const formatNum = (num) => {
+  if (num === null || num === undefined) return "";
+  return Math.floor(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+const parseNum = (str) => {
+  if (typeof str !== 'string') return str;
+  return str.replace(/,/g, "");
+};
 
 const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('همه');
+  const [activeTab, setActiveTab] = useState('new-tx');
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [customers, setCustomers] = useState(INITIAL_CUSTOMERS);
+  const [transactions, setTransactions] = useState([
+    { id: 101, customerId: 1, amount: 50000000, reward: 500000, date: '1402/12/25', description: 'خرید انگشتر' }
+  ]);
+  const [rewardRate, setRewardRate] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // داده‌های نمونه برای شبیه‌سازی محتوای تصویر
-  const categories = ['همه', 'مجسمه‌سازی', 'نقاشی', 'دوره زمانی'];
-  
-  const artworks = [
-    {
-      id: 1,
-      title: "Arcis, Marcus Antonius Primus",
-      date: "۲۱ سپتامبر ۲۰۱۷ - ۱۷ فوریه ۲۰۱۸",
-      category: "مجسمه‌سازی",
-      image: "https://images.unsplash.com/photo-1549887552-cb1071d3e5ca?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      id: 2,
-      title: "Peyron, Jean François Pierre",
-      date: "۲۴ سپتامبر ۲۰۱۹ - ۱۷ فوریه ۲۰۲۰",
-      category: "نقاشی",
-      image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=800",
-    }
-  ];
+  // Invoice State
+  const [invoice, setInvoice] = useState({
+    customerId: '',
+    goldPrice: '', 
+    weight: '', 
+    wagePercent: 7,
+    profitPercent: 7,
+    taxPercent: 9,
+    description: '',
+    useBalance: false
+  });
 
-  const events = [
-    { title: "نمایشگاه پرتره", price: "۷€", date: "۱۵ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
-    { title: "ورنیساژ BLK", price: "۵€", date: "۳۰ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
-    { title: "نمایشگاه شبانه", price: "۷€", date: "۱۵ اکتبر ۲۰۱۹ - ۲۱ ژوئن ۲۰۲۰" },
-  ];
+  // Calculations
+  const invoiceDetails = useMemo(() => {
+    const goldPrice = parseFloat(parseNum(invoice.goldPrice)) || 0;
+    const weight = parseFloat(invoice.weight) || 0;
+    const wageRate = parseFloat(invoice.wagePercent) || 0;
+    const profitRate = parseFloat(invoice.profitPercent) || 0;
+    const taxRate = parseFloat(invoice.taxPercent) || 0;
+    
+    const rawGoldValue = goldPrice * weight;
+    const wageValue = (rawGoldValue * wageRate) / 100;
+    const profitValue = (rawGoldValue + wageValue) * (profitRate / 100); 
+    const taxableAmount = wageValue + profitValue;
+    const taxValue = taxableAmount * (taxRate / 100); 
+    
+    const totalBeforeDiscount = rawGoldValue + wageValue + profitValue + taxValue;
+    const customer = customers.find(c => c.id === parseInt(invoice.customerId));
+    const discount = invoice.useBalance && customer ? customer.balance : 0;
+    const finalPrice = Math.max(0, totalBeforeDiscount - discount);
+    const newReward = (finalPrice * rewardRate) / 100;
+
+    return { rawGoldValue, wageValue, profitValue, taxValue, totalBeforeDiscount, discount, finalPrice, newReward };
+  }, [invoice, customers, rewardRate]);
+
+  // Dashboard Stats
+  const stats = useMemo(() => {
+    const totalSales = transactions.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalPoints = customers.reduce((acc, curr) => acc + curr.balance, 0);
+    return { totalSales, totalPoints, totalCustomers: customers.length };
+  }, [transactions, customers]);
+
+  const submitInvoice = (e) => {
+    e.preventDefault();
+    if (!invoice.customerId) return;
+    const newTx = {
+      id: Date.now(),
+      customerId: parseInt(invoice.customerId),
+      amount: invoiceDetails.finalPrice,
+      reward: invoiceDetails.newReward,
+      date: new Date().toLocaleDateString('fa-IR'),
+      description: invoice.description || 'خرید طلا',
+    };
+    setTransactions([newTx, ...transactions]);
+    setCustomers(customers.map(c => 
+      c.id === parseInt(invoice.customerId) 
+        ? { 
+            ...c, 
+            totalSpent: c.totalSpent + invoiceDetails.finalPrice, 
+            balance: (invoice.useBalance ? 0 : c.balance) + invoiceDetails.newReward 
+          }
+        : c
+    ));
+    setInvoice({ ...invoice, customerId: '', weight: '', description: '', useBalance: false });
+    setActiveTab('history');
+  };
+
+  const NavItem = ({ icon, label, id }) => (
+    <button 
+      onClick={() => { setActiveTab(id); setSidebarOpen(false); }}
+      className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all ${
+        activeTab === id 
+          ? 'bg-[#C5A059] text-[#051109] font-bold' 
+          : 'text-gray-500 hover:text-white hover:bg-white/5'
+      }`}
+    >
+      {icon}
+      <span className="text-sm">{label}</span>
+    </button>
+  );
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white" dir="rtl">
+    <div className="min-h-screen bg-[#051109] text-[#E0E7E1] font-vazir flex flex-col md:flex-row" dir="rtl">
       
-      {/* ناوبری موبایل (Overlay) */}
-      <div className={`fixed inset-0 z-50 bg-white transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="p-6 flex justify-between items-start">
-          <div className="text-xl font-bold leading-tight">
-            موزه<br />Augustins
-          </div>
-          <button onClick={() => setIsMenuOpen(false)} className="p-2 border border-black rounded-full">
-            <X size={24} />
-          </button>
+      {/* Mobile Header */}
+      <header className="md:hidden bg-[#081A0E] p-4 flex justify-between items-center border-b border-[#0F2D19]">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#C5A059] rounded-lg flex items-center justify-center text-[#051109] font-bold">Q</div>
+          <span className="font-bold">قصه</span>
         </div>
-        <nav className="flex flex-col p-10 space-y-8 text-3xl font-bold tracking-tighter">
-          <a href="#" className="hover:line-through">بلیت‌فروشی</a>
-          <a href="#" className="hover:line-through">مجموعه‌ها</a>
-          <a href="#" className="hover:line-through">موزه</a>
-          <a href="#" className="hover:line-through">نحوه دسترسی</a>
-          <a href="#" className="hover:line-through">در حال برگزاری</a>
-        </nav>
-        <div className="absolute bottom-10 left-10 right-10 flex justify-between text-sm border-t pt-6 border-black">
-          <div>همه روزه باز است</div>
-          <div className="text-left font-mono">Google Maps →</div>
-        </div>
-      </div>
-
-      {/* هدر اصلی */}
-      <header className="fixed w-full top-0 bg-white/80 backdrop-blur-md z-40 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-          <div className="flex items-baseline gap-2">
-            <span className="text-xs uppercase tracking-widest font-bold">Musée des</span>
-            <span className="text-2xl font-black tracking-tighter">Augustins</span>
-          </div>
-          
-          <div className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wider">
-            <a href="#collections" className="hover:opacity-50 transition">مجموعه‌ها</a>
-            <a href="#info" className="hover:opacity-50 transition">اطلاعات</a>
-            <a href="#tickets" className="hover:opacity-50 transition">بلیت</a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button className="bg-black text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition">
-              بلیت‌فروشی
-            </button>
-            <button onClick={() => setIsMenuOpen(true)} className="md:hidden">
-              <Menu size={28} />
-            </button>
-          </div>
-        </div>
+        <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="text-[#C5A059]">
+          <Menu size={24} />
+        </button>
       </header>
 
-      <main className="pt-20">
-        {/* بخش Hero مشابه موبایل در عکس */}
-        <section className="relative h-[80vh] bg-gray-50 overflow-hidden group">
-          <div className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105">
-            <img 
-              src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=1600" 
-              className="w-full h-full object-cover grayscale contrast-125"
-              alt="Museum Interior"
-            />
-            <div className="absolute inset-0 bg-black/10"></div>
-          </div>
-          
-          <div className="absolute bottom-10 right-6 left-6 md:right-20 md:left-20 text-white z-10">
-            <div className="text-sm font-bold mb-4 flex items-center gap-2">
-              <span className="w-8 h-px bg-white"></span> در حال برگزاری
-            </div>
-            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-6">
-              PEYRON <br />
-              <span className="text-outline-white text-transparent" style={{ WebkitTextStroke: '1px white' }}>JEAN FRANÇOIS</span>
-            </h1>
-            <button className="bg-white text-black px-8 py-4 flex items-center gap-4 font-bold text-sm uppercase hover:bg-black hover:text-white transition-colors">
-              اطلاعات بیشتر <ArrowRight size={18} />
-            </button>
-          </div>
-        </section>
+      {/* Sidebar */}
+      <aside className={`fixed md:relative z-50 w-64 h-full bg-[#081A0E] border-l border-[#0F2D19] flex flex-col p-6 space-y-8 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}`}>
+        <div className="hidden md:flex items-center gap-3 px-2">
+          <div className="w-10 h-10 bg-[#C5A059] rounded-lg flex items-center justify-center text-[#051109] font-bold">Q</div>
+          <h2 className="text-xl font-bold tracking-tighter">قصه</h2>
+        </div>
+        
+        <nav className="flex-1 space-y-2">
+          <NavItem icon={<LayoutDashboard size={20} />} label="داشبورد مدیریتی" id="dashboard" />
+          <NavItem icon={<Users size={20} />} label="بانک مشتریان" id="customers" />
+          <NavItem icon={<FileText size={20} />} label="صدور فاکتور" id="new-tx" />
+          <NavItem icon={<History size={20} />} label="تراکنش‌های اخیر" id="history" />
+          <NavItem icon={<Settings size={20} />} label="تنظیمات سیستم" id="settings" />
+        </nav>
 
-        {/* بخش Collections با تایپوگرافی شکسته */}
-        <section id="collections" className="py-24 px-6 max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-            <h2 className="text-8xl md:text-[12rem] font-black leading-[0.8] tracking-tighter uppercase">
-              collec-<br />tions
-            </h2>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {categories.map(cat => (
-                <button 
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-1 text-xs font-bold uppercase rounded-full border border-black transition-all
-                    ${activeCategory === cat ? 'bg-black text-white' : 'hover:bg-black hover:text-white'}`}
-                >
-                  {cat}
+        <div className="p-4 bg-[#051109] rounded-xl border border-[#0F2D19]">
+          <p className="text-[10px] text-gray-500 mb-1">نسخه ۱.۴.۰</p>
+          <p className="text-xs font-bold text-[#C5A059]">گالری طلا و جواهر قصه</p>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-10 overflow-y-auto w-full max-w-7xl mx-auto">
+        
+        {activeTab === 'dashboard' && (
+          <div className="space-y-8 animate-in fade-in">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <StatCard label="فروش کل (ریال)" value={formatNum(stats.totalSales)} icon={<TrendingUp className="text-green-500" />} />
+              <StatCard label="تعهد امتیازات" value={formatNum(stats.totalPoints)} icon={<Wallet className="text-[#C5A059]" />} />
+              <StatCard label="تعداد مشتریان" value={stats.totalCustomers} icon={<Users className="text-blue-400" />} />
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-[#081A0E] p-8 rounded-3xl border border-[#0F2D19]">
+                <h3 className="text-sm font-bold text-[#C5A059] mb-6 flex items-center gap-2">
+                  <ArrowUpRight size={18} /> رشد ماهانه
+                </h3>
+                <div className="h-48 flex items-end gap-2 px-2">
+                  {[40, 70, 45, 90, 65, 80, 95].map((h, i) => (
+                    <div key={i} className="flex-1 bg-[#C5A059]/20 rounded-t-lg hover:bg-[#C5A059] transition-all relative group" style={{height: `${h}%`}}>
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#C5A059] text-[#051109] text-[10px] p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        {h}٪
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-4 text-[10px] text-gray-500">
+                  <span>فروردین</span><span>مهر</span>
+                </div>
+              </div>
+
+              <div className="bg-[#081A0E] p-8 rounded-3xl border border-[#0F2D19]">
+                <h3 className="text-sm font-bold text-[#C5A059] mb-6">آخرین فعالیت‌ها</h3>
+                <div className="space-y-4">
+                  {transactions.slice(0, 3).map(tx => (
+                    <div key={tx.id} className="flex justify-between items-center p-3 bg-[#051109] rounded-xl border border-[#0F2D19]">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center">
+                          <Plus size={14} />
+                        </div>
+                        <span className="text-xs font-bold">{customers.find(c => c.id === tx.customerId)?.name}</span>
+                      </div>
+                      <span className="text-xs font-mono text-gray-400">{tx.amount.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'new-tx' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in">
+            <div className="lg:col-span-7 bg-[#081A0E] p-6 md:p-8 rounded-3xl border border-[#0F2D19] shadow-2xl">
+              <form onSubmit={submitInvoice} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">انتخاب مشتری</label>
+                    <select 
+                      value={invoice.customerId}
+                      onChange={(e) => setInvoice({...invoice, customerId: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all text-sm"
+                      required
+                    >
+                      <option value="">جستجو در بانک مشتریان...</option>
+                      {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">قیمت هر گرم (ریال)</label>
+                    <input 
+                      type="text"
+                      value={formatNum(invoice.goldPrice)}
+                      onChange={(e) => setInvoice({...invoice, goldPrice: parseNum(e.target.value)})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all font-mono text-left"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">وزن (گرم)</label>
+                    <input 
+                      type="number" step="0.001"
+                      value={invoice.weight}
+                      onChange={(e) => setInvoice({...invoice, weight: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all font-mono text-left"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">اجرت ساخت (٪)</label>
+                    <input 
+                      type="number"
+                      value={invoice.wagePercent}
+                      onChange={(e) => setInvoice({...invoice, wagePercent: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all font-mono text-left"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">سود (٪)</label>
+                    <input 
+                      type="number"
+                      value={invoice.profitPercent}
+                      onChange={(e) => setInvoice({...invoice, profitPercent: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all font-mono text-left"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">مالیات (٪)</label>
+                    <input 
+                      type="number"
+                      value={invoice.taxPercent}
+                      onChange={(e) => setInvoice({...invoice, taxPercent: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all font-mono text-left"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs text-[#C5A059] font-bold">شرح قطعه</label>
+                    <input 
+                      type="text"
+                      value={invoice.description}
+                      onChange={(e) => setInvoice({...invoice, description: e.target.value})}
+                      className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] transition-all"
+                    />
+                  </div>
+                </div>
+
+                {invoice.customerId && (
+                  <div className="p-4 bg-[#051109] border border-[#0F2D19] rounded-xl flex justify-between items-center">
+                    <span className="text-xs text-gray-400">موجودی وفاداری: {formatNum(customers.find(c => c.id === parseInt(invoice.customerId))?.balance)} ریال</span>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <span className="text-xs">استفاده از موجودی</span>
+                      <input 
+                        type="checkbox" 
+                        checked={invoice.useBalance}
+                        onChange={(e) => setInvoice({...invoice, useBalance: e.target.checked})}
+                        className="w-4 h-4 accent-[#C5A059]"
+                      />
+                    </label>
+                  </div>
+                )}
+
+                <button type="submit" className="w-full bg-[#C5A059] text-[#051109] py-5 rounded-xl font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-xl shadow-[#C5A059]/10">
+                  <Calculator size={20} />
+                  صدور نهایی و ثبت تراکنش
                 </button>
+              </form>
+            </div>
+
+            {/* Price Preview */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="bg-[#0D2214] p-8 rounded-3xl border border-[#16351F] shadow-xl relative overflow-hidden">
+                <h3 className="text-xs font-bold text-[#C5A059] text-center mb-8 tracking-widest">فاکتور سیستمی قصه</h3>
+                <div className="space-y-4 text-xs font-light">
+                  <PriceRow label="ارزش طلا" value={formatNum(invoiceDetails.rawGoldValue)} />
+                  <PriceRow label="اجرت ساخت" value={formatNum(invoiceDetails.wageValue)} />
+                  <PriceRow label="سود گالری" value={formatNum(invoiceDetails.profitValue)} />
+                  <PriceRow label="مالیات" value={formatNum(invoiceDetails.taxValue)} />
+                  {invoice.useBalance && <PriceRow label="کسر اعتبار" value={`-${formatNum(invoiceDetails.discount)}`} highlight />}
+                  
+                  <div className="pt-8 border-t border-[#16351F] text-center">
+                    <p className="text-[10px] text-[#C5A059]/60 mb-2 uppercase">مبلغ نهایی قابل پرداخت</p>
+                    <div className="text-2xl md:text-3xl font-black text-[#C5A059] font-mono break-all leading-none px-2">
+                      {formatNum(invoiceDetails.finalPrice)}
+                      <span className="text-xs font-normal mr-2 text-gray-500">ریال</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-[#081A0E] p-6 rounded-2xl border border-dashed border-[#C5A059]/30 text-center">
+                <p className="text-[10px] text-gray-500 mb-1">امتیاز کسب شده از این خرید</p>
+                <p className="text-xl font-bold text-white font-mono">{formatNum(invoiceDetails.newReward)}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'customers' && (
+          <div className="space-y-6 animate-in slide-in-from-bottom-2">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                <input 
+                  type="text" placeholder="جستجوی نام یا تلفن..."
+                  className="w-full bg-[#081A0E] border border-[#0F2D19] pr-12 pl-4 py-4 rounded-2xl outline-none focus:border-[#C5A059]"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <button onClick={() => document.getElementById('add_cust').showModal()} className="bg-[#C5A059] text-[#051109] px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                <UserPlus size={18} /> افزودن مشتری
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {customers.filter(c => c.name.includes(searchTerm)).map(c => (
+                <div key={c.id} className="bg-[#081A0E] border border-[#0F2D19] p-6 rounded-3xl hover:border-[#C5A059] transition-all group">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <h3 className="font-bold text-lg mb-1">{c.name}</h3>
+                      <p className="text-xs text-gray-500 font-mono">{c.phone}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-[#051109] rounded-xl flex items-center justify-center text-[#C5A059]">
+                      <Users size={20} />
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-400 mb-6">
+                    <span>موجودی وفاداری:</span>
+                    <span className="font-bold text-[#C5A059]">{formatNum(c.balance)} ریال</span>
+                  </div>
+                  <button 
+                    onClick={() => {setInvoice({...invoice, customerId: c.id}); setActiveTab('new-tx');}}
+                    className="w-full py-3 bg-[#051109] rounded-xl text-xs font-bold hover:bg-[#C5A059] hover:text-[#051109] transition-all"
+                  >
+                    صدور فاکتور سریع
+                  </button>
+                </div>
               ))}
             </div>
           </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {artworks.filter(a => activeCategory === 'همه' || a.category === activeCategory).map(art => (
-              <div key={art.id} className="group cursor-pointer">
-                <div className="aspect-[3/4] overflow-hidden mb-6 relative">
-                  <img src={art.image} alt={art.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute top-4 left-4 bg-white px-3 py-1 text-[10px] font-black uppercase">
-                    ۱/۶
-                  </div>
-                </div>
-                <h3 className="text-2xl font-black uppercase tracking-tighter mb-2 group-hover:underline">{art.title}</h3>
-                <p className="text-sm font-medium text-gray-500 uppercase">{art.date}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* بخش "Le Musée" مشابه کارت بزرگ در عکس */}
-        <section className="bg-black text-white py-32 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-            <div>
-              <h2 className="text-8xl md:text-[10rem] font-black leading-[0.8] tracking-tighter mb-10">
-                le <br />musée
-              </h2>
-              <p className="text-xl leading-relaxed text-gray-300 mb-10 max-w-md">
-                موزه آگوستین، موزه هنرهای زیبای تولوز، در صومعه سابق آگوستین واقع شده است که معماری آن به تنهایی یک شاهکار است.
-              </p>
-              <button className="border border-white px-8 py-4 flex items-center gap-4 font-bold text-sm uppercase hover:bg-white hover:text-black transition">
-                کشف موزه <ArrowRight size={18} />
-              </button>
-            </div>
-            <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1566121436497-1835d884854e?auto=format&fit=crop&q=80&w=1000" 
-                className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-1000"
-                alt="Museum Building"
-              />
+        {activeTab === 'history' && (
+          <div className="bg-[#081A0E] rounded-3xl border border-[#0F2D19] overflow-hidden animate-in fade-in">
+            <div className="overflow-x-auto">
+              <table className="w-full text-right text-sm">
+                <thead className="bg-[#051109] text-gray-500 border-b border-[#0F2D19]">
+                  <tr>
+                    <th className="p-6 font-bold">مشتری</th>
+                    <th className="p-6 font-bold">شرح</th>
+                    <th className="p-6 font-bold">مبلغ نهایی</th>
+                    <th className="p-6 font-bold">پاداش</th>
+                    <th className="p-6 font-bold">تاریخ</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#0F2D19]">
+                  {transactions.map(tx => (
+                    <tr key={tx.id} className="hover:bg-[#0F2D19]/30 transition-all">
+                      <td className="p-6 font-bold">{customers.find(c => c.id === tx.customerId)?.name}</td>
+                      <td className="p-6 text-xs text-gray-400">{tx.description}</td>
+                      <td className="p-6 font-mono text-[#C5A059] font-bold">{formatNum(tx.amount)}</td>
+                      <td className="p-6"><span className="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold">+{formatNum(tx.reward)}</span></td>
+                      <td className="p-6 text-[10px] text-gray-500 font-mono">{tx.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </section>
+        )}
 
-        {/* بخش بلیت‌فروشی (Billet-terie) */}
-        <section id="tickets" className="py-24 px-6 max-w-4xl mx-auto">
-          <h2 className="text-7xl md:text-9xl font-black leading-[0.8] tracking-tighter uppercase mb-20">
-            billet-<br />terie
-          </h2>
-          <div className="space-y-0">
-            {events.map((event, idx) => (
-              <div key={idx} className="border-t border-black py-8 flex justify-between items-center group hover:bg-gray-50 px-4 transition-colors cursor-pointer">
+        {activeTab === 'settings' && (
+          <div className="max-w-2xl space-y-8 animate-in fade-in">
+            <div className="bg-[#081A0E] p-8 rounded-3xl border border-[#0F2D19]">
+              <h3 className="text-sm font-bold text-[#C5A059] mb-8 flex items-center gap-3">
+                <Settings size={18} /> تنظیمات پایه کلاب
+              </h3>
+              <div className="space-y-8">
                 <div>
-                  <h4 className="text-xl font-black uppercase">{event.title}</h4>
-                  <p className="text-xs text-gray-500 font-bold mt-1">{event.date}</p>
+                  <div className="flex justify-between mb-4 text-xs">
+                    <span className="text-gray-400">درصد پاداش پیش‌فرض خرید (Cashback)</span>
+                    <span className="font-bold text-[#C5A059]">{rewardRate}٪</span>
+                  </div>
+                  <input 
+                    type="range" min="0" max="5" step="0.1" 
+                    value={rewardRate} onChange={(e) => setRewardRate(e.target.value)}
+                    className="w-full h-1.5 bg-[#051109] rounded-lg appearance-none cursor-pointer accent-[#C5A059]"
+                  />
                 </div>
-                <div className="text-2xl font-black">{event.price}</div>
-              </div>
-            ))}
-            <div className="border-t border-b border-black py-8 flex justify-between items-center px-4">
-              <h4 className="text-xl font-black uppercase italic">نمایشگاه دائمی</h4>
-              <div className="text-sm font-bold uppercase">رایگان</div>
-            </div>
-          </div>
-        </section>
-
-        {/* بخش اطلاعات (Information) مشابه فوتر عکس */}
-        <section id="info" className="bg-gray-50 py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-8xl md:text-[12rem] font-black leading-[0.8] tracking-tighter uppercase mb-20">
-              infor-<br />mation
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 border-t border-black pt-16">
-              <div>
-                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">اطلاعات کاربردی</h5>
-                <p className="text-sm leading-relaxed mb-6 font-medium">
-                  موزه تا بهار ۲۰۲۰ برای بازسازی بسته خواهد بود. <br />
-                  از درک شما سپاسگزاریم.
-                </p>
-                <a href="#" className="text-sm font-black border-b border-black pb-1 inline-flex items-center gap-2">
-                  بیشتر بدانید <ArrowRight size={14} />
-                </a>
-              </div>
-
-              <div>
-                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">تماس با ما</h5>
-                <div className="space-y-4 text-sm font-bold">
-                  <div className="flex items-center gap-3"><MapPin size={16} /> خیابان مِتز ۲۱، تولوز ۳۱۰۰۰</div>
-                  <div className="flex items-center gap-3"><Phone size={16} /> +۳۳ (۰)۵ ۶۱ ۲۲ ۲۱ ۸۲</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                     <label className="text-xs text-gray-400">نام گالری</label>
+                     <input type="text" defaultValue="گالری قصه" className="w-full bg-[#051109] border border-[#0F2D19] p-3 rounded-xl text-sm" />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="text-xs text-gray-400">واحد پول نمایش</label>
+                     <select className="w-full bg-[#051109] border border-[#0F2D19] p-3 rounded-xl text-sm">
+                       <option>ریال ایران</option>
+                       <option>تومان</option>
+                     </select>
+                   </div>
                 </div>
-              </div>
-
-              <div>
-                <h5 className="text-xs font-black uppercase mb-6 tracking-widest">دسترسی</h5>
-                <div className="space-y-2 text-sm">
-                  <p className="font-black">پارکینگ Vinci Esquirol</p>
-                  <p className="text-gray-600">مترو خط A ایستگاه Esquirol</p>
-                  <p className="text-gray-600">اتوبوس L4, L7, L9 ایستگاه Esquirol</p>
-                </div>
+                <button className="w-full py-4 bg-[#C5A059] text-[#051109] rounded-xl font-bold shadow-lg shadow-[#C5A059]/10">ذخیره پیکربندی جدید</button>
               </div>
             </div>
           </div>
-        </section>
+        )}
       </main>
 
-      {/* فوتر نهایی */}
-      <footer className="py-10 px-6 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-[10px] font-black uppercase tracking-widest">
-            © ۲۰۲۴ MUSÉE DES AUGUSTINS - طراحی شده بر اساس کانسپت بصری
+      {/* Add Customer Modal */}
+      <dialog id="add_cust" className="modal p-0 rounded-3xl bg-[#081A0E] border border-[#0F2D19] text-white backdrop:bg-black/80">
+        <div className="p-8 w-full max-w-sm">
+          <div className="flex justify-between items-center mb-8 text-[#C5A059]">
+            <h2 className="text-xl font-bold">مشتری جدید</h2>
+            <button onClick={() => document.getElementById('add_cust').close()}><X /></button>
           </div>
-          <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
-            <a href="#" className="hover:underline">اینستاگرام</a>
-            <a href="#" className="hover:underline">توییتر</a>
-            <a href="#" className="hover:underline">فیسبوک</a>
-          </div>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const data = new FormData(e.target);
+            setCustomers([...customers, { id: Date.now(), name: data.get('name'), phone: data.get('phone'), balance: 0, totalSpent: 0, joinedDate: '1402/12/28' }]);
+            e.target.reset(); document.getElementById('add_cust').close();
+          }} className="space-y-4">
+            <input name="name" required placeholder="نام مشتری" className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059]" />
+            <input name="phone" required placeholder="شماره همراه" className="w-full bg-[#051109] border border-[#0F2D19] p-4 rounded-xl outline-none focus:border-[#C5A059] text-left" />
+            <button className="w-full bg-[#C5A059] text-[#051109] py-4 rounded-xl font-bold mt-4">ثبت نام در کلاب</button>
+          </form>
         </div>
-      </footer>
+      </dialog>
 
-      {/* استایل‌های سفارشی برای متن‌های توخالی */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .text-outline-white {
-          -webkit-text-stroke: 1px white;
-        }
-      `}} />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;400;700;900&display=swap');
+        .font-vazir { font-family: 'Vazirmatn', sans-serif; }
+        .animate-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+      `}</style>
     </div>
   );
 };
+
+const StatCard = ({ label, value, icon }) => (
+  <div className="bg-[#081A0E] p-6 rounded-3xl border border-[#0F2D19] flex items-center gap-5">
+    <div className="w-12 h-12 bg-[#051109] rounded-2xl flex items-center justify-center border border-[#0F2D19]">
+      {icon}
+    </div>
+    <div>
+      <p className="text-[10px] text-gray-500 font-bold mb-1 uppercase tracking-wider">{label}</p>
+      <p className="text-lg font-black font-mono">{value}</p>
+    </div>
+  </div>
+);
+
+const PriceRow = ({ label, value, highlight }) => (
+  <div className={`flex justify-between border-b border-[#16351F] pb-2 ${highlight ? 'text-[#C5A059] font-bold' : 'text-gray-400'}`}>
+    <span>{label}:</span>
+    <span className="font-mono">{value}</span>
+  </div>
+);
 
 export default App;
