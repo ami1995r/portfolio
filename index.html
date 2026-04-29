@@ -468,34 +468,55 @@
         }
 
         // --- CALCULATION ---
-        function calculate() {
-            const price = cleanNum(document.getElementById('gold-price').value);
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const wageType = document.getElementById('wage-type').value;
-            const wageValue = cleanNum(document.getElementById('wage-value').value);
-            const profitP = parseFloat(document.getElementById('profit').value) || 0;
-            const taxP = parseFloat(document.getElementById('tax').value) || 0;
-            const useCredit = document.getElementById('use-credit').checked;
+       function calculate() {
+    const price = cleanNum(document.getElementById('gold-price').value);
+    const weight = parseFloat(document.getElementById('weight').value) || 0;
+    const wageType = document.getElementById('wage-type').value;
+    const wageValue = cleanNum(document.getElementById('wage-value').value);
+    const profitP = parseFloat(document.getElementById('profit').value) || 0;
+    const taxP = parseFloat(document.getElementById('tax').value) || 0;
+    const useCredit = document.getElementById('use-credit').checked;
 
-            const raw = price * weight;
-            let wage = (wageType === 'percent') ? (raw * (wageValue / 100)) : (wageValue * weight);
-            const base = raw + wage;
-            const totalTaxProfit = base * ((profitP + taxP) / 100);
-            let final = base + totalTaxProfit;
-            const reward = Math.floor(final * 0.01);
-            let creditUsed = 0;
-            if(useCredit && selectedCust) {
-                creditUsed = Math.min(final, selectedCust.credit);
-                final -= creditUsed;
-            }
-            document.getElementById('res-raw').innerText = formatMoney(Math.round(raw));
-            document.getElementById('res-wage').innerText = formatMoney(Math.round(wage));
-            document.getElementById('res-tax').innerText = formatMoney(Math.round(totalTaxProfit));
-            document.getElementById('res-credit').innerText = '-' + formatMoney(Math.round(creditUsed));
-            document.getElementById('res-total').innerText = formatMoney(Math.round(final));
-            document.getElementById('res-reward').innerText = formatMoney(reward);
-        }
+    // ۱. محاسبه قیمت خام طلا
+    const raw = price * weight;
 
+    // ۲. محاسبه اجرت (درصدی یا ثابت به ازای هر گرم)
+    let wage = (wageType === 'percent') ? (raw * (wageValue / 100)) : (wageValue * weight);
+    
+    // ۳. قیمت پایه (طلا + اجرت)
+    const base = raw + wage;
+
+    // ۴. محاسبه سود فروشنده (مثلاً ۷ درصد روی قیمت پایه)
+    const profitAmount = base * (profitP / 100);
+
+    // ۵. محاسبه مالیات (مثلاً ۹ درصد روی مجموع قیمت پایه و سود)
+    // نکته: طبق قانون جدید، مالیات فقط روی اجرت و سود است، 
+    // اما اکثر ماشین‌حساب‌های قدیمی روی کل قیمت حساب می‌کنند. 
+    // فرمول زیر مطابق ماشین‌حساب‌های استاندارد بازار (روی کل) است:
+    const totalBeforeTax = base + profitAmount;
+    const taxAmount = totalBeforeTax * (taxP / 100);
+
+    // ۶. قیمت نهایی قبل از کسر اعتبار
+    let final = totalBeforeTax + taxAmount;
+
+    // ۷. محاسبه پاداش ۱ درصدی برای باشگاه مشتریان
+    const reward = Math.floor(final * 0.01);
+
+    // ۸. کسر اعتبار وفاداری
+    let creditUsed = 0;
+    if(useCredit && selectedCust) {
+        creditUsed = Math.min(final, selectedCust.credit);
+        final -= creditUsed;
+    }
+
+    // به‌روزرسانی نمایش اعداد در UI
+    document.getElementById('res-raw').innerText = formatMoney(Math.round(raw));
+    document.getElementById('res-wage').innerText = formatMoney(Math.round(wage));
+    document.getElementById('res-tax').innerText = formatMoney(Math.round(profitAmount + taxAmount));
+    document.getElementById('res-credit').innerText = '-' + formatMoney(Math.round(creditUsed));
+    document.getElementById('res-total').innerText = formatMoney(Math.round(final));
+    document.getElementById('res-reward').innerText = formatMoney(reward);
+}
         // --- ACTIONS ---
         function submitInvoice() {
             const weight = document.getElementById('weight').value;
