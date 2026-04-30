@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدیریت گالری قصه | نسخه ۶.۲</title>
+    <title>مدیریت گالری قصه | نسخه ۶.۳</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
@@ -16,6 +16,7 @@
         .custom-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
         .search-item:hover { background-color: #f1f5f9; cursor: pointer; }
         .invoice-row:hover { background-color: #f8fafc; }
+        .number { font-variant-numeric: tabular-nums; }
     </style>
 </head>
 <body class="antialiased">
@@ -33,7 +34,7 @@
         <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
             <div class="p-8 border-b">
                 <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-emerald-600">قصه</span></h1>
-                <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.2</p>
+                <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.3</p>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -44,6 +45,10 @@
                 <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="font-bold">صدور فاکتور</span>
+                </button>
+                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+                    <span class="font-bold">فاکتورهای صادر شده</span>
                 </button>
                 <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
@@ -62,7 +67,7 @@
 
         <!-- Main Content -->
         <main class="flex-1 mr-0 lg:mr-72 p-4 lg:p-10 space-y-8">
-            
+
             <!-- Dashboard Tab -->
             <div id="dashboard" class="tab-content active space-y-8">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -72,28 +77,27 @@
                     </div>
                 </div>
 
-                <!-- Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
                         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">فروش کل دوره</p>
-                        <h3 class="text-2xl font-black text-slate-800" id="dash-sales-total">۰</h3>
+                        <h3 class="text-3xl font-black text-slate-800 number" id="dash-sales-total">۰</h3>
                     </div>
                     <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
                         <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">موجودی بانک طلا (گرم)</p>
-                        <h3 class="text-2xl font-black text-slate-800" id="dash-gold-total">۰.۰۰۰</h3>
+                        <h3 class="text-3xl font-black text-slate-800 number" id="dash-gold-total">۰.۰۰۰</h3>
                     </div>
                     <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
                         <div class="w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">تعداد مشتریان فعال</p>
-                        <h3 class="text-2xl font-black text-slate-800" id="dash-cust-total">۰</h3>
+                        <h3 class="text-3xl font-black text-slate-800 number" id="dash-cust-total">۰</h3>
                     </div>
                 </div>
 
@@ -147,7 +151,7 @@
                 </div>
             </div>
 
-            <!-- Invoice Tab -->
+            <!-- Invoice Tab - صدور فاکتور جدید -->
             <div id="invoice" class="tab-content">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div class="xl:col-span-2">
@@ -155,10 +159,12 @@
                             <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <!-- جستجوی مشتری -->
                                 <div class="space-y-3 relative">
                                     <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
                                     <div class="relative">
-                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none pr-12">
+                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." 
+                                               class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none pr-12">
                                         <svg class="w-6 h-6 absolute right-4 top-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
                                     <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-56 overflow-y-auto hidden"></div>
@@ -167,17 +173,33 @@
                                         <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">حذف</button>
                                     </div>
                                 </div>
+
+                                <!-- نوع طلا -->
                                 <div class="space-y-3">
-                                    <label class="text-xs font-black text-slate-500 mr-1">قیمت طلا (تومان / گرم)</label>
-                                    <input type="text" id="gold-price" oninput="formatAndCalcInv(this)" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
+                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
+                                    <select id="gold-type" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                        <option value="آب‌شده">طلای آب‌شده</option>
+                                        <option value="زینتی">طلای زینتی</option>
+                                        <option value="دست‌دوم">طلای دست‌دوم</option>
+                                        <option value="سایر">سایر</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
+                                    <input type="text" id="gold-price" oninput="formatAndCalcInv(this)" 
+                                           class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
+                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" 
+                                           class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                <div class="space-y-2">
-                                    <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
-                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">نوع اجرت</label>
                                     <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-4 rounded-xl font-bold outline-none">
@@ -187,18 +209,21 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                    <input type="text" id="wage-value" oninput="formatAndCalcInv(this)" value="7" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="text" id="wage-value" oninput="formatAndCalcInv(this)" value="7" 
+                                           class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
+                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" 
+                                           class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-6 mb-8">
                                 <div class="space-y-2">
-                                    <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
-                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                </div>
-                                <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مالیات (%)</label>
-                                    <input type="number" id="tax" value="9" oninput="calculateInvoice()" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="number" id="tax" value="9" oninput="calculateInvoice()" 
+                                           class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
@@ -213,75 +238,82 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-slate-400">استفاده</span>
+                                    <span class="text-xs font-bold text-slate-400">استفاده از اعتبار</span>
                                     <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-emerald-600">
                                 </div>
                             </div>
 
-                            <button onclick="saveInvoice()" class="w-full bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow">تایید و چاپ فاکتور</button>
+                            <button onclick="saveInvoice()" class="w-full bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow">
+                                تایید و چاپ فاکتور
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Invoice Summary + List -->
+                    <!-- خلاصه محاسبات -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
                             <h4 class="text-center font-black text-slate-800 mb-8 pb-4 border-b">خلاصه محاسبات</h4>
-                            <div class="space-y-5">
-                                <div class="flex justify-between items-center text-slate-400 font-bold">
-                                    <span class="text-xs">قیمت خام طلا:</span>
-                                    <span id="sum-raw" class="font-mono">۰</span>
+                            <div class="space-y-6 text-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
+                                    <span id="sum-raw" class="font-black number text-slate-700">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center text-slate-400 font-bold">
-                                    <span class="text-xs">کل اجرت:</span>
-                                    <span id="sum-wage" class="font-mono">۰</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">کل اجرت:</span>
+                                    <span id="sum-wage" class="font-black number text-slate-700">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center text-slate-400 font-bold">
-                                    <span class="text-xs">سود و مالیات:</span>
-                                    <span id="sum-tax" class="font-mono">۰</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">سود و مالیات:</span>
+                                    <span id="sum-tax" class="font-black number text-slate-700">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center text-red-500 font-black pt-4 border-t border-dashed">
-                                    <span class="text-xs">کسر اعتبار:</span>
-                                    <span id="sum-credit" class="font-mono">۰-</span>
+                                <div class="flex justify-between items-center text-red-600">
+                                    <span class="font-bold">کسر اعتبار:</span>
+                                    <span id="sum-credit" class="font-black number">-۰</span>
                                 </div>
-                                <div class="text-center pt-8">
-                                    <p class="text-4xl font-black text-slate-900 mb-1" id="sum-total">۰</p>
-                                    <p class="text-[10px] text-slate-300 uppercase tracking-widest font-black">Tomans</p>
+                                <div class="pt-6 border-t border-dashed">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="text-xl font-bold text-slate-600">مبلغ نهایی:</span>
+                                        <span id="sum-total" class="text-4xl font-black text-emerald-600 number">۰</span>
+                                    </div>
                                 </div>
-                                <div class="bg-emerald-600 text-white p-5 rounded-2xl text-center mt-6 shadow-xl shadow-emerald-100">
-                                    <p class="text-[10px] opacity-80 font-bold mb-1">پاداش این خرید (۱٪ سود مشتری)</p>
-                                    <p id="sum-reward" class="text-2xl font-black">۰</p>
+                                <div class="bg-emerald-600 text-white p-6 rounded-2xl text-center">
+                                    <p class="text-sm opacity-90">پاداش این خرید</p>
+                                    <p id="sum-reward" class="text-3xl font-black">۰</p>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- لیست فاکتورهای صادر شده - بهبود یافته -->
-                        <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                            <div class="p-6 border-b bg-slate-50/50 flex items-center justify-between">
-                                <h3 class="font-black text-slate-800">فاکتورهای صادر شده</h3>
-                                <input type="text" id="invoice-search" oninput="filterInvoices()" 
-                                       placeholder="جستجو در فاکتورها..." 
-                                       class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-56">
-                            </div>
-                            <div class="overflow-x-auto max-h-[500px]">
-                                <table class="w-full text-right text-sm">
-                                    <thead class="bg-slate-50 text-slate-500 sticky top-0">
-                                        <tr>
-                                            <th class="p-4 font-black">تاریخ</th>
-                                            <th class="p-4 font-black">مشتری</th>
-                                            <th class="p-4 font-black">وزن (گرم)</th>
-                                            <th class="p-4 font-black">قیمت طلا</th>
-                                            <th class="p-4 font-black">مبلغ کل</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Gold Bank Tab -->
+            <!-- تب فاکتورهای صادر شده -->
+            <div id="invoices-list" class="tab-content">
+                <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+                    <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
+                        <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
+                        <input type="text" id="invoice-search" oninput="filterInvoices()" 
+                               placeholder="جستجو در فاکتورها..." 
+                               class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-72">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="bg-slate-50 text-slate-500 sticky top-0">
+                                <tr>
+                                    <th class="p-5 font-black">تاریخ</th>
+                                    <th class="p-5 font-black">مشتری</th>
+                                    <th class="p-5 font-black">نوع طلا</th>
+                                    <th class="p-5 font-black">وزن (گرم)</th>
+                                    <th class="p-5 font-black">قیمت طلا</th>
+                                    <th class="p-5 font-black">مبلغ کل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بانک طلا -->
             <div id="gold-bank" class="tab-content space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
@@ -294,7 +326,8 @@
                         <div class="space-y-6">
                             <div class="space-y-2 relative">
                                 <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
-                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." 
+                                       class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
                                 <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
                                 <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-xl mt-2">
                                     <span id="gb-selected-name" class="font-black text-amber-700 text-sm"></span>
@@ -307,22 +340,22 @@
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
-                                <input type="text" id="gb-note" placeholder="..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
                             </div>
                             <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-amber-600 transition-all">ثبت در بانک طلا</button>
                         </div>
                     </div>
+
                     <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                        <div class="p-6 border-b flex justify-between items-center bg-slate-50/50">
-                            <h3 class="font-black text-slate-800">لیست امانات فعال</h3>
+                        <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
+                            <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-right text-sm">
+                            <table class="w-full text-right">
                                 <thead class="bg-slate-50 text-slate-500">
                                     <tr>
                                         <th class="p-5 font-black">نام مشتری</th>
-                                        <th class="p-5 font-black">وزن (گرم)</th>
-                                        <th class="p-5 font-black">تاریخ ثبت</th>
+                                        <th class="p-5 font-black">مجموع وزن (گرم)</th>
                                         <th class="p-5 font-black text-center">عملیات</th>
                                     </tr>
                                 </thead>
@@ -333,7 +366,7 @@
                 </div>
             </div>
 
-            <!-- Customers Tab -->
+            <!-- مشتریان -->
             <div id="customers" class="tab-content space-y-8">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-black text-slate-800">مدیریت مشتریان</h2>
@@ -355,14 +388,13 @@
                 </div>
             </div>
 
-            <!-- Reports Tab -->
+            <!-- گزارشات -->
             <div id="reports" class="tab-content space-y-8">
                 <div class="bg-emerald-600 text-white p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
                     <div class="relative z-10">
                         <h2 class="text-3xl font-black mb-2">مرکز گزارشات و خروجی</h2>
                         <p class="opacity-80 font-bold">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
                     </div>
-                    <svg class="absolute left-[-20px] bottom-[-20px] w-64 h-64 text-white/10" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -402,7 +434,35 @@
         </main>
     </div>
 
-    <!-- Modals -->
+    <!-- Modal جزئیات امانات مشتری -->
+    <div id="gold-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-[2.5rem] p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-black" id="modal-customer-name"></h3>
+                <button onclick="closeGoldDetailModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="p-4 text-right font-black">تاریخ</th>
+                            <th class="p-4 text-right font-black">وزن امانت (گرم)</th>
+                            <th class="p-4 text-right font-black">یادداشت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gold-detail-tbody" class="divide-y"></tbody>
+                </table>
+            </div>
+            <div class="mt-8 pt-6 border-t text-xl font-black flex justify-between">
+                <span>مجموع وزن امانت:</span>
+                <span id="modal-total-weight" class="text-emerald-600"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal افزودن مشتری -->
     <div id="add-cust-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl">
             <h3 class="text-2xl font-black text-slate-800 mb-8">افزودن مشتری جدید</h3>
@@ -419,10 +479,10 @@
     </div>
 
     <script>
-        // --- State Management ---
-        let customers = JSON.parse(localStorage.getItem('ghesseh_v62_customers')) || [];
-        let invoices = JSON.parse(localStorage.getItem('ghesseh_v62_invoices')) || [];
-        let goldBank = JSON.parse(localStorage.getItem('ghesseh_v62_gold')) || [];
+        // State
+        let customers = JSON.parse(localStorage.getItem('ghesseh_v63_customers')) || [];
+        let invoices = JSON.parse(localStorage.getItem('ghesseh_v63_invoices')) || [];
+        let goldBank = JSON.parse(localStorage.getItem('ghesseh_v63_gold')) || [];
 
         let selectedCustomer = { inv: null, gb: null };
 
@@ -432,9 +492,9 @@
         };
 
         function refreshAll() {
-            localStorage.setItem('ghesseh_v62_customers', JSON.stringify(customers));
-            localStorage.setItem('ghesseh_v62_invoices', JSON.stringify(invoices));
-            localStorage.setItem('ghesseh_v62_gold', JSON.stringify(goldBank));
+            localStorage.setItem('ghesseh_v63_customers', JSON.stringify(customers));
+            localStorage.setItem('ghesseh_v63_invoices', JSON.stringify(invoices));
+            localStorage.setItem('ghesseh_v63_gold', JSON.stringify(goldBank));
             
             updateDashboard();
             renderCustomers();
@@ -442,37 +502,46 @@
             renderInvoices();
         }
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('translate-x-full'); }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('translate-x-full');
+        }
 
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('sidebar-active', 'text-slate-500');
-                if (btn.getAttribute('onclick').includes(id)) btn.classList.add('sidebar-active');
-                else btn.classList.add('text-slate-500');
+                btn.classList.remove('sidebar-active');
+                if (btn.getAttribute('onclick').includes(id)) {
+                    btn.classList.add('sidebar-active');
+                }
             });
+            
             if (window.innerWidth < 1024) toggleSidebar();
         }
 
-        // --- Live Search ---
+        // Live Search
         function liveSearch(query, context) {
             const resultsDiv = document.getElementById(`${context}-search-results`);
-            if (!query) { 
-                resultsDiv.classList.add('hidden'); 
-                return; 
+            if (!query) {
+                resultsDiv.classList.add('hidden');
+                return;
             }
 
-            const filtered = customers.filter(c => c.name.includes(query) || c.national.includes(query));
-            if (filtered.length === 0) { 
-                resultsDiv.classList.add('hidden'); 
-                return; 
+            const filtered = customers.filter(c => 
+                c.name.includes(query) || (c.national && c.national.includes(query))
+            );
+
+            if (filtered.length === 0) {
+                resultsDiv.classList.add('hidden');
+                return;
             }
 
             resultsDiv.innerHTML = filtered.map(c => `
-                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" class="search-item p-4 border-b flex justify-between items-center transition-all">
+                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" 
+                     class="search-item p-4 border-b flex justify-between items-center transition-all">
                     <span class="font-bold text-slate-700">${c.name}</span>
-                    <span class="text-xs font-mono text-slate-400">${c.national}</span>
+                    <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
                 </div>
             `).join('');
             resultsDiv.classList.remove('hidden');
@@ -486,7 +555,7 @@
             
             if (context === 'inv') {
                 document.getElementById('credit-panel').classList.remove('hidden');
-                document.getElementById('inv-credit-val').innerText = parseInt(credit).toLocaleString();
+                document.getElementById('inv-credit-val').innerText = parseInt(credit).toLocaleString('fa-IR');
                 calculateInvoice();
             }
         }
@@ -503,10 +572,10 @@
             }
         }
 
-        // --- Trading Calculator ---
+        // Trading Calculator
         function formatAndCalcTrade() {
             let val = event.target.value.replace(/,/g, '');
-            if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString();
+            if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString('fa-IR');
             calcTradeGold();
         }
 
@@ -528,13 +597,13 @@
             }
 
             document.getElementById('trade-res-weight').innerText = weight.toFixed(3);
-            document.getElementById('trade-res-total').innerText = Math.round(totalValue || (weight * pricePerGram * (1 + profitPercent / 100))).toLocaleString();
+            document.getElementById('trade-res-total').innerText = Math.round(totalValue || (weight * pricePerGram * (1 + profitPercent / 100))).toLocaleString('fa-IR');
         }
 
-        // --- Invoice Logic ---
+        // Invoice Calculations
         function formatAndCalcInv(input) {
             let val = input.value.replace(/,/g, '');
-            if(!isNaN(val) && val !== "") input.value = parseFloat(val).toLocaleString();
+            if(!isNaN(val) && val !== "") input.value = parseFloat(val).toLocaleString('fa-IR');
             calculateInvoice();
         }
 
@@ -567,12 +636,12 @@
                 total -= deducted;
             }
 
-            document.getElementById('sum-raw').innerText = Math.round(raw).toLocaleString();
-            document.getElementById('sum-wage').innerText = Math.round(wage).toLocaleString();
-            document.getElementById('sum-tax').innerText = Math.round(profit + tax).toLocaleString();
-            document.getElementById('sum-credit').innerText = Math.round(deducted).toLocaleString() + "-";
-            document.getElementById('sum-total').innerText = Math.round(total).toLocaleString();
-            document.getElementById('sum-reward').innerText = Math.round(reward).toLocaleString();
+            document.getElementById('sum-raw').innerText = Math.round(raw).toLocaleString('fa-IR');
+            document.getElementById('sum-wage').innerText = Math.round(wage).toLocaleString('fa-IR');
+            document.getElementById('sum-tax').innerText = Math.round(profit + tax).toLocaleString('fa-IR');
+            document.getElementById('sum-credit').innerText = "-" + Math.round(deducted).toLocaleString('fa-IR');
+            document.getElementById('sum-total').innerText = Math.round(total).toLocaleString('fa-IR');
+            document.getElementById('sum-reward').innerText = Math.round(reward).toLocaleString('fa-IR');
         }
 
         function saveInvoice() {
@@ -581,10 +650,13 @@
 
             const price = parseFloat(document.getElementById('gold-price').value.replace(/,/g, '')) || 0;
             const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const total = parseInt(document.getElementById('sum-total').innerText.replace(/,/g, ''));
-            const reward = parseInt(document.getElementById('sum-reward').innerText.replace(/,/g, ''));
+            const goldType = document.getElementById('gold-type').value;
+            const total = parseInt(document.getElementById('sum-total').innerText.replace(/,/g, '')) || 0;
+            const reward = parseInt(document.getElementById('sum-reward').innerText.replace(/,/g, '')) || 0;
             const useCredit = document.getElementById('use-credit').checked;
+
             const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
 
             if (useCredit) {
                 const totalBeforeDeduct = parseInt(document.getElementById('sum-raw').innerText.replace(/,/g, '')) + 
@@ -599,6 +671,7 @@
                 id: Date.now(),
                 customerName: customers[cIndex].name,
                 customerId: selectedCustomer.inv,
+                goldType: goldType,
                 weight: weight,
                 goldPrice: price,
                 total: total,
@@ -621,9 +694,10 @@
                 <tr class="invoice-row transition-all">
                     <td class="p-4 text-slate-400 text-xs">${i.date}</td>
                     <td class="p-4 font-black text-slate-700">${i.customerName}</td>
+                    <td class="p-4 font-bold text-amber-600">${i.goldType || 'آب‌شده'}</td>
                     <td class="p-4 font-mono font-bold text-amber-600">${i.weight.toFixed(3)} گرم</td>
-                    <td class="p-4 font-mono text-slate-500">${i.goldPrice.toLocaleString()} تومان</td>
-                    <td class="p-4 font-mono font-bold text-emerald-600">${i.total.toLocaleString()} تومان</td>
+                    <td class="p-4 font-mono text-slate-500">${(i.goldPrice || 0).toLocaleString('fa-IR')} تومان</td>
+                    <td class="p-4 font-mono font-bold text-emerald-600">${i.total.toLocaleString('fa-IR')} تومان</td>
                 </tr>
             `).join('');
         }
@@ -636,61 +710,97 @@
             }
             const filtered = invoices.filter(i => 
                 i.customerName.toLowerCase().includes(query) ||
+                (i.goldType && i.goldType.includes(query)) ||
                 i.date.includes(query)
             );
             renderInvoices(filtered);
         }
 
-        // --- Gold Bank Logic ---
+        // Gold Bank
         function saveToGoldBank() {
             if (!selectedCustomer.gb) return toast("مشتری را انتخاب کنید", "error");
-            const w = document.getElementById('gb-weight').value;
-            if (!w) return toast("وزن طلا الزامی است", "error");
+            const weight = parseFloat(document.getElementById('gb-weight').value);
+            if (!weight) return toast("وزن طلا الزامی است", "error");
 
             const cust = customers.find(c => c.id == selectedCustomer.gb);
+            if (!cust) return toast("مشتری یافت نشد", "error");
+
             goldBank.push({
                 id: Date.now(),
+                customerId: selectedCustomer.gb,
                 customerName: cust.name,
-                weight: parseFloat(w),
+                weight: weight,
                 note: document.getElementById('gb-note').value || '-',
                 date: new Intl.DateTimeFormat('fa-IR').format(new Date())
             });
 
-            toast("امانت در بانک طلا ثبت شد", "success");
+            toast("امانت جدید ثبت شد", "success");
             clearSelection('gb');
             document.getElementById('gb-weight').value = "";
             document.getElementById('gb-note').value = "";
             refreshAll();
         }
 
-        function deleteGoldBank(id) {
-            goldBank = goldBank.filter(g => g.id !== id);
-            refreshAll();
+        function showGoldDetails(customerId) {
+            const customerGold = goldBank.filter(g => g.customerId == customerId);
+            const customer = customers.find(c => c.id == customerId);
+
+            document.getElementById('modal-customer-name').innerText = customer ? customer.name : 'نامشخص';
+            const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
+            document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(3) + " گرم";
+
+            const tbody = document.getElementById('gold-detail-tbody');
+            tbody.innerHTML = customerGold.map(g => `
+                <tr>
+                    <td class="p-4">${g.date}</td>
+                    <td class="p-4 font-black text-amber-600">${g.weight.toFixed(3)}</td>
+                    <td class="p-4 text-slate-500">${g.note}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('gold-detail-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeGoldDetailModal() {
+            document.getElementById('gold-detail-modal').classList.replace('flex', 'hidden');
         }
 
         function renderGoldBank() {
-            const list = document.getElementById('gold-bank-tbody');
-            list.innerHTML = goldBank.map(g => `
-                <tr class="hover:bg-slate-50 transition-all">
-                    <td class="p-5 font-black text-slate-700">${g.customerName}</td>
-                    <td class="p-5 font-mono font-bold text-amber-600">${g.weight.toFixed(3)} گرم</td>
-                    <td class="p-5 text-slate-400 text-xs">${g.date}</td>
-                    <td class="p-5 text-center">
-                        <button onclick="deleteGoldBank(${g.id})" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg">حذف</button>
-                    </td>
-                </tr>
-            `).join('');
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) grouped[item.customerId] = [];
+                grouped[item.customerId].push(item);
+            });
+
+            const tbody = document.getElementById('gold-bank-tbody');
+            tbody.innerHTML = Object.keys(grouped).map(cid => {
+                const items = grouped[cid];
+                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+                const cust = customers.find(c => c.id == cid);
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+                        <td class="p-5 font-black text-amber-600">${totalWeight.toFixed(3)} گرم</td>
+                        <td class="p-5 text-center">
+                            <button onclick="showGoldDetails(${cid})" 
+                                    class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
+                                جزئیات امانات
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        // --- Customer Logic ---
+        // Customers
         function renderCustomers() {
             const tbody = document.getElementById('customers-tbody');
             tbody.innerHTML = customers.map(c => `
                 <tr class="hover:bg-slate-50 transition-all">
                     <td class="p-6 font-black text-slate-700">${c.name}</td>
-                    <td class="p-6 font-mono text-slate-500">${c.national}</td>
-                    <td class="p-6 font-mono text-slate-500">${c.phone}</td>
-                    <td class="p-6 font-black text-emerald-600">${(c.credit || 0).toLocaleString()}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
+                    <td class="p-6 font-black text-emerald-600">${(c.credit || 0).toLocaleString('fa-IR')}</td>
                     <td class="p-6 text-center">
                         <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
                     </td>
@@ -699,64 +809,71 @@
         }
 
         function saveCustomer() {
-            const n = document.getElementById('m-name').value;
-            const m = document.getElementById('m-national').value;
-            const p = document.getElementById('m-phone').value;
-            if (!n || !m) return toast("اطلاعات را کامل کنید", "error");
+            const n = document.getElementById('m-name').value.trim();
+            const m = document.getElementById('m-national').value.trim();
+            const p = document.getElementById('m-phone').value.trim();
             
-            customers.push({ id: Date.now(), name: n, national: m, phone: p, credit: 0 });
+            if (!n || !m) return toast("نام و کد ملی الزامی است", "error");
+            
+            customers.push({ 
+                id: Date.now(), 
+                name: n, 
+                national: m, 
+                phone: p, 
+                credit: 0 
+            });
+            
             closeAddModal();
             refreshAll();
             toast("مشتری با موفقیت افزوده شد", "success");
         }
 
         function deleteCustomer(id) {
-            customers = customers.filter(c => c.id !== id);
-            refreshAll();
+            if (confirm("آیا از حذف این مشتری اطمینان دارید؟")) {
+                customers = customers.filter(c => c.id !== id);
+                refreshAll();
+            }
         }
 
-        // --- Dashboard Stats ---
+        // Dashboard
         function updateDashboard() {
-            const sales = invoices.reduce((s, i) => s + i.total, 0);
-            const gold = goldBank.reduce((s, g) => s + g.weight, 0);
+            const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
+            const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
             
-            document.getElementById('dash-sales-total').innerText = sales.toLocaleString();
+            document.getElementById('dash-sales-total').innerText = sales.toLocaleString('fa-IR');
             document.getElementById('dash-gold-total').innerText = gold.toFixed(3);
             document.getElementById('dash-cust-total').innerText = customers.length;
         }
 
-        // --- Export Logic ---
+        // Export
         function exportData(type) {
             let csv = "\uFEFF";
-            let name = "Export.csv";
+            let name = "Ghesseh_Export.csv";
 
             if (type === 'customers') {
                 csv += "نام,کد ملی,شماره تماس,اعتبار\n";
-                customers.forEach(c => csv += `${c.name},${c.national},${c.phone},${c.credit}\n`);
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
                 name = "Ghesseh_Customers.csv";
-            } 
-            else if (type === 'invoices') {
-                csv += "تاریخ,مشتری,وزن (گرم),قیمت طلا (تومان/گرم),مبلغ کل (تومان)\n";
-                invoices.forEach(i => csv += `${i.date},${i.customerName},${i.weight},${i.goldPrice},${i.total}\n`);
+            } else if (type === 'invoices') {
+                csv += "تاریخ,مشتری,نوع طلا,وزن (گرم),قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
                 name = "Ghesseh_Invoices.csv";
-            } 
-            else if (type === 'gold') {
+            } else if (type === 'gold') {
                 csv += "مشتری,وزن,تاریخ,توضیحات\n";
-                goldBank.forEach(g => csv += `${g.customerName},${g.weight},${g.date},${g.note}\n`);
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}"\n`);
                 name = "Ghesseh_GoldBank.csv";
-            } 
-            else if (type === 'all') {
+            } else if (type === 'all') {
                 csv += "=== مشتریان ===\n";
                 csv += "نام,کد ملی,شماره تماس,اعتبار\n";
-                customers.forEach(c => csv += `${c.name},${c.national},${c.phone},${c.credit}\n`);
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
                 
                 csv += "\n=== فاکتورها ===\n";
-                csv += "تاریخ,مشتری,وزن,قیمت طلا,مبلغ کل\n";
-                invoices.forEach(i => csv += `${i.date},${i.customerName},${i.weight},${i.goldPrice},${i.total}\n`);
+                csv += "تاریخ,مشتری,نوع طلا,وزن,قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
                 
                 csv += "\n=== بانک طلا ===\n";
                 csv += "مشتری,وزن,تاریخ,توضیحات\n";
-                goldBank.forEach(g => csv += `${g.customerName},${g.weight},${g.date},${g.note}\n`);
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}"\n`);
                 
                 name = "Ghesseh_Full_Report.csv";
             }
@@ -769,19 +886,23 @@
             toast("فایل با موفقیت دانلود شد", "success");
         }
 
-        // --- UI Utils ---
-        function openAddModal() { document.getElementById('add-cust-modal').classList.replace('hidden', 'flex'); }
-        function closeAddModal() { document.getElementById('add-cust-modal').classList.replace('flex', 'hidden'); }
-        
-        function toast(m, t) {
+        // Modals
+        function openAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('hidden', 'flex');
+        }
+        function closeAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('flex', 'hidden');
+        }
+
+        function toast(message, type = "success") {
             const div = document.createElement('div');
-            div.className = `fixed bottom-8 left-8 px-8 py-4 rounded-[1.5rem] text-white font-black shadow-2xl z-[1000] animate-bounce ${t==='success'?'bg-emerald-600':'bg-red-500'}`;
-            div.innerText = m;
+            div.className = `fixed bottom-8 left-8 px-8 py-4 rounded-[1.5rem] text-white font-black shadow-2xl z-[1000] animate-bounce ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
+            div.innerText = message;
             document.body.appendChild(div);
             setTimeout(() => div.remove(), 3000);
         }
 
-        // Bug Fix: Force recalculation when profit percent changes to 0
+        // Event listeners
         document.addEventListener('input', function(e) {
             if (e.target.id === 'profit' || e.target.id === 'tax') {
                 calculateInvoice();
