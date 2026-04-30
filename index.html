@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدیریت گالری قصه | نسخه ۶.۱</title>
+    <title>مدیریت گالری قصه | نسخه ۶.۲</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
@@ -15,6 +15,7 @@
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .custom-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
         .search-item:hover { background-color: #f1f5f9; cursor: pointer; }
+        .invoice-row:hover { background-color: #f8fafc; }
     </style>
 </head>
 <body class="antialiased">
@@ -32,7 +33,7 @@
         <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
             <div class="p-8 border-b">
                 <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-emerald-600">قصه</span></h1>
-                <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.1</p>
+                <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.2</p>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -96,7 +97,7 @@
                     </div>
                 </div>
 
-                <!-- Updated Melting Calculator for Gold Trading -->
+                <!-- Trading Calculator -->
                 <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
                     <div class="relative z-10">
@@ -106,7 +107,6 @@
                         </div>
                         
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <!-- Inputs -->
                             <div class="lg:col-span-2 space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
@@ -135,7 +135,6 @@
                                 </div>
                             </div>
 
-                            <!-- Results -->
                             <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
                                 <p class="text-slate-400 text-sm font-bold mb-2">وزن قابل معامله (گرم)</p>
                                 <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400 mb-6">۰.۰۰۰</h4>
@@ -155,7 +154,6 @@
                         <div class="bg-white p-8 lg:p-12 rounded-[3rem] border border-slate-100 custom-shadow">
                             <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
                             
-                            <!-- بقیه کد صدور فاکتور بدون تغییر باقی مانده -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-3 relative">
                                     <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
@@ -224,7 +222,7 @@
                         </div>
                     </div>
 
-                    <!-- Invoice Summary -->
+                    <!-- Invoice Summary + List -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
                             <h4 class="text-center font-black text-slate-800 mb-8 pb-4 border-b">خلاصه محاسبات</h4>
@@ -256,18 +254,23 @@
                             </div>
                         </div>
 
-                        <!-- لیست فاکتورهای صادر شده -->
+                        <!-- لیست فاکتورهای صادر شده - بهبود یافته -->
                         <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                            <div class="p-6 border-b bg-slate-50/50">
+                            <div class="p-6 border-b bg-slate-50/50 flex items-center justify-between">
                                 <h3 class="font-black text-slate-800">فاکتورهای صادر شده</h3>
+                                <input type="text" id="invoice-search" oninput="filterInvoices()" 
+                                       placeholder="جستجو در فاکتورها..." 
+                                       class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-56">
                             </div>
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-auto max-h-[500px]">
                                 <table class="w-full text-right text-sm">
-                                    <thead class="bg-slate-50 text-slate-500">
+                                    <thead class="bg-slate-50 text-slate-500 sticky top-0">
                                         <tr>
-                                            <th class="p-5 font-black">تاریخ</th>
-                                            <th class="p-5 font-black">مشتری</th>
-                                            <th class="p-5 font-black">مبلغ کل</th>
+                                            <th class="p-4 font-black">تاریخ</th>
+                                            <th class="p-4 font-black">مشتری</th>
+                                            <th class="p-4 font-black">وزن (گرم)</th>
+                                            <th class="p-4 font-black">قیمت طلا</th>
+                                            <th class="p-4 font-black">مبلغ کل</th>
                                         </tr>
                                     </thead>
                                     <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
@@ -362,29 +365,37 @@
                     <svg class="absolute left-[-20px] bottom-[-20px] w-64 h-64 text-white/10" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <button onclick="exportData('customers')" class="bg-white p-10 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right">
-                        <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onclick="exportData('customers')" class="bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right flex flex-col items-start">
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </div>
                         <h4 class="text-xl font-black text-slate-800">خروجی مشتریان</h4>
-                        <p class="text-slate-400 font-bold mt-2 text-xs">CSV Export / Customers List</p>
+                        <p class="text-slate-400 font-bold mt-2 text-sm">لیست کامل مشتریان</p>
                     </button>
 
-                    <button onclick="exportData('invoices')" class="bg-white p-10 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right">
-                        <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <button onclick="exportData('invoices')" class="bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right flex flex-col items-start">
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         </div>
                         <h4 class="text-xl font-black text-slate-800">خروجی فاکتورها</h4>
-                        <p class="text-slate-400 font-bold mt-2 text-xs">CSV Export / Sales History</p>
+                        <p class="text-slate-400 font-bold mt-2 text-sm">تاریخچه فروش کامل</p>
                     </button>
 
-                    <button onclick="exportData('gold')" class="bg-white p-10 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right">
-                        <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <button onclick="exportData('gold')" class="bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right flex flex-col items-start">
+                        <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                         </div>
                         <h4 class="text-xl font-black text-slate-800">خروجی بانک طلا</h4>
-                        <p class="text-slate-400 font-bold mt-2 text-xs">CSV Export / Gold Inventory</p>
+                        <p class="text-slate-400 font-bold mt-2 text-sm">امانات طلای آب‌شده</p>
+                    </button>
+
+                    <button onclick="exportData('all')" class="bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 hover:border-emerald-500 transition-all custom-shadow group text-right flex flex-col items-start">
+                        <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-black text-slate-800">خروجی کلی سیستم</h4>
+                        <p class="text-slate-400 font-bold mt-2 text-sm">تمام اطلاعات در یک فایل</p>
                     </button>
                 </div>
             </div>
@@ -409,9 +420,9 @@
 
     <script>
         // --- State Management ---
-        let customers = JSON.parse(localStorage.getItem('ghesseh_v6_customers')) || [];
-        let invoices = JSON.parse(localStorage.getItem('ghesseh_v6_invoices')) || [];
-        let goldBank = JSON.parse(localStorage.getItem('ghesseh_v6_gold')) || [];
+        let customers = JSON.parse(localStorage.getItem('ghesseh_v62_customers')) || [];
+        let invoices = JSON.parse(localStorage.getItem('ghesseh_v62_invoices')) || [];
+        let goldBank = JSON.parse(localStorage.getItem('ghesseh_v62_gold')) || [];
 
         let selectedCustomer = { inv: null, gb: null };
 
@@ -421,9 +432,9 @@
         };
 
         function refreshAll() {
-            localStorage.setItem('ghesseh_v6_customers', JSON.stringify(customers));
-            localStorage.setItem('ghesseh_v6_invoices', JSON.stringify(invoices));
-            localStorage.setItem('ghesseh_v6_gold', JSON.stringify(goldBank));
+            localStorage.setItem('ghesseh_v62_customers', JSON.stringify(customers));
+            localStorage.setItem('ghesseh_v62_invoices', JSON.stringify(invoices));
+            localStorage.setItem('ghesseh_v62_gold', JSON.stringify(goldBank));
             
             updateDashboard();
             renderCustomers();
@@ -473,9 +484,6 @@
             document.getElementById(`${context}-selected-name`).innerText = name;
             document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
             
-            // رفع مشکل قبلی: فیلد جستجو مخفی نشود
-            // document.getElementById(`${context}-cust-search`).parentElement.classList.add('hidden'); ← حذف شد
-
             if (context === 'inv') {
                 document.getElementById('credit-panel').classList.remove('hidden');
                 document.getElementById('inv-credit-val').innerText = parseInt(credit).toLocaleString();
@@ -495,7 +503,7 @@
             }
         }
 
-        // --- New Trading Calculator ---
+        // --- Trading Calculator ---
         function formatAndCalcTrade() {
             let val = event.target.value.replace(/,/g, '');
             if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString();
@@ -523,7 +531,7 @@
             document.getElementById('trade-res-total').innerText = Math.round(totalValue || (weight * pricePerGram * (1 + profitPercent / 100))).toLocaleString();
         }
 
-        // --- Invoice Logic (بدون تغییر اساسی) ---
+        // --- Invoice Logic ---
         function formatAndCalcInv(input) {
             let val = input.value.replace(/,/g, '');
             if(!isNaN(val) && val !== "") input.value = parseFloat(val).toLocaleString();
@@ -569,7 +577,10 @@
 
         function saveInvoice() {
             if (!selectedCustomer.inv) return toast("مشتری را انتخاب کنید", "error");
-            
+            if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
+
+            const price = parseFloat(document.getElementById('gold-price').value.replace(/,/g, '')) || 0;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
             const total = parseInt(document.getElementById('sum-total').innerText.replace(/,/g, ''));
             const reward = parseInt(document.getElementById('sum-reward').innerText.replace(/,/g, ''));
             const useCredit = document.getElementById('use-credit').checked;
@@ -587,25 +598,47 @@
             invoices.push({
                 id: Date.now(),
                 customerName: customers[cIndex].name,
+                customerId: selectedCustomer.inv,
+                weight: weight,
+                goldPrice: price,
                 total: total,
-                date: new Intl.DateTimeFormat('fa-IR').format(new Date())
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                fullDate: new Date().toISOString()
             });
 
             toast("فاکتور با موفقیت ثبت شد", "success");
             clearSelection('inv');
             document.getElementById('weight').value = "";
+            document.getElementById('gold-price').value = "";
             refreshAll();
         }
 
-        function renderInvoices() {
+        function renderInvoices(filteredInvoices = null) {
             const tbody = document.getElementById('invoices-tbody');
-            tbody.innerHTML = invoices.map(i => `
-                <tr class="hover:bg-slate-50 transition-all">
-                    <td class="p-5 text-slate-400 text-xs">${i.date}</td>
-                    <td class="p-5 font-black text-slate-700">${i.customerName}</td>
-                    <td class="p-5 font-mono font-bold text-emerald-600">${i.total.toLocaleString()} تومان</td>
+            const data = filteredInvoices || invoices;
+            
+            tbody.innerHTML = data.map(i => `
+                <tr class="invoice-row transition-all">
+                    <td class="p-4 text-slate-400 text-xs">${i.date}</td>
+                    <td class="p-4 font-black text-slate-700">${i.customerName}</td>
+                    <td class="p-4 font-mono font-bold text-amber-600">${i.weight.toFixed(3)} گرم</td>
+                    <td class="p-4 font-mono text-slate-500">${i.goldPrice.toLocaleString()} تومان</td>
+                    <td class="p-4 font-mono font-bold text-emerald-600">${i.total.toLocaleString()} تومان</td>
                 </tr>
             `).join('');
+        }
+
+        function filterInvoices() {
+            const query = document.getElementById('invoice-search').value.trim().toLowerCase();
+            if (!query) {
+                renderInvoices();
+                return;
+            }
+            const filtered = invoices.filter(i => 
+                i.customerName.toLowerCase().includes(query) ||
+                i.date.includes(query)
+            );
+            renderInvoices(filtered);
         }
 
         // --- Gold Bank Logic ---
@@ -701,14 +734,31 @@
                 csv += "نام,کد ملی,شماره تماس,اعتبار\n";
                 customers.forEach(c => csv += `${c.name},${c.national},${c.phone},${c.credit}\n`);
                 name = "Ghesseh_Customers.csv";
-            } else if (type === 'invoices') {
-                csv += "تاریخ,مشتری,مبلغ کل\n";
-                invoices.forEach(i => csv += `${i.date},${i.customerName},${i.total}\n`);
-                name = "Ghesseh_Sales.csv";
-            } else if (type === 'gold') {
+            } 
+            else if (type === 'invoices') {
+                csv += "تاریخ,مشتری,وزن (گرم),قیمت طلا (تومان/گرم),مبلغ کل (تومان)\n";
+                invoices.forEach(i => csv += `${i.date},${i.customerName},${i.weight},${i.goldPrice},${i.total}\n`);
+                name = "Ghesseh_Invoices.csv";
+            } 
+            else if (type === 'gold') {
                 csv += "مشتری,وزن,تاریخ,توضیحات\n";
                 goldBank.forEach(g => csv += `${g.customerName},${g.weight},${g.date},${g.note}\n`);
                 name = "Ghesseh_GoldBank.csv";
+            } 
+            else if (type === 'all') {
+                csv += "=== مشتریان ===\n";
+                csv += "نام,کد ملی,شماره تماس,اعتبار\n";
+                customers.forEach(c => csv += `${c.name},${c.national},${c.phone},${c.credit}\n`);
+                
+                csv += "\n=== فاکتورها ===\n";
+                csv += "تاریخ,مشتری,وزن,قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `${i.date},${i.customerName},${i.weight},${i.goldPrice},${i.total}\n`);
+                
+                csv += "\n=== بانک طلا ===\n";
+                csv += "مشتری,وزن,تاریخ,توضیحات\n";
+                goldBank.forEach(g => csv += `${g.customerName},${g.weight},${g.date},${g.note}\n`);
+                
+                name = "Ghesseh_Full_Report.csv";
             }
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -716,7 +766,7 @@
             link.href = URL.createObjectURL(blob);
             link.download = name;
             link.click();
-            toast("فایل اکسل آماده دانلود شد", "success");
+            toast("فایل با موفقیت دانلود شد", "success");
         }
 
         // --- UI Utils ---
@@ -730,6 +780,13 @@
             document.body.appendChild(div);
             setTimeout(() => div.remove(), 3000);
         }
+
+        // Bug Fix: Force recalculation when profit percent changes to 0
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'profit' || e.target.id === 'tax') {
+                calculateInvoice();
+            }
+        });
     </script>
 </body>
 </html>
