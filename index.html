@@ -516,6 +516,60 @@
     </div>
 
     <script>
+// مبدل اعداد فارسی و ویرگول‌دار به عدد انگلیسی برای محاسبات
+function parseLocaleNumber(string) {
+    if (!string) return 0;
+    const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+    const cleanString = p2e(string.toString()).replace(/[^\d.]/g, '');
+    return parseFloat(cleanString) || 0;
+}
+
+// نمایش اعداد به صورت فارسی و با جداکننده هزارگان
+function formatNumber(num) {
+    return Math.round(num).toLocaleString('fa-IR');
+}
+
+// مدیریت ورودی‌های فیلدها (اضافه کردن خودکار ویرگول هنگام تایپ)
+function handleTradeInput(input) {
+    if (input.id !== 'trade-weight') {
+        const rawValue = parseLocaleNumber(input.value);
+        input.value = rawValue > 0 ? rawValue.toLocaleString('fa-IR') : "";
+    }
+    calcTradeGold(input.id);
+}
+
+
+
+function calcTradeGold(sourceId) {
+    const price = parseLocaleNumber(document.getElementById('trade-gold-price').value);
+    const profitPer = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
+    const amountInput = document.getElementById('trade-amount');
+    const weightInput = document.getElementById('trade-weight');
+    
+    const priceWithProfit = price * (1 + profitPer / 100);
+
+    if (priceWithProfit <= 0) return;
+
+    // سناریو ۱: کاربر مبلغ را وارد کرده -> وزن را حساب کن
+    if (sourceId === 'trade-amount') {
+        const amount = parseLocaleNumber(amountInput.value);
+        const possibleWeight = amount / priceWithProfit;
+        weightInput.value = possibleWeight.toFixed(3);
+    } 
+    // سناریو ۲: کاربر وزن یا قیمت/سود را تغییر داده -> مبلغ را حساب کن
+    else {
+        const weight = parseFloat(weightInput.value) || 0;
+        const totalValue = weight * priceWithProfit;
+        amountInput.value = Math.round(totalValue).toLocaleString('fa-IR');
+    }
+
+    // بروزرسانی بخش نمایش نهایی (کادر سمت چپ)
+    document.getElementById('trade-res-weight').innerText = (parseFloat(weightInput.value) || 0).toFixed(3);
+    document.getElementById('trade-res-total').innerText = formatNumber(parseLocaleNumber(amountInput.value));
+}
+
+        
+        
         // State
         let customers = JSON.parse(localStorage.getItem('ghesseh_v63_customers')) || [];
         let invoices = JSON.parse(localStorage.getItem('ghesseh_v63_invoices')) || [];
