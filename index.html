@@ -478,244 +478,263 @@
         </div>
     </div>
 
-    <script>
-        // State
-        let customers = JSON.parse(localStorage.getItem('ghesseh_v63_customers')) || [];
-        let invoices = JSON.parse(localStorage.getItem('ghesseh_v63_invoices')) || [];
-        let goldBank = JSON.parse(localStorage.getItem('ghesseh_v63_gold')) || [];
+ <script>
+    // State
+    let customers = JSON.parse(localStorage.getItem('ghesseh_v63_customers')) || [];
+    let invoices = JSON.parse(localStorage.getItem('ghesseh_v63_invoices')) || [];
+    let goldBank = JSON.parse(localStorage.getItem('ghesseh_v63_gold')) || [];
 
-        let selectedCustomer = { inv: null, gb: null };
+    let selectedCustomer = { inv: null, gb: null };
 
-        window.onload = () => {
-            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-            refreshAll();
-        };
+    window.onload = () => {
+        document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+        refreshAll();
+    };
 
-        function refreshAll() {
-            localStorage.setItem('ghesseh_v63_customers', JSON.stringify(customers));
-            localStorage.setItem('ghesseh_v63_invoices', JSON.stringify(invoices));
-            localStorage.setItem('ghesseh_v63_gold', JSON.stringify(goldBank));
-            
-            updateDashboard();
-            renderCustomers();
-            renderGoldBank();
-            renderInvoices();
-        }
+    function refreshAll() {
+        localStorage.setItem('ghesseh_v63_customers', JSON.stringify(customers));
+        localStorage.setItem('ghesseh_v63_invoices', JSON.stringify(invoices));
+        localStorage.setItem('ghesseh_v63_gold', JSON.stringify(goldBank));
+        
+        updateDashboard();
+        renderCustomers();
+        renderGoldBank();
+        renderInvoices();
+    }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('translate-x-full');
-        }
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('translate-x-full');
+    }
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('sidebar-active');
-                if (btn.getAttribute('onclick').includes(id)) {
-                    btn.classList.add('sidebar-active');
-                }
-            });
-            
-            if (window.innerWidth < 1024) toggleSidebar();
-        }
-
-        // Live Search
-        function liveSearch(query, context) {
-            const resultsDiv = document.getElementById(`${context}-search-results`);
-            if (!query) {
-                resultsDiv.classList.add('hidden');
-                return;
+    function switchTab(id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('sidebar-active');
+            if (btn.getAttribute('onclick').includes(id)) {
+                btn.classList.add('sidebar-active');
             }
+        });
+        
+        if (window.innerWidth < 1024) toggleSidebar();
+    }
 
-            const filtered = customers.filter(c => 
-                c.name.includes(query) || (c.national && c.national.includes(query))
-            );
+    // === Utility for numbers ===
+    function parseNumber(str) {
+        if (!str) return 0;
+        // حذف کاماها و تبدیل به عدد (پشتیبانی از اعشار)
+        return parseFloat(str.toString().replace(/,/g, '')) || 0;
+    }
 
-            if (filtered.length === 0) {
-                resultsDiv.classList.add('hidden');
-                return;
-            }
+    function formatNumber(num) {
+        if (num == null) return "۰";
+        return parseFloat(num).toLocaleString('fa-IR');
+    }
 
-            resultsDiv.innerHTML = filtered.map(c => `
-                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" 
-                     class="search-item p-4 border-b flex justify-between items-center transition-all">
-                    <span class="font-bold text-slate-700">${c.name}</span>
-                    <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
-                </div>
-            `).join('');
-            resultsDiv.classList.remove('hidden');
+    // Live Search (بدون تغییر)
+    function liveSearch(query, context) {
+        const resultsDiv = document.getElementById(`${context}-search-results`);
+        if (!query) { 
+            resultsDiv.classList.add('hidden'); 
+            return; 
         }
 
-        function selectUser(id, name, credit, context) {
-            selectedCustomer[context] = id;
-            document.getElementById(`${context}-search-results`).classList.add('hidden');
-            document.getElementById(`${context}-selected-name`).innerText = name;
-            document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
-            
-            if (context === 'inv') {
-                document.getElementById('credit-panel').classList.remove('hidden');
-                document.getElementById('inv-credit-val').innerText = parseInt(credit).toLocaleString('fa-IR');
-                calculateInvoice();
-            }
+        const filtered = customers.filter(c => 
+            (c.name && c.name.includes(query)) || 
+            (c.national && c.national.includes(query))
+        );
+
+        if (filtered.length === 0) { 
+            resultsDiv.classList.add('hidden'); 
+            return; 
         }
 
-        function clearSelection(context) {
-            selectedCustomer[context] = null;
-            document.getElementById(`${context}-selected-badge`).classList.add('hidden');
-            document.getElementById(`${context}-cust-search`).value = "";
-            
-            if (context === 'inv') {
-                document.getElementById('credit-panel').classList.add('hidden');
-                document.getElementById('use-credit').checked = false;
-                calculateInvoice();
-            }
-        }
+        resultsDiv.innerHTML = filtered.map(c => `
+            <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" 
+                 class="search-item p-4 border-b flex justify-between items-center transition-all">
+                <span class="font-bold text-slate-700">${c.name}</span>
+                <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
+            </div>
+        `).join('');
+        resultsDiv.classList.remove('hidden');
+    }
 
-        // Trading Calculator
-        function formatAndCalcTrade() {
-            let val = event.target.value.replace(/,/g, '');
-            if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString('fa-IR');
-            calcTradeGold();
-        }
-
-        function calcTradeGold() {
-            const pricePerGram = parseFloat(document.getElementById('trade-gold-price').value.replace(/,/g, '')) || 0;
-            const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 1;
-            const amount = parseFloat(document.getElementById('trade-amount').value.replace(/,/g, '')) || 0;
-            const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
-
-            let weight = 0;
-            let totalValue = 0;
-
-            if (amount > 0) {
-                const priceWithProfit = pricePerGram * (1 + profitPercent / 100);
-                weight = amount / priceWithProfit;
-            } else if (desiredWeight > 0) {
-                weight = desiredWeight;
-                totalValue = desiredWeight * pricePerGram * (1 + profitPercent / 100);
-            }
-
-            document.getElementById('trade-res-weight').innerText = weight.toFixed(3);
-            document.getElementById('trade-res-total').innerText = Math.round(totalValue || (weight * pricePerGram * (1 + profitPercent / 100))).toLocaleString('fa-IR');
-        }
-
-        // Invoice Calculations
-        function formatAndCalcInv(input) {
-            let val = input.value.replace(/,/g, '');
-            if(!isNaN(val) && val !== "") input.value = parseFloat(val).toLocaleString('fa-IR');
+    function selectUser(id, name, credit, context) {
+        selectedCustomer[context] = id;
+        document.getElementById(`${context}-search-results`).classList.add('hidden');
+        document.getElementById(`${context}-selected-name`).innerText = name;
+        document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+        
+        if (context === 'inv') {
+            document.getElementById('credit-panel').classList.remove('hidden');
+            document.getElementById('inv-credit-val').innerText = formatNumber(credit);
             calculateInvoice();
         }
+    }
 
-        function calculateInvoice() {
-            const price = parseFloat(document.getElementById('gold-price').value.replace(/,/g, '')) || 0;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const wType = document.getElementById('wage-type').value;
-            const wVal = parseFloat(document.getElementById('wage-value').value.replace(/,/g, '')) || 0;
-            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-            const useCredit = document.getElementById('use-credit').checked;
+    function clearSelection(context) {
+        selectedCustomer[context] = null;
+        document.getElementById(`${context}-selected-badge`).classList.add('hidden');
+        if (document.getElementById(`${context}-cust-search`)) 
+            document.getElementById(`${context}-cust-search`).value = "";
+        
+        if (context === 'inv') {
+            document.getElementById('credit-panel').classList.add('hidden');
+            document.getElementById('use-credit').checked = false;
+            calculateInvoice();
+        }
+    }
 
-            const cId = selectedCustomer.inv;
-            const customer = customers.find(c => c.id == cId);
-            const availableCredit = customer ? (customer.credit || 0) : 0;
+    // === Trading Calculator (بدون تغییر عمده) ===
+    function formatAndCalcTrade() {
+        let val = event.target.value.replace(/,/g, '');
+        if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString('fa-IR');
+        calcTradeGold();
+    }
 
-            const raw = price * weight;
-            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-            
-            const taxable = raw + wage;
-            const profit = taxable * (profitPer / 100);
-            const tax = (taxable + profit) * (taxPer / 100);
-            
-            let total = taxable + profit + tax;
-            let reward = (taxable + profit + tax) * 0.01;
+    function calcTradeGold() {
+        const pricePerGram = parseNumber(document.getElementById('trade-gold-price').value);
+        const profitPercent = parseNumber(document.getElementById('trade-profit-percent').value);
+        const amount = parseNumber(document.getElementById('trade-amount').value);
+        const desiredWeight = parseNumber(document.getElementById('trade-weight').value);
 
-            let deducted = 0;
-            if (useCredit) {
-                deducted = Math.min(total, availableCredit);
-                total -= deducted;
-            }
+        let weight = 0;
+        let totalValue = 0;
 
-            document.getElementById('sum-raw').innerText = Math.round(raw).toLocaleString('fa-IR');
-            document.getElementById('sum-wage').innerText = Math.round(wage).toLocaleString('fa-IR');
-            document.getElementById('sum-tax').innerText = Math.round(profit + tax).toLocaleString('fa-IR');
-            document.getElementById('sum-credit').innerText = "-" + Math.round(deducted).toLocaleString('fa-IR');
-            document.getElementById('sum-total').innerText = Math.round(total).toLocaleString('fa-IR');
-            document.getElementById('sum-reward').innerText = Math.round(reward).toLocaleString('fa-IR');
+        if (amount > 0) {
+            const priceWithProfit = pricePerGram * (1 + profitPercent / 100);
+            weight = amount / priceWithProfit;
+        } else if (desiredWeight > 0) {
+            weight = desiredWeight;
+            totalValue = desiredWeight * pricePerGram * (1 + profitPercent / 100);
         }
 
-        function saveInvoice() {
-            if (!selectedCustomer.inv) return toast("مشتری را انتخاب کنید", "error");
-            if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
+        document.getElementById('trade-res-weight').innerText = weight.toFixed(3);
+        document.getElementById('trade-res-total').innerText = formatNumber(totalValue || (weight * pricePerGram * (1 + profitPercent / 100)));
+    }
 
-            const price = parseFloat(document.getElementById('gold-price').value.replace(/,/g, '')) || 0;
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const goldType = document.getElementById('gold-type').value;
-            const total = parseInt(document.getElementById('sum-total').innerText.replace(/,/g, '')) || 0;
-            const reward = parseInt(document.getElementById('sum-reward').innerText.replace(/,/g, '')) || 0;
-            const useCredit = document.getElementById('use-credit').checked;
+    // === Invoice Calculator - نسخه اصلاح شده ===
+    function formatAndCalcInv(input) {
+        let val = input.value.replace(/,/g, '');
+        if (!isNaN(val) && val !== "") {
+            input.value = parseFloat(val).toLocaleString('fa-IR');
+        }
+        calculateInvoice();
+    }
 
-            const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+    function calculateInvoice() {
+        const price = parseNumber(document.getElementById('gold-price').value);
+        const weight = parseNumber(document.getElementById('weight').value);
+        const wType = document.getElementById('wage-type').value;
+        const wVal = parseNumber(document.getElementById('wage-value').value);
+        const profitPer = parseNumber(document.getElementById('profit').value);
+        const taxPer = parseNumber(document.getElementById('tax').value);
+        const useCredit = document.getElementById('use-credit').checked;
 
-            if (useCredit) {
-                const totalBeforeDeduct = parseInt(document.getElementById('sum-raw').innerText.replace(/,/g, '')) + 
-                                         parseInt(document.getElementById('sum-wage').innerText.replace(/,/g, '')) + 
-                                         parseInt(document.getElementById('sum-tax').innerText.replace(/,/g, ''));
-                customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - totalBeforeDeduct);
-            }
-            
-            customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
-            
-            invoices.push({
-                id: Date.now(),
-                customerName: customers[cIndex].name,
-                customerId: selectedCustomer.inv,
-                goldType: goldType,
-                weight: weight,
-                goldPrice: price,
-                total: total,
-                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-                fullDate: new Date().toISOString()
-            });
+        const cId = selectedCustomer.inv;
+        const customer = customers.find(c => c.id == cId);
+        const availableCredit = customer ? (customer.credit || 0) : 0;
 
-            toast("فاکتور با موفقیت ثبت شد", "success");
-            clearSelection('inv');
-            document.getElementById('weight').value = "";
-            document.getElementById('gold-price').value = "";
-            refreshAll();
+        const raw = price * weight;
+        let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+        
+        const taxable = raw + wage;
+        const profit = taxable * (profitPer / 100);
+        const tax = (taxable + profit) * (taxPer / 100);
+        
+        let total = taxable + profit + tax;
+        let reward = total * 0.01;   // پاداش ۱ درصد
+
+        let deducted = 0;
+        if (useCredit && availableCredit > 0) {
+            deducted = Math.min(total, availableCredit);
+            total -= deducted;
         }
 
-        function renderInvoices(filteredInvoices = null) {
-            const tbody = document.getElementById('invoices-tbody');
-            const data = filteredInvoices || invoices;
-            
-            tbody.innerHTML = data.map(i => `
-                <tr class="invoice-row transition-all">
-                    <td class="p-4 text-slate-400 text-xs">${i.date}</td>
-                    <td class="p-4 font-black text-slate-700">${i.customerName}</td>
-                    <td class="p-4 font-bold text-amber-600">${i.goldType || 'آب‌شده'}</td>
-                    <td class="p-4 font-mono font-bold text-amber-600">${i.weight.toFixed(3)} گرم</td>
-                    <td class="p-4 font-mono text-slate-500">${(i.goldPrice || 0).toLocaleString('fa-IR')} تومان</td>
-                    <td class="p-4 font-mono font-bold text-emerald-600">${i.total.toLocaleString('fa-IR')} تومان</td>
-                </tr>
-            `).join('');
-        }
+        // نمایش نتایج
+        document.getElementById('sum-raw').innerText = formatNumber(raw);
+        document.getElementById('sum-wage').innerText = formatNumber(wage);
+        document.getElementById('sum-tax').innerText = formatNumber(profit + tax);
+        document.getElementById('sum-credit').innerText = deducted > 0 ? "-" + formatNumber(deducted) : "۰";
+        document.getElementById('sum-total').innerText = formatNumber(total);
+        document.getElementById('sum-reward').innerText = formatNumber(reward);
+    }
 
-        function filterInvoices() {
-            const query = document.getElementById('invoice-search').value.trim().toLowerCase();
-            if (!query) {
-                renderInvoices();
-                return;
-            }
-            const filtered = invoices.filter(i => 
-                i.customerName.toLowerCase().includes(query) ||
-                (i.goldType && i.goldType.includes(query)) ||
-                i.date.includes(query)
-            );
-            renderInvoices(filtered);
-        }
+    function saveInvoice() {
+        if (!selectedCustomer.inv) return toast("مشتری را انتخاب کنید", "error");
+        if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
 
+        const price = parseNumber(document.getElementById('gold-price').value);
+        const weight = parseNumber(document.getElementById('weight').value);
+        const goldType = document.getElementById('gold-type').value;
+        const total = parseNumber(document.getElementById('sum-total').innerText);
+        const reward = parseNumber(document.getElementById('sum-reward').innerText);
+        const useCredit = document.getElementById('use-credit').checked;
+
+        const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+        if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+
+        if (useCredit) {
+            const totalBeforeDeduct = parseNumber(document.getElementById('sum-raw').innerText) + 
+                                     parseNumber(document.getElementById('sum-wage').innerText) + 
+                                     parseNumber(document.getElementById('sum-tax').innerText);
+            customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - totalBeforeDeduct);
+        }
+        
+        customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
+        
+        invoices.push({
+            id: Date.now(),
+            customerName: customers[cIndex].name,
+            customerId: selectedCustomer.inv,
+            goldType: goldType,
+            weight: weight,
+            goldPrice: price,
+            total: total,
+            date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+            fullDate: new Date().toISOString()
+        });
+
+        toast("فاکتور با موفقیت ثبت شد", "success");
+        clearSelection('inv');
+        document.getElementById('weight').value = "";
+        document.getElementById('gold-price').value = "";
+        refreshAll();
+    }
+
+    // بقیه توابع (renderInvoices, renderGoldBank, exportData و ...) همان نسخه قبلی هستند
+    // برای کوتاه بودن اینجا تکرار نشده‌اند. اگر نیاز داری بگو کامل بفرستم.
+
+    function renderInvoices(filteredInvoices = null) {
+        const tbody = document.getElementById('invoices-tbody');
+        const data = filteredInvoices || invoices;
+        
+        tbody.innerHTML = data.map(i => `
+            <tr class="invoice-row transition-all">
+                <td class="p-4 text-slate-400 text-xs">${i.date}</td>
+                <td class="p-4 font-black text-slate-700">${i.customerName}</td>
+                <td class="p-4 font-bold text-amber-600">${i.goldType || 'آب‌شده'}</td>
+                <td class="p-4 font-mono font-bold text-amber-600">${parseFloat(i.weight || 0).toFixed(3)} گرم</td>
+                <td class="p-4 font-mono text-slate-500">${formatNumber(i.goldPrice)} تومان</td>
+                <td class="p-4 font-mono font-bold text-emerald-600">${formatNumber(i.total)} تومان</td>
+            </tr>
+        `).join('');
+    }
+
+    function filterInvoices() {
+        const query = document.getElementById('invoice-search').value.trim().toLowerCase();
+        if (!query) {
+            renderInvoices();
+            return;
+        }
+        const filtered = invoices.filter(i => 
+            (i.customerName && i.customerName.toLowerCase().includes(query)) ||
+            (i.goldType && i.goldType.includes(query)) ||
+            (i.date && i.date.includes(query))
+        );
+        renderInvoices(filtered);
+        
         // Gold Bank
         function saveToGoldBank() {
             if (!selectedCustomer.gb) return toast("مشتری را انتخاب کنید", "error");
