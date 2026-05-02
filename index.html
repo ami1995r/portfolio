@@ -31,13 +31,24 @@
         .invoice-row:hover { background-color: #f8fafc; }
         .number { font-variant-numeric: tabular-nums; }
 
+        /* Number formatting */
+        .input-number {
+            font-size: 16px !important;
+        }
+
         /* بهبود ریسپانسیو */
         @media (max-width: 1024px) {
             .lg\:mr-72 { margin-right: 0 !important; }
             aside { width: 280px; }
         }
-        input, select {
-            font-size: 16px !important; /* جلوگیری از زوم در iOS */
+        
+        @media (max-width: 640px) {
+            .grid-cols-1.md\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            main {
+                padding: 1rem !important;
+            }
         }
     </style>
 </head>
@@ -137,33 +148,33 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">قیمت روز طلا (۱۸ عیار - تومان/گرم)</label>
-                                        <input type="text" id="trade-gold-price" oninput="formatAndCalcTrade()" placeholder="مثلاً ۳,۸۵۰,۰۰۰" 
-                                               class="w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">درصد سود گالری (%)</label>
                                         <input type="number" id="trade-profit-percent" value="1" oninput="calcTradeGold()" 
-                                               class="w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">مبلغ مورد نظر (تومان)</label>
-                                        <input type="text" id="trade-amount" oninput="formatAndCalcTrade()" placeholder="مبلغی که می‌خواهید خرج کنید" 
-                                               class="w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">وزن مورد نظر (گرم)</label>
                                         <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" 
-                                               class="w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
                                 <p class="text-slate-400 text-sm font-bold mb-2">وزن قابل معامله (گرم)</p>
-                                <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400 mb-6">۰.۰۰۰</h4>
+                                <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400 mb-6">۰٫۰۰۰</h4>
                                 
                                 <p class="text-slate-400 text-sm font-bold mb-2">ارزش کل با سود گالری</p>
                                 <h4 id="trade-res-total" class="text-3xl font-black text-white">۰</h4>
@@ -173,7 +184,7 @@
                 </div>
             </div>
 
-            <!-- Invoice Tab - صدور فاکتور جدید -->
+            <!-- Invoice Tab -->
             <div id="invoice" class="tab-content">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div class="xl:col-span-2">
@@ -199,25 +210,21 @@
                                 <!-- نوع طلا -->
                                 <div class="space-y-3">
                                     <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-                                    <select id="gold-type" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
-                                        <option value="آب‌شده">طلای آب‌شده</option>
-                                        <option value="زینتی">طلای زینتی</option>
-                                        <option value="دست‌دوم">طلای دست‌دوم</option>
-                                        <option value="سایر">سایر</option>
-                                    </select>
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" 
+                                           class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
-                                    <input type="text" id="gold-price" oninput="formatAndCalcInv(this)" 
-                                           class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
+                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" 
+                                           class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
                                     <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" 
-                                           class="w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
@@ -231,13 +238,13 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                    <input type="text" id="wage-value" oninput="formatAndCalcInv(this)" value="7" 
-                                           class="w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" 
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
                                     <input type="number" id="profit" value="7" oninput="calculateInvoice()" 
-                                           class="w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
@@ -245,7 +252,7 @@
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مالیات (%)</label>
                                     <input type="number" id="tax" value="9" oninput="calculateInvoice()" 
-                                           class="w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
@@ -358,7 +365,7 @@
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
-                                <input type="number" id="gb-weight" step="0.001" class="w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
+                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
@@ -486,6 +493,7 @@
                         <tr class="border-b">
                             <th class="p-4 text-right font-black">تاریخ</th>
                             <th class="p-4 text-right font-black">وزن امانت (گرم)</th>
+                            <th class="p-4 text-right font-black">قیمت روز (تومان/گرم)</th>
                             <th class="p-4 text-right font-black">یادداشت</th>
                         </tr>
                     </thead>
@@ -522,6 +530,33 @@
         let goldBank = JSON.parse(localStorage.getItem('ghesseh_v63_gold')) || [];
 
         let selectedCustomer = { inv: null, gb: null };
+
+        // Persian number formatting
+        function toPersianDigits(str) {
+            const persian = { '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴', '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹' };
+            return str.toString().replace(/[0-9]/g, w => persian[w]);
+        }
+
+        function formatWithDots(num) {
+            if (!num) return '۰';
+            const str = Math.round(num).toString();
+            return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
+
+        function parsePersianNumber(str) {
+            if (!str) return 0;
+            // Remove dots and convert Persian digits
+            let cleaned = str.toString().replace(/\./g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+            return parseFloat(cleaned) || 0;
+        }
+
+        function formatNumberInput(input) {
+            let val = input.value.replace(/[^0-9۰-۹]/g, '');
+            if (val) {
+                const num = parsePersianNumber(val);
+                input.value = num.toLocaleString('en-US').replace(/,/g, '.');
+            }
+        }
 
         window.onload = () => {
             document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
@@ -588,7 +623,7 @@
             
             if (context === 'inv') {
                 document.getElementById('credit-panel').classList.remove('hidden');
-                document.getElementById('inv-credit-val').innerText = parseInt(credit).toLocaleString('fa-IR');
+                document.getElementById('inv-credit-val').innerText = formatWithDots(credit);
                 calculateInvoice();
             }
         }
@@ -605,49 +640,37 @@
             }
         }
 
-        // Trading Calculator
-        function formatAndCalcTrade() {
-            let val = event.target.value.replace(/,/g, '');
-            if (!isNaN(val) && val !== "") event.target.value = parseFloat(val).toLocaleString('fa-IR');
-            calcTradeGold();
-        }
-
+        // Trading Calculator - Fixed & Accurate
         function calcTradeGold() {
-            const pricePerGram = parseFloat(document.getElementById('trade-gold-price').value.replace(/,/g, '')) || 0;
+            const priceStr = document.getElementById('trade-gold-price').value;
             const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 1;
-            const amount = parseFloat(document.getElementById('trade-amount').value.replace(/,/g, '')) || 0;
+            const amountStr = document.getElementById('trade-amount').value;
             const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
+
+            const price = parsePersianNumber(priceStr);
+            const amount = parsePersianNumber(amountStr);
 
             let weight = 0;
             let totalValue = 0;
 
             if (amount > 0) {
-                const priceWithProfit = pricePerGram * (1 + profitPercent / 100);
+                const priceWithProfit = price * (1 + profitPercent / 100);
                 weight = amount / priceWithProfit;
             } else if (desiredWeight > 0) {
                 weight = desiredWeight;
-                totalValue = desiredWeight * pricePerGram * (1 + profitPercent / 100);
+                totalValue = desiredWeight * price * (1 + profitPercent / 100);
             }
 
-            document.getElementById('trade-res-weight').innerText = weight.toFixed(3);
-            document.getElementById('trade-res-total').innerText = Math.round(totalValue || (weight * pricePerGram * (1 + profitPercent / 100))).toLocaleString('fa-IR');
+            document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
+            document.getElementById('trade-res-total').innerText = formatWithDots(totalValue || (weight * price * (1 + profitPercent / 100)));
         }
 
-        // Invoice Calculations
-        function formatAndCalcInv(input) {
-            let val = input.value.replace(/,/g, '');
-            if(!isNaN(val) && val !== "") input.value = parseFloat(val).toLocaleString('fa-IR');
-            calculateInvoice();
-        }
-
+        // Invoice Calculations - Fixed & Precise
         function calculateInvoice() {
-            const priceStr = document.getElementById('gold-price').value.replace(/,/g, '');
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
             const weight = parseFloat(document.getElementById('weight').value) || 0;
             const wType = document.getElementById('wage-type').value;
-            const wValStr = document.getElementById('wage-value').value.replace(/,/g, '');
-            
-            const price = parseFloat(priceStr) || 0;
-            const wVal = parseFloat(wValStr) || 0;
+            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
             const profitPer = parseFloat(document.getElementById('profit').value) || 0;
             const taxPer = parseFloat(document.getElementById('tax').value) || 0;
             const useCredit = document.getElementById('use-credit').checked;
@@ -660,11 +683,11 @@
             let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
             
             const taxable = raw + wage;
-            const profit = taxable * (profitPer / 100);
-            const tax = (taxable + profit) * (taxPer / 100);
+            const profitAmount = taxable * (profitPer / 100);
+            const tax = (taxable + profitAmount) * (taxPer / 100);
             
-            let total = taxable + profit + tax;
-            let reward = total * 0.01;
+            let total = taxable + profitAmount + tax;
+            let reward = Math.round(total * 0.01);
 
             let deducted = 0;
             if (useCredit && availableCredit > 0) {
@@ -672,32 +695,32 @@
                 total -= deducted;
             }
 
-            document.getElementById('sum-raw').innerText = Math.round(raw).toLocaleString('fa-IR');
-            document.getElementById('sum-wage').innerText = Math.round(wage).toLocaleString('fa-IR');
-            document.getElementById('sum-tax').innerText = Math.round(profit + tax).toLocaleString('fa-IR');
-            document.getElementById('sum-credit').innerText = deducted ? "-" + Math.round(deducted).toLocaleString('fa-IR') : "۰";
-            document.getElementById('sum-total').innerText = Math.round(total).toLocaleString('fa-IR');
-            document.getElementById('sum-reward').innerText = Math.round(reward).toLocaleString('fa-IR');
+            document.getElementById('sum-raw').innerText = formatWithDots(raw);
+            document.getElementById('sum-wage').innerText = formatWithDots(wage);
+            document.getElementById('sum-tax').innerText = formatWithDots(profitAmount + tax);
+            document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
+            document.getElementById('sum-total').innerText = formatWithDots(total);
+            document.getElementById('sum-reward').innerText = formatWithDots(reward);
         }
 
         function saveInvoice() {
             if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
             if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
 
-            const price = parseFloat(document.getElementById('gold-price').value.replace(/,/g, '')) || 0;
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
             const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const goldType = document.getElementById('gold-type').value;
-            const total = parseInt(document.getElementById('sum-total').innerText.replace(/,/g, '')) || 0;
-            const reward = parseInt(document.getElementById('sum-reward').innerText.replace(/,/g, '')) || 0;
+            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+            const reward = parsePersianNumber(document.getElementById('sum-reward').innerText);
 
             const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
             if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
 
             const useCredit = document.getElementById('use-credit').checked;
             if (useCredit) {
-                const totalBefore = parseInt(document.getElementById('sum-raw').innerText.replace(/,/g, '')) +
-                                  parseInt(document.getElementById('sum-wage').innerText.replace(/,/g, '')) +
-                                  parseInt(document.getElementById('sum-tax').innerText.replace(/,/g, ''));
+                const totalBefore = parsePersianNumber(document.getElementById('sum-raw').innerText) +
+                                  parsePersianNumber(document.getElementById('sum-wage').innerText) +
+                                  parsePersianNumber(document.getElementById('sum-tax').innerText);
                 customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - totalBefore);
             }
             
@@ -730,10 +753,10 @@
                 <tr class="invoice-row transition-all">
                     <td class="p-4 text-slate-400 text-xs">${i.date}</td>
                     <td class="p-4 font-black text-slate-700">${i.customerName}</td>
-                    <td class="p-4 font-bold text-amber-600">${i.goldType || 'آب‌شده'}</td>
-                    <td class="p-4 font-mono font-bold text-amber-600">${i.weight.toFixed(3)} گرم</td>
-                    <td class="p-4 font-mono text-slate-500">${(i.goldPrice || 0).toLocaleString('fa-IR')} تومان</td>
-                    <td class="p-4 font-mono font-bold text-emerald-600">${i.total.toLocaleString('fa-IR')} تومان</td>
+                    <td class="p-4 font-bold text-amber-600">${i.goldType || 'طلای آب‌شده'}</td>
+                    <td class="p-4 font-mono font-bold text-amber-600">${i.weight.toFixed(3).replace('.', '٫')} گرم</td>
+                    <td class="p-4 font-mono text-slate-500">${formatWithDots(i.goldPrice || 0)} تومان</td>
+                    <td class="p-4 font-mono font-bold text-emerald-600">${formatWithDots(i.total)} تومان</td>
                 </tr>
             `).join('');
         }
@@ -746,7 +769,7 @@
             }
             const filtered = invoices.filter(i => 
                 i.customerName.toLowerCase().includes(query) ||
-                (i.goldType && i.goldType.includes(query)) ||
+                (i.goldType && i.goldType.toLowerCase().includes(query)) ||
                 i.date.includes(query)
             );
             renderInvoices(filtered);
@@ -761,13 +784,16 @@
             const cust = customers.find(c => c.id == selectedCustomer.gb);
             if (!cust) return toast("مشتری یافت نشد", "error");
 
+            const currentGoldPrice = parsePersianNumber(document.getElementById('gold-price').value) || 0; // Use latest entered price
+
             goldBank.push({
                 id: Date.now(),
                 customerId: selectedCustomer.gb,
                 customerName: cust.name,
                 weight: weight,
                 note: document.getElementById('gb-note').value || '-',
-                date: new Intl.DateTimeFormat('fa-IR').format(new Date())
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                goldPrice: currentGoldPrice
             });
 
             toast("امانت جدید ثبت شد", "success");
@@ -783,13 +809,14 @@
 
             document.getElementById('modal-customer-name').innerText = customer ? customer.name : 'نامشخص';
             const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
-            document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(3) + " گرم";
+            document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(3).replace('.', '٫') + " گرم";
 
             const tbody = document.getElementById('gold-detail-tbody');
             tbody.innerHTML = customerGold.map(g => `
                 <tr>
                     <td class="p-4">${g.date}</td>
-                    <td class="p-4 font-black text-amber-600">${g.weight.toFixed(3)}</td>
+                    <td class="p-4 font-black text-amber-600">${g.weight.toFixed(3).replace('.', '٫')}</td>
+                    <td class="p-4 font-mono text-slate-600">${g.goldPrice ? formatWithDots(g.goldPrice) : '—'}</td>
                     <td class="p-4 text-slate-500">${g.note}</td>
                 </tr>
             `).join('');
@@ -816,7 +843,7 @@
                 return `
                     <tr class="hover:bg-slate-50">
                         <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                        <td class="p-5 font-black text-amber-600">${totalWeight.toFixed(3)} گرم</td>
+                        <td class="p-5 font-black text-amber-600">${totalWeight.toFixed(3).replace('.', '٫')} گرم</td>
                         <td class="p-5 text-center">
                             <button onclick="showGoldDetails(${cid})" 
                                     class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
@@ -836,7 +863,7 @@
                     <td class="p-6 font-black text-slate-700">${c.name}</td>
                     <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
                     <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
-                    <td class="p-6 font-black text-emerald-600">${(c.credit || 0).toLocaleString('fa-IR')}</td>
+                    <td class="p-6 font-black text-emerald-600">${formatWithDots(c.credit || 0)}</td>
                     <td class="p-6 text-center">
                         <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
                     </td>
@@ -876,8 +903,8 @@
             const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
             const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
             
-            document.getElementById('dash-sales-total').innerText = sales.toLocaleString('fa-IR');
-            document.getElementById('dash-gold-total').innerText = gold.toFixed(3);
+            document.getElementById('dash-sales-total').innerText = formatWithDots(sales);
+            document.getElementById('dash-gold-total').innerText = gold.toFixed(3).replace('.', '٫');
             document.getElementById('dash-cust-total').innerText = customers.length;
         }
 
@@ -895,8 +922,8 @@
                 invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
                 name = "Ghesseh_Invoices.csv";
             } else if (type === 'gold') {
-                csv += "مشتری,وزن,تاریخ,توضیحات\n";
-                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}"\n`);
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
                 name = "Ghesseh_GoldBank.csv";
             } else if (type === 'all') {
                 csv += "=== مشتریان ===\n";
@@ -908,8 +935,8 @@
                 invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
                 
                 csv += "\n=== بانک طلا ===\n";
-                csv += "مشتری,وزن,تاریخ,توضیحات\n";
-                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}"\n`);
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
                 
                 name = "Ghesseh_Full_Report.csv";
             }
