@@ -434,76 +434,17 @@
     </div>
 
     <script>
-       // State
+        // State
         let customers = JSON.parse(localStorage.getItem('ghesseh_v63_customers')) || [];
         let invoices = JSON.parse(localStorage.getItem('ghesseh_v63_invoices')) || [];
         let goldBank = JSON.parse(localStorage.getItem('ghesseh_v63_gold')) || [];
+
         let selectedCustomer = { inv: null, gb: null };
 
-        function toPersianDigits(n) {
-            return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
-        }
-
-        function formatWithDots(num) {
-            if (!num) return '۰';
-            return toPersianDigits(Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        }
-
-        function parsePersianNumber(str) {
-            if (!str) return 0;
-            let s = str.toString().replace(/\./g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-            return parseFloat(s) || 0;
-        }
-
-        function formatNumberInput(el) {
-            let val = el.value.replace(/[^0-9۰-۹]/g, '');
-            if (val) el.value = parsePersianNumber(val).toLocaleString('en').replace(/,/g, '.');
-        }
-
-        // ماشین حساب طلای آب‌شده (اصلاح شده)
-        function calcTradeGold() {
-            const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
-            const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
-            const amount = parsePersianNumber(document.getElementById('trade-amount').value);
-            const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
-
-            let weight = 0;
-            let total = 0;
-
-            if (amount > 0) {
-                const priceWithProfit = price * (1 + profitPercent / 100);
-                weight = amount / priceWithProfit;
-            } else if (desiredWeight > 0) {
-                weight = desiredWeight;
-                total = weight * price * (1 + profitPercent / 100);
-            }
-
-            document.getElementById('trade-res-weight').textContent = weight.toFixed(3).replace('.', '٫');
-            document.getElementById('trade-res-total').textContent = formatWithDots(total || (weight * price * (1 + profitPercent / 100)));
-        }
-
-        // محاسبه فاکتور (طلای نو) - طبق فرمول درخواستی
-        function calculateInvoice() {
-            const rawPrice = parsePersianNumber(document.getElementById('gold-price').value);
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const wType = document.getElementById('wage-type').value;
-            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-
-            const rawTotal = rawPrice * weight;
-            let wage = wType === 'percent' ? rawTotal * wVal / 100 : wVal;
-            let profitAmount = (rawTotal + wage) * (profitPer / 100);
-            let taxable = wage + profitAmount;
-            let tax = taxable * (taxPer / 100);
-
-            let finalTotal = rawTotal + wage + profitAmount + tax;
-
-            document.getElementById('sum-raw').textContent = formatWithDots(rawTotal);
-            document.getElementById('sum-wage').textContent = formatWithDots(wage);
-            document.getElementById('sum-profit').textContent = formatWithDots(profitAmount);
-            document.getElementById('sum-tax').textContent = formatWithDots(tax);
-            document.getElementById('sum-total').textContent = formatWithDots(finalTotal);
+        // Persian number formatting
+        function toPersianDigits(str) {
+            const persian = { '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴', '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹' };
+            return str.toString().replace(/[0-9]/g, w => persian[w]);
         }
 
         function formatWithDots(num) {
