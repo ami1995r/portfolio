@@ -696,8 +696,123 @@
             setTimeout(() => t.remove(), 3000);
         }
 
-        // توابع کمکی دیگر (renderCustomers, saveCustomer, deleteCustomer, exportData, modals و ...)
-        // را از نسخه قبلی خودتان کپی کنید.
-    </script>
+        // Customers
+        function renderCustomers() {
+            const tbody = document.getElementById('customers-tbody');
+            tbody.innerHTML = customers.map(c => `
+                <tr class="hover:bg-slate-50 transition-all">
+                    <td class="p-6 font-black text-slate-700">${c.name}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
+                    <td class="p-6 font-black text-emerald-600">${formatWithDots(c.credit || 0)}</td>
+                    <td class="p-6 text-center">
+                        <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function saveCustomer() {
+            const n = document.getElementById('m-name').value.trim();
+            const m = document.getElementById('m-national').value.trim();
+            const p = document.getElementById('m-phone').value.trim();
+            
+            if (!n || !m) return toast("نام و کد ملی الزامی است", "error");
+            
+            customers.push({ 
+                id: Date.now(), 
+                name: n, 
+                national: m, 
+                phone: p, 
+                credit: 0 
+            });
+            
+            closeAddModal();
+            refreshAll();
+            toast("مشتری با موفقیت افزوده شد", "success");
+        }
+
+        function deleteCustomer(id) {
+            if (confirm("آیا از حذف این مشتری اطمینان دارید؟")) {
+                customers = customers.filter(c => c.id !== id);
+                refreshAll();
+            }
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
+            const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
+            
+            document.getElementById('dash-sales-total').innerText = formatWithDots(sales);
+            document.getElementById('dash-gold-total').innerText = gold.toFixed(3).replace('.', '٫');
+            document.getElementById('dash-cust-total').innerText = customers.length;
+        }
+
+        // Export
+        function exportData(type) {
+            let csv = "\uFEFF";
+            let name = "Ghesseh_Export.csv";
+
+            if (type === 'customers') {
+                csv += "نام,کد ملی,شماره تماس,اعتبار\n";
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
+                name = "Ghesseh_Customers.csv";
+            } else if (type === 'invoices') {
+                csv += "تاریخ,مشتری,نوع طلا,وزن (گرم),قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
+                name = "Ghesseh_Invoices.csv";
+            } else if (type === 'gold') {
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
+                name = "Ghesseh_GoldBank.csv";
+            } else if (type === 'all') {
+                csv += "=== مشتریان ===\n";
+                csv += "نام,کد ملی,شماره تماس,اعتبار\n";
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
+                
+                csv += "\n=== فاکتورها ===\n";
+                csv += "تاریخ,مشتری,نوع طلا,وزن,قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
+                
+                csv += "\n=== بانک طلا ===\n";
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
+                
+                name = "Ghesseh_Full_Report.csv";
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = name;
+            link.click();
+            toast("فایل با موفقیت دانلود شد", "success");
+        }
+
+        // Modals
+        function openAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('hidden', 'flex');
+        }
+        function closeAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('flex', 'hidden');
+        }
+
+        function toast(message, type = "success") {
+            const div = document.createElement('div');
+            div.className = `fixed bottom-8 left-8 px-8 py-4 rounded-[1.5rem] text-white font-black shadow-2xl z-[1000] animate-bounce ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
+            div.innerText = message;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // Event listeners
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'profit' || e.target.id === 'tax') {
+                calculateInvoice();
+            }
+        });
+            </script>
+
 </body>
 </html>
