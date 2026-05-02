@@ -812,6 +812,87 @@
                 calculateInvoice();
             }
         });
+
+          // Gold Bank
+        function saveToGoldBank() {
+            if (!selectedCustomer.gb) return toast("مشتری را انتخاب کنید", "error");
+            const weight = parseFloat(document.getElementById('gb-weight').value);
+            if (!weight) return toast("وزن طلا الزامی است", "error");
+
+            const cust = customers.find(c => c.id == selectedCustomer.gb);
+            if (!cust) return toast("مشتری یافت نشد", "error");
+
+            const currentGoldPrice = parsePersianNumber(document.getElementById('gold-price').value) || 0; // Use latest entered price
+
+            goldBank.push({
+                id: Date.now(),
+                customerId: selectedCustomer.gb,
+                customerName: cust.name,
+                weight: weight,
+                note: document.getElementById('gb-note').value || '-',
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                goldPrice: currentGoldPrice
+            });
+
+            toast("امانت جدید ثبت شد", "success");
+            clearSelection('gb');
+            document.getElementById('gb-weight').value = "";
+            document.getElementById('gb-note').value = "";
+            refreshAll();
+        }
+
+        function showGoldDetails(customerId) {
+            const customerGold = goldBank.filter(g => g.customerId == customerId);
+            const customer = customers.find(c => c.id == customerId);
+
+            document.getElementById('modal-customer-name').innerText = customer ? customer.name : 'نامشخص';
+            const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
+            document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(3).replace('.', '٫') + " گرم";
+
+            const tbody = document.getElementById('gold-detail-tbody');
+            tbody.innerHTML = customerGold.map(g => `
+                <tr>
+                    <td class="p-4">${g.date}</td>
+                    <td class="p-4 font-black text-amber-600">${g.weight.toFixed(3).replace('.', '٫')}</td>
+                    <td class="p-4 font-mono text-slate-600">${g.goldPrice ? formatWithDots(g.goldPrice) : '—'}</td>
+                    <td class="p-4 text-slate-500">${g.note}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('gold-detail-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeGoldDetailModal() {
+            document.getElementById('gold-detail-modal').classList.replace('flex', 'hidden');
+        }
+
+        function renderGoldBank() {
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) grouped[item.customerId] = [];
+                grouped[item.customerId].push(item);
+            });
+
+            const tbody = document.getElementById('gold-bank-tbody');
+            tbody.innerHTML = Object.keys(grouped).map(cid => {
+                const items = grouped[cid];
+                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+                const cust = customers.find(c => c.id == cid);
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+                        <td class="p-5 font-black text-amber-600">${totalWeight.toFixed(3).replace('.', '٫')} گرم</td>
+                        <td class="p-5 text-center">
+                            <button onclick="showGoldDetails(${cid})" 
+                                    class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
+                                جزئیات امانات
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
             </script>
 
 </body>
