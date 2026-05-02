@@ -31,12 +31,10 @@
         .invoice-row:hover { background-color: #f8fafc; }
         .number { font-variant-numeric: tabular-nums; }
 
-        /* Number formatting */
         .input-number {
             font-size: 16px !important;
         }
 
-        /* بهبود ریسپانسیو */
         @media (max-width: 1024px) {
             .lg\:mr-72 { margin-right: 0 !important; }
             aside { width: 280px; }
@@ -153,7 +151,7 @@
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">درصد سود گالری (%)</label>
-                                        <input type="number" id="trade-profit-percent" value="1" oninput="calcTradeGold()" 
+                                        <input type="number" id="trade-profit-percent" value="1.5" step="0.1" oninput="calcTradeGold()" 
                                                class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
                                     </div>
                                 </div>
@@ -192,7 +190,6 @@
                             <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                                <!-- جستجوی مشتری -->
                                 <div class="space-y-3 relative">
                                     <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
                                     <div class="relative">
@@ -207,7 +204,6 @@
                                     </div>
                                 </div>
 
-                                <!-- نوع طلا -->
                                 <div class="space-y-3">
                                     <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
                                     <input type="text" id="gold-type" value="طلای آب‌شده" 
@@ -292,7 +288,11 @@
                                     <span id="sum-wage" class="font-black number text-slate-700">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-slate-500 font-bold">سود و مالیات:</span>
+                                    <span class="text-slate-500 font-bold">سود فروشنده:</span>
+                                    <span id="sum-profit" class="font-black number text-slate-700">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">مالیات:</span>
                                     <span id="sum-tax" class="font-black number text-slate-700">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center text-red-600">
@@ -366,6 +366,11 @@
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
                                 <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
+                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" 
+                                       class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
@@ -545,7 +550,6 @@
 
         function parsePersianNumber(str) {
             if (!str) return 0;
-            // Remove dots and convert Persian digits
             let cleaned = str.toString().replace(/\./g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
             return parseFloat(cleaned) || 0;
         }
@@ -640,15 +644,12 @@
             }
         }
 
-        // Trading Calculator - Fixed & Accurate
+        // Trading Calculator (به‌روزرسانی شده)
         function calcTradeGold() {
-            const priceStr = document.getElementById('trade-gold-price').value;
-            const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 1;
-            const amountStr = document.getElementById('trade-amount').value;
+            const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
+            const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 1.5;
+            const amount = parsePersianNumber(document.getElementById('trade-amount').value);
             const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
-
-            const price = parsePersianNumber(priceStr);
-            const amount = parsePersianNumber(amountStr);
 
             let weight = 0;
             let totalValue = 0;
@@ -665,7 +666,7 @@
             document.getElementById('trade-res-total').innerText = formatWithDots(totalValue || (weight * price * (1 + profitPercent / 100)));
         }
 
-        // Invoice Calculations - Fixed & Precise
+        // Invoice Calculations (به‌روزرسانی شده - منطبق با edit.html)
         function calculateInvoice() {
             const price = parsePersianNumber(document.getElementById('gold-price').value);
             const weight = parseFloat(document.getElementById('weight').value) || 0;
@@ -682,11 +683,11 @@
             const raw = price * weight;
             let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
             
-            const taxable = raw + wage;
-            const profitAmount = taxable * (profitPer / 100);
-            const tax = (taxable + profitAmount) * (taxPer / 100);
+            let profitAmount = (raw + wage) * (profitPer / 100);
+            let taxable = wage + profitAmount;
+            let tax = taxable * (taxPer / 100);
             
-            let total = taxable + profitAmount + tax;
+            let total = raw + wage + profitAmount + tax;
             let reward = Math.round(total * 0.01);
 
             let deducted = 0;
@@ -697,7 +698,8 @@
 
             document.getElementById('sum-raw').innerText = formatWithDots(raw);
             document.getElementById('sum-wage').innerText = formatWithDots(wage);
-            document.getElementById('sum-tax').innerText = formatWithDots(profitAmount + tax);
+            document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
+            document.getElementById('sum-tax').innerText = formatWithDots(tax);
             document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
             document.getElementById('sum-total').innerText = formatWithDots(total);
             document.getElementById('sum-reward').innerText = formatWithDots(reward);
@@ -720,6 +722,7 @@
             if (useCredit) {
                 const totalBefore = parsePersianNumber(document.getElementById('sum-raw').innerText) +
                                   parsePersianNumber(document.getElementById('sum-wage').innerText) +
+                                  parsePersianNumber(document.getElementById('sum-profit').innerText) +
                                   parsePersianNumber(document.getElementById('sum-tax').innerText);
                 customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - totalBefore);
             }
@@ -784,7 +787,7 @@
             const cust = customers.find(c => c.id == selectedCustomer.gb);
             if (!cust) return toast("مشتری یافت نشد", "error");
 
-            const currentGoldPrice = parsePersianNumber(document.getElementById('gold-price').value) || 0; // Use latest entered price
+            const currentGoldPrice = parsePersianNumber(document.getElementById('gb-gold-price').value) || 0;
 
             goldBank.push({
                 id: Date.now(),
@@ -800,6 +803,7 @@
             clearSelection('gb');
             document.getElementById('gb-weight').value = "";
             document.getElementById('gb-note').value = "";
+            document.getElementById('gb-gold-price').value = "";
             refreshAll();
         }
 
