@@ -7,16 +7,49 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; color: #0f172a; }
-        .sidebar-active { background: #059669; color: white; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+        body { 
+            font-family: 'Vazirmatn', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+        }
+        .sidebar-active { 
+            background: #059669; 
+            color: white; 
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); 
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .custom-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { 
+            -webkit-appearance: none; margin: 0; 
+        }
+        .custom-shadow { 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); 
+        }
         .search-item:hover { background-color: #f1f5f9; cursor: pointer; }
-        .input-number { font-size: 16px !important; }
+        .invoice-row:hover { background-color: #f8fafc; }
+        .number { font-variant-numeric: tabular-nums; }
+
+        /* Number formatting */
+        .input-number {
+            font-size: 16px !important;
+        }
+
+        /* بهبود ریسپانسیو */
+        @media (max-width: 1024px) {
+            .lg\:mr-72 { margin-right: 0 !important; }
+            aside { width: 280px; }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-cols-1.md\\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            main {
+                padding: 1rem !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -28,26 +61,42 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
         </button>
     </div>
-    
 
-     <div class="flex min-h-screen pt-16 lg:pt-0">
+    <div class="flex min-h-screen pt-16 lg:pt-0">
         <!-- Sidebar -->
         <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
             <div class="p-8 border-b">
                 <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-emerald-600">قصه</span></h1>
-                <p class="text-[10px] text-slate-400 font-bold mt-1">Gold Management System v6.3</p>
+                <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.3</p>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <button onclick="switchTab('dashboard')" class="nav-btn sidebar-active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all">پیشخوان</button>
-                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">صدور فاکتور</button>
-                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">فاکتورهای صادر شده</button>
-                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">بانک طلا</button>
-                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">مشتریان</button>
-                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all border-t mt-4 pt-4">مرکز گزارشات</button>
+                <button onclick="switchTab('dashboard')" class="nav-btn sidebar-active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="font-bold">پیشخوان</span>
+                </button>
+                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-bold">صدور فاکتور</span>
+                </button>
+                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+                    <span class="font-bold">فاکتورهای صادر شده</span>
+                </button>
+                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    <span class="font-bold">بانک طلا</span>
+                </button>
+                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span class="font-bold">مشتریان</span>
+                </button>
+                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all border-t mt-4 pt-4">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-bold text-emerald-700">مرکز گزارشات</span>
+                </button>
             </nav>
         </aside>
-         
 
         <!-- Main Content -->
         <main class="flex-1 mr-0 lg:mr-72 p-4 lg:p-10 space-y-8">
@@ -85,140 +134,186 @@
                     </div>
                 </div>
 
-               <!-- Main Content -->
-        <main class="flex-1 mr-0 lg:mr-72 p-4 lg:p-10 space-y-8">
-
-            <!-- Dashboard - ماشین حساب طلای آب‌شده -->
-            <div id="dashboard" class="tab-content active space-y-8">
-                <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl">
-                    <h3 class="text-xl font-black italic mb-6">حساب خرید و فروش طلای آب‌شده</h3>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-2 space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="text-xs font-bold text-slate-400 block mb-1">قیمت روز طلا ۱۸ عیار (تومان/گرم)</label>
-                                    <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" 
-                                           class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500" placeholder="۳۸۵۰۰۰۰">
-                                </div>
-                                <div>
-                                    <label class="text-xs font-bold text-slate-400 block mb-1">درصد سود/کارمزد گالری (%)</label>
-                                    <input type="number" id="trade-profit-percent" value="1.5" step="0.1" oninput="calcTradeGold()" 
-                                           class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="text-xs font-bold text-slate-400 block mb-1">مبلغ مورد نظر (تومان)</label>
-                                    <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" 
-                                           class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500">
-                                </div>
-                                <div>
-                                    <label class="text-xs font-bold text-slate-400 block mb-1">وزن مورد نظر (گرم)</label>
-                                    <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" 
-                                           class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500">
-                                </div>
-                            </div>
+                <!-- Trading Calculator -->
+                <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="bg-emerald-500 w-3 h-8 rounded-full"></span>
+                            <h3 class="text-xl font-black italic">حساب خرید و فروش طلای آب‌شده</h3>
                         </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] text-slate-400 font-bold">قیمت روز طلا (۱۸ عیار - تومان/گرم)</label>
+                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] text-slate-400 font-bold">درصد سود گالری (%)</label>
+                                        <input type="number" id="trade-profit-percent" value="1" oninput="calcTradeGold()" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    </div>
+                                </div>
 
-                        <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
-                            <p class="text-slate-400 text-sm font-bold mb-1">وزن قابل معامله (گرم)</p>
-                            <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400">۰٫۰۰۰</h4>
-                            <p class="text-slate-400 text-sm font-bold mt-6 mb-1">ارزش کل با سود گالری</p>
-                            <h4 id="trade-res-total" class="text-3xl font-black text-white">۰</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] text-slate-400 font-bold">مبلغ مورد نظر (تومان)</label>
+                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] text-slate-400 font-bold">وزن مورد نظر (گرم)</label>
+                                        <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" 
+                                               class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
+                                <p class="text-slate-400 text-sm font-bold mb-2">وزن قابل معامله (گرم)</p>
+                                <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400 mb-6">۰٫۰۰۰</h4>
+                                
+                                <p class="text-slate-400 text-sm font-bold mb-2">ارزش کل با سود گالری</p>
+                                <h4 id="trade-res-total" class="text-3xl font-black text-white">۰</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- صدور فاکتور -->
+
+            <!-- Invoice Tab -->
             <div id="invoice" class="tab-content">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div class="xl:col-span-2">
                         <div class="bg-white p-6 lg:p-12 rounded-[3rem] border border-slate-100 custom-shadow">
-                            <h3 class="text-2xl font-black mb-10">صدور فاکتور جدید</h3>
+                            <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <!-- جستجوی مشتری -->
                                 <div class="space-y-3 relative">
-                                    <label class="text-xs font-black text-slate-500">جستجو و انتخاب مشتری</label>
-                                    <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کد ملی..." 
-                                           class="w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500">
-                                    <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border rounded-2xl shadow-2xl max-h-56 overflow-auto hidden"></div>
-                                    <div id="inv-selected-badge" class="hidden p-4 bg-emerald-50 rounded-2xl flex justify-between">
-                                        <span id="inv-selected-name" class="font-black"></span>
-                                        <button onclick="clearSelection('inv')" class="text-red-500">حذف</button>
+                                    <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
+                                    <div class="relative">
+                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." 
+                                               class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none pr-12">
+                                        <svg class="w-6 h-6 absolute right-4 top-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-56 overflow-y-auto hidden"></div>
+                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                                        <span id="inv-selected-name" class="font-black text-emerald-700"></span>
+                                        <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">حذف</button>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label class="text-xs font-black text-slate-500">نوع طلا</label>
-                                    <input type="text" id="gold-type" value="طلای نو" class="w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500">
+                                <!-- نوع طلا -->
+                                <div class="space-y-3">
+                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" 
+                                           class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                                <div>
-                                    <label class="text-xs font-black text-slate-500">قیمت خام طلا (تومان/گرم)</label>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
                                     <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" 
-                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500">
+                                           class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
                                 </div>
-                                <div>
-                                    <label class="text-xs font-black text-slate-500">وزن (گرم)</label>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
                                     <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" 
-                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500">
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                <div>
+                                <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">نوع اجرت</label>
-                                    <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-5 rounded-2xl font-bold">
-                                        <option value="percent">درصدی</option>
-                                        <option value="fixed">ثابت</option>
+                                    <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-5 rounded-2xl font-bold outline-none">
+                                        <option value="percent">درصدی (%)</option>
+                                        <option value="fixed">مبلغ ثابت (تومان)</option>
                                     </select>
                                 </div>
-                                <div>
+                                <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                    <input type="text" id="wage-value" value="10" oninput="formatNumberInput(this); calculateInvoice()" 
-                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold">
+                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" 
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
-                                <div>
+                                <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
                                     <input type="number" id="profit" value="7" oninput="calculateInvoice()" 
-                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold">
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="text-xs font-black text-slate-500">مالیات ارزش افزوده (%)</label>
-                                <input type="number" id="tax" value="9" oninput="calculateInvoice()" 
-                                       class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">مالیات (%)</label>
+                                    <input type="number" id="tax" value="9" oninput="calculateInvoice()" 
+                                           class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                </div>
                             </div>
 
-                            <button onclick="saveInvoice()" class="w-full mt-8 bg-slate-900 text-white py-6 rounded-2xl font-black text-xl">تایید و چاپ فاکتور</button>
+                            <div id="credit-panel" class="hidden bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-slate-800">اعتبار پاداش مشتری</p>
+                                        <p class="text-xs text-emerald-600 font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-400">استفاده از اعتبار</span>
+                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-emerald-600 accent-emerald-600">
+                                </div>
+                            </div>
+
+                            <button onclick="saveInvoice()" class="w-full bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow">
+                                تایید و چاپ فاکتور
+                            </button>
                         </div>
                     </div>
 
-                    <!-- خلاصه -->
+                    <!-- خلاصه محاسبات -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
-                            <h4 class="font-black text-center mb-8">خلاصه محاسبات</h4>
-                            <div class="space-y-5 text-lg">
-                                <div class="flex justify-between"><span class="text-slate-500">قیمت خام:</span><span id="sum-raw" class="font-black">۰</span></div>
-                                <div class="flex justify-between"><span class="text-slate-500">اجرت:</span><span id="sum-wage" class="font-black">۰</span></div>
-                                <div class="flex justify-between"><span class="text-slate-500">سود فروشنده:</span><span id="sum-profit" class="font-black">۰</span></div>
-                                <div class="flex justify-between"><span class="text-slate-500">مالیات (اجرت + سود):</span><span id="sum-tax" class="font-black">۰</span></div>
-                                <div class="flex justify-between text-red-600"><span class="font-bold">کسر اعتبار:</span><span id="sum-credit" class="font-black">-۰</span></div>
-                                <div class="pt-6 border-t">
-                                    <div class="flex justify-between text-2xl"><span class="font-bold">مبلغ نهایی:</span><span id="sum-total" class="font-black text-emerald-600">۰</span></div>
+                            <h4 class="text-center font-black text-slate-800 mb-8 pb-4 border-b">خلاصه محاسبات</h4>
+                            <div class="space-y-6 text-lg">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
+                                    <span id="sum-raw" class="font-black number text-slate-700">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">کل اجرت:</span>
+                                    <span id="sum-wage" class="font-black number text-slate-700">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-500 font-bold">سود و مالیات:</span>
+                                    <span id="sum-tax" class="font-black number text-slate-700">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center text-red-600">
+                                    <span class="font-bold">کسر اعتبار:</span>
+                                    <span id="sum-credit" class="font-black number">-۰</span>
+                                </div>
+                                <div class="pt-6 border-t border-dashed">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="text-xl font-bold text-slate-600">مبلغ نهایی:</span>
+                                        <span id="sum-total" class="text-4xl font-black text-emerald-600 number">۰</span>
+                                    </div>
+                                </div>
+                                <div class="bg-emerald-600 text-white p-6 rounded-2xl text-center">
+                                    <p class="text-sm opacity-90">پاداش این خرید</p>
+                                    <p id="sum-reward" class="text-3xl font-black">۰</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
 
             <!-- تب فاکتورهای صادر شده -->
             <div id="invoices-list" class="tab-content">
@@ -247,43 +342,38 @@
                 </div>
             </div>
 
-            <!-- بانک طلا - با فیلد قیمت -->
+            <!-- بانک طلا -->
             <div id="gold-bank" class="tab-content space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border custom-shadow">
-                        <h3 class="text-xl font-black mb-8">ثبت امانت جدید</h3>
+                    <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-black text-slate-800">ثبت امانت جدید</h3>
+                        </div>
                         <div class="space-y-6">
-                            <!-- جستجوی مشتری -->
                             <div class="space-y-2 relative">
-                                <label class="text-xs font-black text-slate-500">مشتری</label>
-                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 p-4 rounded-xl font-bold">
-                                <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border rounded-2xl shadow-2xl hidden"></div>
-                                <div id="gb-selected-badge" class="hidden mt-2 p-3 bg-amber-50 rounded-xl flex justify-between text-sm">
-                                    <span id="gb-selected-name"></span>
-                                    <button onclick="clearSelection('gb')" class="text-red-500">حذف</button>
+                                <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
+                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." 
+                                       class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
+                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-xl mt-2">
+                                    <span id="gb-selected-name" class="font-black text-amber-700 text-sm"></span>
+                                    <button onclick="clearSelection('gb')" class="text-red-500 text-xs font-bold">حذف</button>
                                 </div>
                             </div>
-
                             <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500">وزن (گرم)</label>
-                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl">
+                                <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
+                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
                             </div>
-
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
-                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" 
-                                       class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold">
-                            </div>
-
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
-                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl">
+                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
                             </div>
-
-                            <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black">ثبت امانت</button>
+                            <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-amber-600 transition-all">ثبت در بانک طلا</button>
                         </div>
                     </div>
-                    
 
                     <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                         <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
