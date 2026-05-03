@@ -725,17 +725,6 @@
             }).join('');
         }
 
-function toast(msg, type = "success") {
-            const t = document.createElement('div');
-            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
-            t.textContent = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-
-        // فراخوانی اولیه
-        refreshAll();
-
 
        
             </script>
