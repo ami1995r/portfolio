@@ -85,7 +85,6 @@
 
             <!-- Dashboard -->
             <div id="dashboard" class="tab-content active space-y-8">
-                <!-- ... (Dashboard unchanged) ... -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-3xl font-black text-slate-800">خوش آمدید!</h2>
@@ -117,7 +116,7 @@
                     </div>
                 </div>
 
-                <!-- ماشین حساب طلای آب‌شده (اصلاح شده) -->
+                <!-- ماشین حساب طلای آب‌شده -->
                 <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
                     <div class="relative z-10">
@@ -188,7 +187,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
-                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none">
+                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
@@ -250,28 +249,28 @@
                             <div class="space-y-6 text-lg">
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
-                                    <span id="sum-raw" class="font-black number text-slate-700">۰</span>
+                                    <span id="sum-raw" class="font-black number text-slate-700 persian-number">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 font-bold">کل اجرت:</span>
-                                    <span id="sum-wage" class="font-black number text-slate-700">۰</span>
+                                    <span id="sum-wage" class="font-black number text-slate-700 persian-number">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 font-bold">سود فروشنده:</span>
-                                    <span id="sum-profit" class="font-black number text-slate-700">۰</span>
+                                    <span id="sum-profit" class="font-black number text-slate-700 persian-number">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-slate-500 font-bold">مالیات:</span>
-                                    <span id="sum-tax" class="font-black number text-slate-700">۰</span>
+                                    <span id="sum-tax" class="font-black number text-slate-700 persian-number">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center text-red-600">
                                     <span class="font-bold">کسر اعتبار:</span>
-                                    <span id="sum-credit" class="font-black number">-۰</span>
+                                    <span id="sum-credit" class="font-black number persian-number">-۰</span>
                                 </div>
                                 <div class="pt-6 border-t border-dashed">
                                     <div class="flex justify-between items-baseline">
                                         <span class="text-xl font-bold text-slate-600">مبلغ نهایی:</span>
-                                        <span id="sum-total" class="text-4xl font-black text-emerald-600 number">۰</span>
+                                        <span id="sum-total" class="text-4xl font-black text-emerald-600 number persian-number">۰</span>
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +279,7 @@
                 </div>
             </div>
 
-           <!-- فاکتورهای صادر شده -->
+            <!-- فاکتورهای صادر شده -->
             <div id="invoices-list" class="tab-content">
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
@@ -332,7 +331,7 @@
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
-                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none persian-number">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
@@ -342,26 +341,27 @@
                         </div>
                     </div>
 
-                 <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                    <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
-                        <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right">
-                            <thead class="bg-slate-50 text-slate-500">
-                                <tr>
-                                    <th class="p-5 font-black">نام مشتری</th>
-                                    <th class="p-5 font-black">مجموع وزن (گرم)</th>
-                                    <th class="p-5 font-black text-center">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
-                        </table>
+                    <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+                        <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
+                            <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-right">
+                                <thead class="bg-slate-50 text-slate-500">
+                                    <tr>
+                                        <th class="p-5 font-black">نام مشتری</th>
+                                        <th class="p-5 font-black">مجموع وزن (گرم)</th>
+                                        <th class="p-5 font-black text-center">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- مشتریان و گزارشات و مودال‌ها -->
+            <!-- مشتریان -->
             <div id="customers" class="tab-content space-y-8">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-black text-slate-800">مدیریت مشتریان</h2>
@@ -383,12 +383,12 @@
                 </div>
             </div>
 
+            <!-- گزارشات -->
             <div id="reports" class="tab-content space-y-8">
                 <div class="bg-emerald-600 text-white p-10 rounded-[3rem] shadow-2xl">
                     <h2 class="text-3xl font-black mb-2">مرکز گزارشات و خروجی</h2>
                     <p class="opacity-80 font-bold">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
                 </div>
-                <!-- دکمه‌های خروجی -->
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="divide-y">
                         <button onclick="exportData('customers')" class="w-full p-8 hover:bg-slate-50 transition-all flex items-center gap-6 group text-right">خروجی مشتریان</button>
@@ -401,7 +401,7 @@
         </main>
     </div>
 
-  <!-- مودال جزئیات بانک طلا (اصلاح شده) -->
+    <!-- مودال جزئیات امانات -->
     <div id="gold-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-3xl rounded-[2.5rem] p-8 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
@@ -420,7 +420,7 @@
                     <p id="modal-total-weight" class="text-3xl font-black text-amber-600 persian-number">۰٫۰۰۰ گرم</p>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-500 font-bold">مجموع بستانکاری (طلب مشتری)</p>
+                    <p class="text-xs text-slate-500 font-bold">مجموع بستانکاری</p>
                     <p id="modal-total-debt" class="text-3xl font-black text-emerald-600 persian-number">۰ تومان</p>
                 </div>
                 <div>
@@ -449,6 +449,7 @@
         </div>
     </div>
 
+    <!-- مودال افزودن مشتری -->
     <div id="add-cust-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl">
             <h3 class="text-2xl font-black text-slate-800 mb-8">افزودن مشتری جدید</h3>
@@ -464,7 +465,7 @@
         </div>
     </div>
 
-   <script>
+    <script>
         // State
         let customers = JSON.parse(localStorage.getItem('ghesseh_v64_customers')) || [];
         let invoices = JSON.parse(localStorage.getItem('ghesseh_v64_invoices')) || [];
@@ -511,7 +512,58 @@
             renderInvoices();
         }
 
-        // ماشین حساب طلای آب‌شده (اصلاح کامل)
+        function toggleSidebar() { 
+            document.getElementById('sidebar').classList.toggle('translate-x-full'); 
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('sidebar-active');
+                if (btn.getAttribute('onclick').includes(id)) btn.classList.add('sidebar-active');
+            });
+            if (window.innerWidth < 1024) toggleSidebar();
+        }
+
+        // Live Search
+        function liveSearch(query, context) {
+            const resultsDiv = document.getElementById(`${context}-search-results`);
+            if (!query) { resultsDiv.classList.add('hidden'); return; }
+            const filtered = customers.filter(c => (c.name && c.name.includes(query)) || (c.national && c.national.includes(query)));
+            resultsDiv.innerHTML = filtered.map(c => `
+                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" class="search-item p-4 border-b flex justify-between items-center">
+                    <span class="font-bold text-slate-700">${c.name}</span>
+                    <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
+                </div>
+            `).join('');
+            resultsDiv.classList.toggle('hidden', filtered.length === 0);
+        }
+
+        function selectUser(id, name, credit, context) {
+            selectedCustomer[context] = id;
+            document.getElementById(`${context}-search-results`).classList.add('hidden');
+            document.getElementById(`${context}-selected-name`).innerText = name;
+            document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+            if (context === 'inv') {
+                document.getElementById('credit-panel').classList.remove('hidden');
+                document.getElementById('inv-credit-val').innerText = formatWithDots(credit);
+                calculateInvoice();
+            }
+        }
+
+        function clearSelection(context) {
+            selectedCustomer[context] = null;
+            document.getElementById(`${context}-selected-badge`).classList.add('hidden');
+            document.getElementById(`${context}-cust-search`).value = "";
+            if (context === 'inv') {
+                document.getElementById('credit-panel').classList.add('hidden');
+                document.getElementById('use-credit').checked = false;
+                calculateInvoice();
+            }
+        }
+
+        // ماشین حساب طلای آب‌شده
         function calcTradeGold() {
             const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
             let profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
@@ -519,7 +571,6 @@
             const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
 
             let weight = 0, total = 0;
-
             if (amount > 0 && price > 0) {
                 weight = amount / (price * (1 + profitPercent / 100));
                 total = amount;
@@ -532,7 +583,7 @@
             document.getElementById('trade-res-total').innerText = formatWithDots(total);
         }
 
-        // محاسبه فاکتور - نسخه اصلاح شده
+        // محاسبه فاکتور
         function calculateInvoice() {
             const price = parsePersianNumber(document.getElementById('gold-price').value);
             const weight = parseFloat(document.getElementById('weight').value) || 0;
@@ -608,8 +659,7 @@
             refreshAll();
         }
 
-        // بقیه توابع (render, export, modals, etc.)
-       function renderInvoices(filtered = null) {
+        function renderInvoices(filtered = null) {
             const tbody = document.getElementById('invoices-tbody');
             const data = filtered || invoices;
             tbody.innerHTML = data.map(i => `
@@ -635,7 +685,65 @@
             }
         }
 
-        // جزئیات امانات (بهبود یافته)
+        function filterInvoices() {
+            const q = document.getElementById('invoice-search').value.toLowerCase().trim();
+            const filtered = invoices.filter(i => i.customerName.toLowerCase().includes(q) || (i.goldType && i.goldType.toLowerCase().includes(q)));
+            renderInvoices(filtered);
+        }
+
+        function saveToGoldBank() {
+            if (!selectedCustomer.gb) return toast("مشتری را انتخاب کنید", "error");
+            const weight = parseFloat(document.getElementById('gb-weight').value);
+            if (!weight) return toast("وزن را وارد کنید", "error");
+
+            const cust = customers.find(c => c.id == selectedCustomer.gb);
+            if (!cust) return toast("مشتری یافت نشد", "error");
+
+            goldBank.push({
+                id: Date.now(),
+                customerId: selectedCustomer.gb,
+                customerName: cust.name,
+                weight: weight,
+                goldPrice: parsePersianNumber(document.getElementById('gb-gold-price').value),
+                note: document.getElementById('gb-note').value || '-',
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date())
+            });
+
+            toast("امانت ثبت شد", "success");
+            clearSelection('gb');
+            document.getElementById('gb-weight').value = "";
+            document.getElementById('gb-gold-price').value = "";
+            document.getElementById('gb-note').value = "";
+            refreshAll();
+        }
+
+        function renderGoldBank() {
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) grouped[item.customerId] = [];
+                grouped[item.customerId].push(item);
+            });
+
+            const tbody = document.getElementById('gold-bank-tbody');
+            tbody.innerHTML = Object.keys(grouped).map(cid => {
+                const items = grouped[cid];
+                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+                const cust = customers.find(c => c.id == cid);
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+                        <td class="p-5 font-black text-amber-600 persian-number">${totalWeight.toFixed(3).replace('.', '٫')} گرم</td>
+                        <td class="p-5 text-center">
+                            <button onclick="showGoldDetails(${cid})" 
+                                    class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
+                                جزئیات امانات
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function showGoldDetails(customerId) {
             const customerGold = goldBank.filter(g => g.customerId == customerId);
             const customer = customers.find(c => c.id == customerId);
@@ -651,7 +759,7 @@
             document.getElementById('modal-total-value').innerText = formatWithDots(totalValue) + " تومان";
 
             const tbody = document.getElementById('gold-detail-tbody');
-            tbody.innerHTML = customerGold.map((g, index) => `
+            tbody.innerHTML = customerGold.map(g => `
                 <tr>
                     <td class="p-4">${g.date}</td>
                     <td class="p-4 font-black text-amber-600 persian-number">${g.weight.toFixed(3).replace('.', '٫')}</td>
@@ -670,9 +778,8 @@
             if (confirm("آیا از حذف این امانت اطمینان دارید؟")) {
                 goldBank = goldBank.filter(g => g.id !== id);
                 refreshAll();
-                // refresh modal
-                const currentCust = document.getElementById('modal-customer-name').innerText;
-                const cust = customers.find(c => c.name === currentCust);
+                const currentCustName = document.getElementById('modal-customer-name').innerText;
+                const cust = customers.find(c => c.name === currentCustName);
                 if (cust) showGoldDetails(cust.id);
             }
         }
@@ -689,45 +796,125 @@
         }
 
         function exportGoldDetail() {
-            // ساده‌ترین خروجی
             alert("خروجی جزئیات امانت در حال حاضر به صورت CSV دانلود می‌شود (قابل گسترش)");
-            // می‌توانید логиک کامل CSV را اینجا اضافه کنید
         }
 
         function closeGoldDetailModal() {
             document.getElementById('gold-detail-modal').classList.replace('flex', 'hidden');
         }
-       
-        function renderGoldBank() {
-            const grouped = {};
-            goldBank.forEach(item => {
-                if (!grouped[item.customerId]) grouped[item.customerId] = [];
-                grouped[item.customerId].push(item);
-            });
 
-            const tbody = document.getElementById('gold-bank-tbody');
-            tbody.innerHTML = Object.keys(grouped).map(cid => {
-                const items = grouped[cid];
-                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
-                const cust = customers.find(c => c.id == cid);
-                return `
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                        <td class="p-5 font-black text-amber-600">${totalWeight.toFixed(3).replace('.', '٫')} گرم</td>
-                        <td class="p-5 text-center">
-                            <button onclick="showGoldDetails(${cid})" 
-                                    class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
-                                جزئیات امانات
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+        function updateDashboard() {
+            const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
+            const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
+            document.getElementById('dash-sales-total').innerText = formatWithDots(sales);
+            document.getElementById('dash-gold-total').innerText = gold.toFixed(3).replace('.', '٫');
+            document.getElementById('dash-cust-total').innerText = customers.length;
         }
 
+        function renderCustomers() {
+            const tbody = document.getElementById('customers-tbody');
+            tbody.innerHTML = customers.map(c => `
+                <tr class="hover:bg-slate-50 transition-all">
+                    <td class="p-6 font-black text-slate-700">${c.name}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
+                    <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
+                    <td class="p-6 font-black text-emerald-600 persian-number">${formatWithDots(c.credit || 0)}</td>
+                    <td class="p-6 text-center">
+                        <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-       
-            </script>
+        function saveCustomer() {
+            const n = document.getElementById('m-name').value.trim();
+            const m = document.getElementById('m-national').value.trim();
+            const p = document.getElementById('m-phone').value.trim();
+            
+            if (!n || !m) return toast("نام و کد ملی الزامی است", "error");
+            
+            customers.push({ 
+                id: Date.now(), 
+                name: n, 
+                national: m, 
+                phone: p, 
+                credit: 0 
+            });
+            
+            closeAddModal();
+            refreshAll();
+            toast("مشتری با موفقیت افزوده شد", "success");
+        }
 
+        function deleteCustomer(id) {
+            if (confirm("آیا از حذف این مشتری اطمینان دارید؟")) {
+                customers = customers.filter(c => c.id !== id);
+                refreshAll();
+            }
+        }
+
+        function exportData(type) {
+            let csv = "\uFEFF";
+            let name = "Ghesseh_Export.csv";
+
+            if (type === 'customers') {
+                csv += "نام,کد ملی,شماره تماس,اعتبار\n";
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
+                name = "Ghesseh_Customers.csv";
+            } else if (type === 'invoices') {
+                csv += "تاریخ,مشتری,نوع طلا,وزن (گرم),قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
+                name = "Ghesseh_Invoices.csv";
+            } else if (type === 'gold') {
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
+                name = "Ghesseh_GoldBank.csv";
+            } else if (type === 'all') {
+                csv += "=== مشتریان ===\n";
+                csv += "نام,کد ملی,شماره تماس,اعتبار\n";
+                customers.forEach(c => csv += `"${c.name}","${c.national || ''}","${c.phone || ''}",${c.credit || 0}\n`);
+                
+                csv += "\n=== فاکتورها ===\n";
+                csv += "تاریخ,مشتری,نوع طلا,وزن,قیمت طلا,مبلغ کل\n";
+                invoices.forEach(i => csv += `"${i.date}","${i.customerName}","${i.goldType || ''}",${i.weight},${i.goldPrice || 0},${i.total}\n`);
+                
+                csv += "\n=== بانک طلا ===\n";
+                csv += "مشتری,وزن,تاریخ,توضیحات,قیمت روز\n";
+                goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
+                
+                name = "Ghesseh_Full_Report.csv";
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = name;
+            link.click();
+            toast("فایل با موفقیت دانلود شد", "success");
+        }
+
+        function openAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-cust-modal').classList.replace('flex', 'hidden');
+        }
+
+        function toast(msg, type = "success") {
+            const t = document.createElement('div');
+            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        // Event listeners
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'profit' || e.target.id === 'tax') {
+                calculateInvoice();
+            }
+        });
+    </script>
 </body>
 </html>
