@@ -300,6 +300,8 @@
                         </div>
                     </div>
 
+                    
+
                     <!-- خلاصه محاسبات -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
@@ -607,7 +609,7 @@ function formatWithDots(num) {
     loadData();   // ← اضافه شد
     document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
               refreshAll();
-            printInvoice(invoices[invoices.length - 1]);  // چاپ فاکتور بعد از ذخیره
+            };
         function refreshAll() {
     saveData();
     updateDashboard();
@@ -772,8 +774,10 @@ function calculateInvoice() {
             clearSelection('inv');
             document.getElementById('weight').value = "";
             document.getElementById('gold-price').value = "";
-            refreshAll();
-        }
+                       refreshAll();
+            setTimeout(() => {
+                printInvoice(invoices[invoices.length - 1]);
+            }, 300);
 
         function renderInvoices(filtered = null) {
             const tbody = document.getElementById('invoices-tbody');
@@ -801,6 +805,7 @@ function calculateInvoice() {
             }
         }
 
+     
         function filterInvoices() {
             const q = document.getElementById('invoice-search').value.toLowerCase().trim();
             const filtered = invoices.filter(i => i.customerName.toLowerCase().includes(q) || (i.goldType && i.goldType.toLowerCase().includes(q)));
