@@ -119,7 +119,7 @@
                 </button>
                 <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
-                    <span class="font-bold">فاکتورهای صادر شده</span>
+                    <span class="font-bold">فاکتورها</span>
                 </button>
                 <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
@@ -520,290 +520,288 @@
             </div>
         </div>
     </div>
+ <script>
+       // ==================== State Management ====================
+const APP_VERSION = "6.5";
 
-   <script>
-    // ====================== STATE & CONFIG ======================
-    let customers = JSON.parse(localStorage.getItem('ghesseh_v64_customers')) || [];
-    let invoices = JSON.parse(localStorage.getItem('ghesseh_v64_invoices')) || [];
-    let goldBank = JSON.parse(localStorage.getItem('ghesseh_v64_gold')) || [];
-    
-    let selectedCustomer = { inv: null, gb: null };
+let customers = [];
+let invoices = [];
+let goldBank = [];
+let selectedCustomer = { inv: null, gb: null };
 
-    // ====================== UTILITIES ======================
-    function toPersianDigits(str) {
-        const persian = { '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴', '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹' };
-        return str.toString().replace(/[0-9]/g, w => persian[w] || w);
+function loadData() {
+    try {
+        const savedCustomers = localStorage.getItem('ghesseh_v64_customers');
+        const savedInvoices = localStorage.getItem('ghesseh_v64_invoices');
+        const savedGold = localStorage.getItem('ghesseh_v64_gold');
+
+        customers = savedCustomers ? JSON.parse(savedCustomers) : [];
+        invoices = savedInvoices ? JSON.parse(savedInvoices) : [];
+        goldBank = savedGold ? JSON.parse(savedGold) : [];
+
+        // اگر نسخه قدیمی بود، بعداً می‌توانیم migration اضافه کنیم
+    } catch (e) {
+        console.error("خطا در لود داده‌ها:", e);
+        customers = [];
+        invoices = [];
+        goldBank = [];
     }
+}
 
-    function formatWithDots(num) {
-        if (num == null) return '۰';
-        const str = Math.round(num).toString();
-        return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-    }
-
-    function parsePersianNumber(str) {
-        if (!str) return 0;
-        // حذف کاما و نقطه‌های هزارگان + تبدیل اعداد فارسی
-        let cleaned = str.toString()
-            .replace(/[,.]/g, '')                    // حذف کاما و نقطه
-            .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-        return parseFloat(cleaned) || 0;
-    }
-
-    function formatNumberInput(input) {
-        let val = input.value.replace(/[^۰-۹0-9]/g, '');
-        if (val) {
-            const num = parsePersianNumber(val);
-            input.value = toPersianDigits(num.toLocaleString('en-US').replace(/,/g, '.'));
-        }
-    }
-
-    function toast(msg, type = "success") {
-        const t = document.createElement('div');
-        t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] shadow-2xl flex items-center gap-3
-                       ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
-        t.innerHTML = `
-            ${type === 'success' ? 
-                '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>' : 
-                '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12" /></svg>'}
-            <span>${msg}</span>
-        `;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 3000);
-    }
-
-    // ====================== INIT & REFRESH ======================
-    function refreshAll() {
+function saveData() {
+    try {
         localStorage.setItem('ghesseh_v64_customers', JSON.stringify(customers));
         localStorage.setItem('ghesseh_v64_invoices', JSON.stringify(invoices));
         localStorage.setItem('ghesseh_v64_gold', JSON.stringify(goldBank));
-        
-        updateDashboard();
-        renderCustomers();
-        renderGoldBank();
-        renderInvoices();
+    } catch (e) {
+        console.error("خطا در ذخیره داده‌ها:", e);
+        toast("خطا در ذخیره اطلاعات!", "error");
     }
+}
 
-    function initApp() {
-        document.getElementById('today-date').innerText = 
-            new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-        refreshAll();
-    }
-
-    // ====================== DASHBOARD ======================
-    function updateDashboard() {
-        const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
-        const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
-        
-        document.getElementById('dash-sales-total').innerText = formatWithDots(sales);
-        document.getElementById('dash-gold-total').innerText = gold.toFixed(3).replace('.', '٫');
-        document.getElementById('dash-cust-total').innerText = customers.length;
-    }
-
-    function calcTradeGold() {
-        const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
-        const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
-        const amount = parsePersianNumber(document.getElementById('trade-amount').value);
-        const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
-
-        let weight = 0, total = 0;
-
-        if (amount > 0 && price > 0) {
-            weight = amount / (price * (1 + profitPercent / 100));
-            total = amount;
-        } else if (desiredWeight > 0 && price > 0) {
-            weight = desiredWeight;
-            total = weight * price * (1 + profitPercent / 100);
+        function toPersianDigits(str) {
+            const persian = { '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴', '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹' };
+            return str.toString().replace(/[0-9]/g, w => persian[w]);
         }
 
-        document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
-        document.getElementById('trade-res-total').innerText = formatWithDots(total);
-    }
-
-    // ====================== COMMON ======================
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('translate-x-full');
-    }
-
-    function switchTab(id) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('sidebar-active');
-            if (btn.getAttribute('onclick').includes(id)) btn.classList.add('sidebar-active');
-        });
-
-        if (window.innerWidth < 1024) toggleSidebar();
-    }
-
-    // ====================== LIVE SEARCH ======================
-    function liveSearch(query, context) {
-        const resultsDiv = document.getElementById(`${context}-search-results`);
-        if (!query.trim()) {
-            resultsDiv.classList.add('hidden');
-            return;
+        function formatWithDots(num) {
+            if (num == null) return '۰';
+            const str = Math.round(num).toString();
+            return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
         }
 
-        const filtered = customers.filter(c => 
-            (c.name && c.name.includes(query)) || 
-            (c.national && c.national.includes(query))
+        // ==================== توابع فرمتینگ اعداد ====================
+function parsePersianNumber(str) {
+    if (!str) return 0;
+    
+    let cleaned = str.toString()
+        .replace(/[^۰-۹0-9]/g, '')                    // فقط اعداد باقی بماند
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)); // تبدیل فارسی به انگلیسی
+    
+    return parseFloat(cleaned) || 0;
+}
+
+function formatNumberInput(input) {
+    // حذف همه چیز جز اعداد فارسی و انگلیسی
+    let val = input.value.replace(/[^۰-۹0-9]/g, '');
+    
+    if (val) {
+        const num = parsePersianNumber(val);
+        // نمایش با کاما و اعداد فارسی
+        input.value = toPersianDigits(
+            num.toLocaleString('en-US').replace(/,/g, '.')
         );
-
-        resultsDiv.innerHTML = filtered.map(c => `
-            <div onclick="selectUser('${c.id}', '${c.name}', ${c.credit || 0}, '${context}')" 
-                 class="search-item p-4 border-b flex justify-between items-center hover:bg-slate-50">
-                <span class="font-bold text-slate-700">${c.name}</span>
-                <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
-            </div>
-        `).join('');
-
-        resultsDiv.classList.toggle('hidden', filtered.length === 0);
     }
+}
 
-    function selectUser(id, name, credit, context) {
-        selectedCustomer[context] = id;
-        document.getElementById(`${context}-search-results`).classList.add('hidden');
-        document.getElementById(`${context}-selected-name`).innerText = name;
-        document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+// تابع کمکی نمایش اعداد با نقطه و فارسی
+function formatWithDots(num) {
+    if (num == null || isNaN(num)) return '۰';
+    const str = Math.round(num).toString();
+    return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+}
 
-        if (context === 'inv') {
-            document.getElementById('credit-panel').classList.remove('hidden');
-            document.getElementById('inv-credit-val').innerText = formatWithDots(credit);
-            calculateInvoice();
-        }
-    }
+        window.onload = () => {
+    loadData();   // ← اضافه شد
+    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+    refreshAll();
+};
+        function refreshAll() {
+    saveData();
+    updateDashboard();
+    renderCustomers();
+    renderGoldBank();
+    renderInvoices();
+}
 
-    function clearSelection(context) {
-        selectedCustomer[context] = null;
-        document.getElementById(`${context}-selected-badge`).classList.add('hidden');
-        document.getElementById(`${context}-cust-search`).value = "";
-
-        if (context === 'inv') {
-            document.getElementById('credit-panel').classList.add('hidden');
-            document.getElementById('use-credit').checked = false;
-            calculateInvoice();
-        }
-    }
-
-    // ====================== INVOICE ======================
-    function calculateInvoice() {
-        const price = parsePersianNumber(document.getElementById('gold-price').value);
-        const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const wType = document.getElementById('wage-type').value;
-        const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-        const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-        const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-        const useCredit = document.getElementById('use-credit').checked;
-
-        const customer = customers.find(c => c.id == selectedCustomer.inv);
-        const availableCredit = customer ? (customer.credit || 0) : 0;
-
-        const raw = price * weight;
-        let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-        const profitAmount = (raw + wage) * (profitPer / 100);
-        const tax = (wage + profitAmount) * (taxPer / 100);
-        let total = raw + wage + profitAmount + tax;
-
-        let deducted = 0;
-        if (useCredit && availableCredit > 0) {
-            deducted = Math.min(total, availableCredit);
-            total -= deducted;
+        function toggleSidebar() { 
+            document.getElementById('sidebar').classList.toggle('translate-x-full'); 
         }
 
-        document.getElementById('sum-raw').innerText = formatWithDots(raw);
-        document.getElementById('sum-wage').innerText = formatWithDots(wage);
-        document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
-        document.getElementById('sum-tax').innerText = formatWithDots(tax);
-        document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
-        document.getElementById('sum-total').innerText = formatWithDots(total);
-    }
-
-    function saveInvoice() {
-        if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-        if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
-
-        const price = parsePersianNumber(document.getElementById('gold-price').value);
-        const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
-        const total = parsePersianNumber(document.getElementById('sum-total').innerText);
-
-        const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-        if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
-
-        const useCredit = document.getElementById('use-credit').checked;
-        const customer = customers[cIndex];
-
-        if (useCredit) {
-            const totalBefore = parsePersianNumber(document.getElementById('sum-raw').innerText) +
-                               parsePersianNumber(document.getElementById('sum-wage').innerText) +
-                               parsePersianNumber(document.getElementById('sum-profit').innerText) +
-                               parsePersianNumber(document.getElementById('sum-tax').innerText);
-            customer.credit = Math.max(0, (customer.credit || 0) - totalBefore);
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('sidebar-active');
+                if (btn.getAttribute('onclick').includes(id)) btn.classList.add('sidebar-active');
+            });
+            if (window.innerWidth < 1024) toggleSidebar();
         }
 
-        // پاداش ۱ درصد
-        customer.credit = (customer.credit || 0) + Math.round(total * 0.01);
+        // Live Search
+        function liveSearch(query, context) {
+            const resultsDiv = document.getElementById(`${context}-search-results`);
+            if (!query) { resultsDiv.classList.add('hidden'); return; }
+            const filtered = customers.filter(c => (c.name && c.name.includes(query)) || (c.national && c.national.includes(query)));
+            resultsDiv.innerHTML = filtered.map(c => `
+                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" class="search-item p-4 border-b flex justify-between items-center">
+                    <span class="font-bold text-slate-700">${c.name}</span>
+                    <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
+                </div>
+            `).join('');
+            resultsDiv.classList.toggle('hidden', filtered.length === 0);
+        }
 
-        invoices.push({
-            id: Date.now(),
-            customerName: customer.name,
-            customerId: selectedCustomer.inv,
-            goldType: goldType,
-            weight: weight,
-            goldPrice: price,
-            total: total,
-            date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-            fullDate: new Date().toISOString()
-        });
+        function selectUser(id, name, credit, context) {
+            selectedCustomer[context] = id;
+            document.getElementById(`${context}-search-results`).classList.add('hidden');
+            document.getElementById(`${context}-selected-name`).innerText = name;
+            document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+            if (context === 'inv') {
+                document.getElementById('credit-panel').classList.remove('hidden');
+                document.getElementById('inv-credit-val').innerText = formatWithDots(credit);
+                calculateInvoice();
+            }
+        }
 
-        toast("فاکتور با موفقیت ثبت شد", "success");
-        clearSelection('inv');
-        document.getElementById('weight').value = "";
-        document.getElementById('gold-price').value = "";
-        refreshAll();
-    }
+        function clearSelection(context) {
+            selectedCustomer[context] = null;
+            document.getElementById(`${context}-selected-badge`).classList.add('hidden');
+            document.getElementById(`${context}-cust-search`).value = "";
+            if (context === 'inv') {
+                document.getElementById('credit-panel').classList.add('hidden');
+                document.getElementById('use-credit').checked = false;
+                calculateInvoice();
+            }
+        }
 
-    function renderInvoices(filtered = null) {
-        const tbody = document.getElementById('invoices-tbody');
-        const data = filtered || invoices;
+        // ماشین حساب طلای آب‌شده
+        function calcTradeGold() {
+            const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
+            let profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
+            const amount = parsePersianNumber(document.getElementById('trade-amount').value);
+            const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
 
-        tbody.innerHTML = data.map(i => `
-            <tr class="invoice-row hover:bg-slate-50 transition-colors">
-                <td class="p-4 text-slate-400 text-xs">${i.date}</td>
-                <td class="p-4 font-black">${i.customerName}</td>
-                <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
-                <td class="p-4 font-mono persian-number">${i.weight.toFixed(3).replace('.', '٫')} گرم</td>
-                <td class="p-4 font-mono persian-number">${formatWithDots(i.goldPrice)}</td>
-                <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatWithDots(i.total)}</td>
-                <td class="p-4 text-center">
-                    <button onclick="deleteInvoice(${i.id})" 
-                            class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold transition-colors">
-                        حذف
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-    }
+            let weight = 0, total = 0;
+            if (amount > 0 && price > 0) {
+                weight = amount / (price * (1 + profitPercent / 100));
+                total = amount;
+            } else if (desiredWeight > 0 && price > 0) {
+                weight = desiredWeight;
+                total = weight * price * (1 + profitPercent / 100);
+            }
 
-    function deleteInvoice(id) {
-        if (confirm("آیا از حذف این فاکتور اطمینان دارید؟")) {
-            invoices = invoices.filter(i => i.id !== id);
+            document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
+            document.getElementById('trade-res-total').innerText = formatWithDots(total);
+        }
+
+        // محاسبه فاکتور
+        function calculateInvoice() {
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const wType = document.getElementById('wage-type').value;
+            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
+            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
+            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
+            const useCredit = document.getElementById('use-credit').checked;
+
+            const cId = selectedCustomer.inv;
+            const customer = customers.find(c => c.id == cId);
+            const availableCredit = customer ? (customer.credit || 0) : 0;
+
+            const raw = price * weight;
+            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+            const profitAmount = (raw + wage) * (profitPer / 100);
+            const tax = (wage + profitAmount) * (taxPer / 100);
+            let total = raw + wage + profitAmount + tax;
+
+            let deducted = 0;
+            if (useCredit && availableCredit > 0) {
+                deducted = Math.min(total, availableCredit);
+                total -= deducted;
+            }
+
+            document.getElementById('sum-raw').innerText = formatWithDots(raw);
+            document.getElementById('sum-wage').innerText = formatWithDots(wage);
+            document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
+            document.getElementById('sum-tax').innerText = formatWithDots(tax);
+            document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
+            document.getElementById('sum-total').innerText = formatWithDots(total);
+        }
+
+        function saveInvoice() {
+            if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
+            if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
+
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+
+                        const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+
+            const useCredit = document.getElementById('use-credit').checked;
+            let deducted = 0;
+
+            if (useCredit) {
+                const raw = parsePersianNumber(document.getElementById('sum-raw').innerText);
+                const wage = parsePersianNumber(document.getElementById('sum-wage').innerText);
+                const profitAmount = parsePersianNumber(document.getElementById('sum-profit').innerText);
+                const tax = parsePersianNumber(document.getElementById('sum-tax').innerText);
+                
+                const totalBeforeCredit = raw + wage + profitAmount + tax;
+                deducted = Math.min(totalBeforeCredit, customers[cIndex].credit || 0);
+                
+                customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - deducted);
+            }
+
+            // اضافه کردن پاداش ۱٪ از مبلغ نهایی پرداخت شده
+            const reward = Math.round(total * 0.01);
+            customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
+
+
+            invoices.push({
+                id: Date.now(),
+                customerName: customers[cIndex].name,
+                customerId: selectedCustomer.inv,
+                goldType: goldType,
+                weight: weight,
+                goldPrice: price,
+                total: total,
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                fullDate: new Date().toISOString()
+            });
+
+            toast("فاکتور با موفقیت ثبت شد", "success");
+            clearSelection('inv');
+            document.getElementById('weight').value = "";
+            document.getElementById('gold-price').value = "";
             refreshAll();
-            toast("فاکتور حذف شد", "success");
         }
-    }
 
-    function filterInvoices() {
-        const q = document.getElementById('invoice-search').value.toLowerCase().trim();
-        const filtered = invoices.filter(i => 
-            i.customerName.toLowerCase().includes(q) || 
-            (i.goldType && i.goldType.toLowerCase().includes(q))
-        );
-        renderInvoices(filtered);
-    }
+        function renderInvoices(filtered = null) {
+            const tbody = document.getElementById('invoices-tbody');
+            const data = filtered || invoices;
+            tbody.innerHTML = data.map(i => `
+                <tr class="invoice-row">
+                    <td class="p-4 text-slate-400 text-xs">${i.date}</td>
+                    <td class="p-4 font-black">${i.customerName}</td>
+                    <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
+                    <td class="p-4 font-mono persian-number">${i.weight.toFixed(3).replace('.', '٫')} گرم</td>
+                    <td class="p-4 font-mono persian-number">${formatWithDots(i.goldPrice)}</td>
+                    <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatWithDots(i.total)}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-    // ====================== GOLD BANK ======================
+        function deleteInvoice(id) {
+            if (confirm("آیا از حذف این فاکتور اطمینان دارید؟")) {
+                invoices = invoices.filter(i => i.id !== id);
+                refreshAll();
+                toast("فاکتور حذف شد", "success");
+            }
+        }
+
+        function filterInvoices() {
+            const q = document.getElementById('invoice-search').value.toLowerCase().trim();
+            const filtered = invoices.filter(i => i.customerName.toLowerCase().includes(q) || (i.goldType && i.goldType.toLowerCase().includes(q)));
+            renderInvoices(filtered);
+        }
+
         function saveToGoldBank() {
             if (!selectedCustomer.gb) return toast("مشتری را انتخاب کنید", "error");
             const weight = parseFloat(document.getElementById('gb-weight').value);
@@ -924,8 +922,6 @@
             document.getElementById('dash-cust-total').innerText = customers.length;
         }
 
-         // ====================== CUSTOMERS ======================
-
         function renderCustomers() {
             const tbody = document.getElementById('customers-tbody');
             tbody.innerHTML = customers.map(c => `
@@ -968,7 +964,6 @@
             }
         }
 
-        // ====================== EXPORT ======================
         function exportData(type) {
             let csv = "\uFEFF";
             let name = "Ghesseh_Export.csv";
@@ -1032,5 +1027,6 @@
             }
         });
     </script>
+    
 </body>
 </html>
