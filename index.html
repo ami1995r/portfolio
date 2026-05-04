@@ -665,56 +665,66 @@ function formatWithDots(num) {
         }
 
         function saveInvoice() {
-            if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-            if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
+    // اعتبارسنجی
+    if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
+    
+    const weightInput = document.getElementById('weight').value;
+    if (!weightInput || parseFloat(weightInput) <= 0) {
+        return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
+    }
 
-            const price = parsePersianNumber(document.getElementById('gold-price').value);
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
-            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+    const price = parsePersianNumber(document.getElementById('gold-price').value);
+    if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
 
-                        const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+    const weight = parseFloat(weightInput);
+    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+    const total = parsePersianNumber(document.getElementById('sum-total').innerText);
 
-            const useCredit = document.getElementById('use-credit').checked;
-            let deducted = 0;
+    const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+    if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
 
-            if (useCredit) {
-                const raw = parsePersianNumber(document.getElementById('sum-raw').innerText);
-                const wage = parsePersianNumber(document.getElementById('sum-wage').innerText);
-                const profitAmount = parsePersianNumber(document.getElementById('sum-profit').innerText);
-                const tax = parsePersianNumber(document.getElementById('sum-tax').innerText);
-                
-                const totalBeforeCredit = raw + wage + profitAmount + tax;
-                deducted = Math.min(totalBeforeCredit, customers[cIndex].credit || 0);
-                
-                customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - deducted);
-            }
+    const useCredit = document.getElementById('use-credit').checked;
+    let deducted = 0;
 
-            // اضافه کردن پاداش ۱٪ از مبلغ نهایی پرداخت شده
-            const reward = Math.round(total * 0.01);
-            customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
+    if (useCredit) {
+        const raw = parsePersianNumber(document.getElementById('sum-raw').innerText);
+        const wage = parsePersianNumber(document.getElementById('sum-wage').innerText);
+        const profitAmount = parsePersianNumber(document.getElementById('sum-profit').innerText);
+        const tax = parsePersianNumber(document.getElementById('sum-tax').innerText);
+        
+        const totalBeforeCredit = raw + wage + profitAmount + tax;
+        deducted = Math.min(totalBeforeCredit, customers[cIndex].credit || 0);
+        
+        customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - deducted);
+    }
 
+    // پاداش ۱٪ از مبلغ نهایی پرداخت شده
+    const reward = Math.round(total * 0.01);
+    customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
 
-            invoices.push({
-                id: Date.now(),
-                customerName: customers[cIndex].name,
-                customerId: selectedCustomer.inv,
-                goldType: goldType,
-                weight: weight,
-                goldPrice: price,
-                total: total,
-                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-                fullDate: new Date().toISOString()
-            });
+    // ثبت فاکتور
+    invoices.push({
+        id: Date.now(),
+        customerName: customers[cIndex].name,
+        customerId: selectedCustomer.inv,
+        goldType: goldType,
+        weight: weight,
+        goldPrice: price,
+        total: total,
+        deductedCredit: deducted,
+        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+        fullDate: new Date().toISOString()
+    });
 
-            toast("فاکتور با موفقیت ثبت شد", "success");
-            clearSelection('inv');
-            document.getElementById('weight').value = "";
-            document.getElementById('gold-price').value = "";
-            refreshAll();
-        }
-
+    toast("فاکتور با موفقیت ثبت و ذخیره شد", "success");
+    
+    // ریست فرم
+    clearSelection('inv');
+    document.getElementById('weight').value = "";
+    document.getElementById('gold-price').value = "";
+    
+    refreshAll();
+}
         function renderInvoices(filtered = null) {
             const tbody = document.getElementById('invoices-tbody');
             const data = filtered || invoices;
