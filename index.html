@@ -99,6 +99,7 @@
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">فروش کل دوره</p>
                         <h3 class="text-3xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
+                        <p id="dash-today-sales" class="text-emerald-600 text-sm font-bold mt-1">فروش امروز: ۰ تومان</p>
                     </div>
                     <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
                         <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4">
@@ -870,13 +871,28 @@ function formatWithDots(num) {
         }
 
         function updateDashboard() {
-            const sales = invoices.reduce((s, i) => s + (i.total || 0), 0);
-            const gold = goldBank.reduce((s, g) => s + (g.weight || 0), 0);
-            document.getElementById('dash-sales-total').innerText = formatWithDots(sales);
-            document.getElementById('dash-gold-total').innerText = gold.toFixed(3).replace('.', '٫');
-            document.getElementById('dash-cust-total').innerText = customers.length;
-        }
+    // فروش کل
+    const totalSales = invoices.reduce((sum, inv) => sum + (inv.total || 0), 0);
+    
+    // فروش امروز
+    const today = new Intl.DateTimeFormat('fa-IR').format(new Date());
+    const todaySales = invoices
+        .filter(inv => inv.date === today)
+        .reduce((sum, inv) => sum + (inv.total || 0), 0);
 
+    // مجموع طلای امانت
+    const totalGold = goldBank.reduce((sum, g) => sum + (g.weight || 0), 0);
+
+    // به‌روزرسانی کارت‌ها
+    document.getElementById('dash-sales-total').innerText = formatWithDots(totalSales);
+    document.getElementById('dash-gold-total').innerText = totalGold.toFixed(3).replace('.', '٫');
+    document.getElementById('dash-cust-total').innerText = customers.length;
+
+    // اضافه کردن فروش امروز (اختیاری - اگر بخوای نمایش بدی)
+    console.log(`📊 فروش امروز: ${formatWithDots(todaySales)} تومان`);
+}
+
+     
         function renderCustomers() {
             const tbody = document.getElementById('customers-tbody');
             tbody.innerHTML = customers.map(c => `
