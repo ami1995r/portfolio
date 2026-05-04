@@ -686,42 +686,42 @@ function formatWithDots(num) {
         }
 
         // محاسبه فاکتور
-         function calculateInvoice() {
-    const price = parsePersianNumber(document.getElementById('gold-price').value);
-    const weight = parseFloat(document.getElementById('weight').value) || 0;
-    const wType = document.getElementById('wage-type').value;
-    const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-    const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-    const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-    const useCredit = document.getElementById('use-credit').checked;
+function calculateInvoice() {
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const wType = document.getElementById('wage-type').value;
+            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
+            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
+            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
+            const useCredit = document.getElementById('use-credit').checked;
 
-    // محاسبات پایه
-    const raw = price * weight;
-    let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-    const profitAmount = (raw + wage) * (profitPer / 100);
-    const tax = (raw + wage + profitAmount) * (taxPer / 100);   // اصلاح: مالیات روی جمع
+            const cId = selectedCustomer.inv;
+            const customer = customers.find(c => c.id == cId);
+            const availableCredit = customer ? (customer.credit || 0) : 0;
 
-    let totalBeforeCredit = raw + wage + profitAmount + tax;
-    let deducted = 0;
+            const raw = price * weight;
+            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+            const profitAmount = (raw + wage) * (profitPer / 100);
+            const tax = (wage + profitAmount) * (taxPer / 100);
+            let total = raw + wage + profitAmount + tax;
 
-    // مدیریت اعتبار مشتری
-    if (useCredit && selectedCustomer.inv) {
-        const customer = customers.find(c => c.id == selectedCustomer.inv);
-        const availableCredit = customer ? (customer.credit || 0) : 0;
-        deducted = Math.min(totalBeforeCredit, availableCredit);
-    }
+            let deducted = 0;
+            if (useCredit && availableCredit > 0) {
+                deducted = Math.min(total, availableCredit);
+                total -= deducted;
+            }
 
-    const finalTotal = totalBeforeCredit - deducted;
+            document.getElementById('sum-raw').innerText = formatWithDots(raw);
+            document.getElementById('sum-wage').innerText = formatWithDots(wage);
+            document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
+            document.getElementById('sum-tax').innerText = formatWithDots(tax);
+            document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
+            document.getElementById('sum-total').innerText = formatWithDots(total);
+        }
 
-    // نمایش در خلاصه
-    document.getElementById('sum-raw').innerText = formatWithDots(raw);
-    document.getElementById('sum-wage').innerText = formatWithDots(wage);
-    document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
-    document.getElementById('sum-tax').innerText = formatWithDots(tax);
-    document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
-    document.getElementById('sum-total').innerText = formatWithDots(finalTotal);
-}
 
+
+     
         function saveInvoice() {
             if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
             if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
