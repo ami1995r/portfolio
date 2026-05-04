@@ -7,62 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-/* ====================== IMPROVEMENTS ====================== */
-
-/* Glassmorphism + Shadow */
-.glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
-}
-
-/* Gradient Accents */
-.gradient-primary {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
-
-.gradient-gold {
-    background: linear-gradient(135deg, #fbbf24, #d97706);
-}
-
-/* Better Cards */
-.card-hover {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.card-hover:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 30px 40px -15px rgb(16 185 129 / 0.25);
-}
-
-/* Improved Buttons */
-.btn-modern {
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-.btn-modern:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 25px -5px rgb(16 185 129 / 0.4);
-}
-
-/* Table Improvements */
-.table-row {
-    transition: all 0.2s ease;
-}
-.table-row:hover {
-    background-color: #f8fafc;
-    transform: scale(1.01);
-}
-
-/* Number Animation */
-.animate-number {
-    transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-/* Sidebar Enhancement */
-#sidebar {
-    box-shadow: -10px 0 30px -15px rgb(0 0 0 / 0.1);
-}
-
         body { 
             font-family: 'Vazirmatn', sans-serif; 
             background-color: #f8fafc; 
@@ -119,7 +63,7 @@
                 </button>
                 <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
-                    <span class="font-bold">فاکتورها</span>
+                    <span class="font-bold">فاکتورهای صادر شده</span>
                 </button>
                 <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
@@ -520,6 +464,7 @@
             </div>
         </div>
     </div>
+
  <script>
        // ==================== State Management ====================
 const APP_VERSION = "6.5";
@@ -686,7 +631,7 @@ function formatWithDots(num) {
         }
 
         // محاسبه فاکتور
-function calculateInvoice() {
+        function calculateInvoice() {
             const price = parsePersianNumber(document.getElementById('gold-price').value);
             const weight = parseFloat(document.getElementById('weight').value) || 0;
             const wType = document.getElementById('wage-type').value;
@@ -719,9 +664,6 @@ function calculateInvoice() {
             document.getElementById('sum-total').innerText = formatWithDots(total);
         }
 
-
-
-     
         function saveInvoice() {
             if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
             if (!document.getElementById('weight').value) return toast("وزن طلا را وارد کنید", "error");
@@ -1030,6 +972,8 @@ function calculateInvoice() {
             }
         });
     </script>
-    
-</body>
+
+
+
+    </body>
 </html>
