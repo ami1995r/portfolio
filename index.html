@@ -1024,80 +1024,64 @@ function calculateInvoice() {
 
 // ==================== چاپ فاکتور ====================
 function printInvoice(invoice) {
+    if (!invoice) {
+        return toast("فاکتور برای چاپ یافت نشد", "error");
+    }
+
     const customer = customers.find(c => c.id == invoice.customerId);
-    
-    let printContent = `
-        <div id="print-invoice" style="direction: rtl; text-align: right; max-width: 800px; margin: 0 auto; font-family: 'Vazirmatn', sans-serif;">
-            <div style="border: 3px solid #10b981; border-radius: 16px; padding: 30px;">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h1 style="color: #10b981; font-size: 28px; margin: 0;">گالری قصه</h1>
-                    <p style="margin: 5px 0; color: #64748b;">فروشگاه طلا و جواهرات</p>
-                    <p style="margin: 10px 0; font-size: 18px; font-weight: bold;">فاکتور فروش</p>
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
-                    <div>
-                        <strong>شماره فاکتور:</strong> ${invoice.id}<br>
-                        <strong>تاریخ:</strong> ${invoice.date}
-                    </div>
-                    <div style="text-align: left;">
-                        <strong>مشتری:</strong> ${invoice.customerName}<br>
-                        ${customer && customer.national ? `<strong>کد ملی:</strong> ${customer.national}` : ''}
-                    </div>
+
+    const printContent = `
+        <div style="direction: rtl; font-family: 'Vazirmatn', sans-serif; padding: 40px; max-width: 900px; margin: 0 auto; background: white;">
+            <div style="border: 5px solid #10b981; border-radius: 20px; padding: 40px;">
+                <div style="text-align: center; margin-bottom: 35px;">
+                    <h1 style="color: #10b981; font-size: 36px; margin: 0;">گالری قصه</h1>
+                    <p style="color: #475569; font-size: 20px; margin: 10px 0;">فاکتور فروش رسمی</p>
+                    <p style="color: #64748b;">${invoice.date} — شماره فاکتور: ${invoice.id}</p>
                 </div>
 
-                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                    <thead>
-                        <tr style="background: #f8fafc;">
-                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: right;">شرح</th>
-                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">وزن (گرم)</th>
-                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">قیمت واحد</th>
-                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">مبلغ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 12px; border: 1px solid #e2e8f0;">طلای آب‌شده - ${invoice.goldType}</td>
-                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">${invoice.weight.toFixed(3).replace('.', '٫')}</td>
-                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">${formatWithDots(invoice.goldPrice)} تومان</td>
-                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">${formatWithDots(invoice.total)} تومان</td>
-                        </tr>
-                    </tbody>
+                <div style="background:#f8fafc; padding:25px; border-radius:12px; margin-bottom:25px;">
+                    <strong>نام مشتری:</strong> ${invoice.customerName}<br>
+                    ${customer && customer.national ? `<strong>کد ملی:</strong> ${customer.national}` : ''}
+                </div>
+
+                <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+                    <tr style="background:#f1f5f9;">
+                        <th style="padding:18px; text-align:right; border:2px solid #e2e8f0;">شرح</th>
+                        <th style="padding:18px; text-align:center; border:2px solid #e2e8f0;">وزن</th>
+                        <th style="padding:18px; text-align:left; border:2px solid #e2e8f0;">قیمت واحد</th>
+                        <th style="padding:18px; text-align:left; border:2px solid #e2e8f0;">مبلغ کل</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:18px; border:2px solid #e2e8f0;">${invoice.goldType || 'طلای آب‌شده'}</td>
+                        <td style="padding:18px; text-align:center; border:2px solid #e2e8f0;">${invoice.weight.toFixed(3).replace('.', '٫')} گرم</td>
+                        <td style="padding:18px; text-align:left; border:2px solid #e2e8f0;">${formatWithDots(invoice.goldPrice)} تومان</td>
+                        <td style="padding:18px; text-align:left; border:2px solid #e2e8f0; font-weight:bold;">${formatWithDots(invoice.total)} تومان</td>
+                    </tr>
                 </table>
 
-                <div style="margin-top: 30px; text-align: left; font-size: 18px;">
-                    <strong>مبلغ کل پرداختی: </strong> 
-                    <span style="color: #10b981; font-size: 22px; font-weight: bold;">${formatWithDots(invoice.total)} تومان</span>
+                <div style="text-align:left; font-size:24px; margin-top:40px; padding-top:20px; border-top:3px solid #10b981;">
+                    <strong>مبلغ نهایی پرداختی: </strong>
+                    <span style="color:#10b981; font-size:28px;">${formatWithDots(invoice.total)} تومان</span>
                 </div>
 
-                <div style="margin-top: 40px; text-align: center; color: #64748b; font-size: 14px;">
-                    سپاس از خرید شما<br>
-                    گالری قصه — نسخه ۶.۵
+                <div style="text-align:center; margin-top:50px; color:#64748b; font-size:15px;">
+                    سپاس از خرید شما — گالری قصه
                 </div>
             </div>
         </div>
     `;
 
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-        <html dir="rtl">
-        <head>
-            <title>فاکتور ${invoice.id}</title>
-            <style>
-                body { font-family: 'Vazirmatn', sans-serif; padding: 20px; }
-            </style>
-        </head>
-        <body>${printContent}</body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
+    const originalHTML = document.body.innerHTML;
+    document.body.innerHTML = printContent;
     
-    setTimeout(() => {
-        printWindow.print();
-    }, 500);
-}
+    window.print();
 
+    // بازگشت به حالت قبلی بعد از چاپ
+    setTimeout(() => {
+        document.body.innerHTML = originalHTML;
+        window.location.reload();
+    }, 800);
+}
 
      
         function toast(msg, type = "success") {
