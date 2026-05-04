@@ -5,8 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدیریت گالری قصه | نسخه ۶.۴</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <style>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+/* ==================== استایل چاپ فاکتور ==================== */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #print-invoice, #print-invoice * {
+        visibility: visible;
+    }
+    #print-invoice {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+        font-family: 'Vazirmatn', sans-serif;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+
+    <style>   
 /* ====================== IMPROVEMENTS ====================== */
 
 /* Glassmorphism + Shadow */
@@ -604,8 +625,8 @@ function formatWithDots(num) {
         window.onload = () => {
     loadData();   // ← اضافه شد
     document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-    refreshAll();
-};
+              refreshAll();
+            printInvoice(invoices[invoices.length - 1]);  // چاپ فاکتور بعد از ذخیره
         function refreshAll() {
     saveData();
     updateDashboard();
@@ -1015,6 +1036,84 @@ function calculateInvoice() {
             document.getElementById('add-cust-modal').classList.replace('flex', 'hidden');
         }
 
+// ==================== چاپ فاکتور ====================
+function printInvoice(invoice) {
+    const customer = customers.find(c => c.id == invoice.customerId);
+    
+    let printContent = `
+        <div id="print-invoice" style="direction: rtl; text-align: right; max-width: 800px; margin: 0 auto; font-family: 'Vazirmatn', sans-serif;">
+            <div style="border: 3px solid #10b981; border-radius: 16px; padding: 30px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #10b981; font-size: 28px; margin: 0;">گالری قصه</h1>
+                    <p style="margin: 5px 0; color: #64748b;">فروشگاه طلا و جواهرات</p>
+                    <p style="margin: 10px 0; font-size: 18px; font-weight: bold;">فاکتور فروش</p>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px;">
+                    <div>
+                        <strong>شماره فاکتور:</strong> ${invoice.id}<br>
+                        <strong>تاریخ:</strong> ${invoice.date}
+                    </div>
+                    <div style="text-align: left;">
+                        <strong>مشتری:</strong> ${invoice.customerName}<br>
+                        ${customer && customer.national ? `<strong>کد ملی:</strong> ${customer.national}` : ''}
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: right;">شرح</th>
+                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">وزن (گرم)</th>
+                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">قیمت واحد</th>
+                            <th style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">مبلغ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0;">طلای آب‌شده - ${invoice.goldType}</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">${invoice.weight.toFixed(3).replace('.', '٫')}</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">${formatWithDots(invoice.goldPrice)} تومان</td>
+                            <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: left;">${formatWithDots(invoice.total)} تومان</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 30px; text-align: left; font-size: 18px;">
+                    <strong>مبلغ کل پرداختی: </strong> 
+                    <span style="color: #10b981; font-size: 22px; font-weight: bold;">${formatWithDots(invoice.total)} تومان</span>
+                </div>
+
+                <div style="margin-top: 40px; text-align: center; color: #64748b; font-size: 14px;">
+                    سپاس از خرید شما<br>
+                    گالری قصه — نسخه ۶.۵
+                </div>
+            </div>
+        </div>
+    `;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html dir="rtl">
+        <head>
+            <title>فاکتور ${invoice.id}</title>
+            <style>
+                body { font-family: 'Vazirmatn', sans-serif; padding: 20px; }
+            </style>
+        </head>
+        <body>${printContent}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    
+    setTimeout(() => {
+        printWindow.print();
+    }, 500);
+}
+
+
+     
         function toast(msg, type = "success") {
             const t = document.createElement('div');
             t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
