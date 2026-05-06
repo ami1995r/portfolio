@@ -159,100 +159,101 @@
                 </div>
             </div>
 
-                     <!-- صدور فاکتور -->
+            <!-- صدور فاکتور -->
             <div id="invoice" class="tab-content">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                     <div class="xl:col-span-2">
                         <div class="bg-white p-6 lg:p-12 rounded-[3rem] border border-slate-100 custom-shadow">
                             <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
                             
-                            <!-- نوع طلا / سکه -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div class="space-y-3 relative">
+                                    <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
+                                    <div class="relative">
+                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none pr-12">
+                                        <svg class="w-6 h-6 absolute right-4 top-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-56 overflow-y-auto hidden"></div>
+                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                                        <span id="inv-selected-name" class="font-black text-emerald-700"></span>
+                                        <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">حذف</button>
+                                    </div>
+                                </div>
                                 <div class="space-y-3">
-                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا / سکه</label>
-                                    <select id="gold-type-select" onchange="handleGoldTypeChange()" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
-                                        <option value="طلای آب‌شده">طلای آب‌شده</option>
-                                        <option value="سکه تمام طرح جدید">سکه تمام طرح جدید</option>
-                                        <option value="سکه تمام طرح قدیم">سکه تمام طرح قدیم</option>
-                                        <option value="نیم سکه">نیم سکه</option>
-                                        <option value="ربع سکه">ربع سکه</option>
-                                        <option value="سکه پارسیان">سکه پارسیان</option>
-                                        <option value="سایر">سایر (دست‌نویس)</option>
+                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
+                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
+                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">نوع اجرت</label>
+                                    <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-5 rounded-2xl font-bold outline-none">
+                                        <option value="percent">درصدی (%)</option>
+                                        <option value="fixed">مبلغ ثابت (تومان)</option>
                                     </select>
-                                    <input type="text" id="gold-type-custom" placeholder="نوع طلا را بنویسید..." class="hidden w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none mt-3">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
+                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
+                                  <input type="number" id="profit" value="7" 
+       oninput="calculateInvoice()" 
+       class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
-                            <!-- فیلدهای دینامیک -->
-                            <div id="dynamic-fields">
-
-                                <!-- حالت طلای آب‌شده -->
-                                <div id="gold-mode">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
-                                            <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
-                                            <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">نوع اجرت</label>
-                                            <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-5 rounded-2xl font-bold outline-none">
-                                                <option value="percent">درصدی (%)</option>
-                                                <option value="fixed">مبلغ ثابت (تومان)</option>
-                                            </select>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                            <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
-                                            <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">مالیات ارزش افزوده (%)</label>
-                                            <input type="number" id="tax" value="2" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- حالت سکه -->
-                                <div id="coin-mode" class="hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">قیمت روز سکه (تومان)</label>
-                                            <input type="text" id="coin-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
-                                        </div>
-                                        <div class="space-y-2">
-                                            <label class="text-xs font-black text-slate-500">سود گالری (%)</label>
-                                            <input type="number" id="coin-profit" value="2.5" step="0.1" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
-                                        </div>
-                                    </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-black text-slate-500">مالیات ارزش افزوده (%)</label>
+                                   <input type="number" id="tax" value="2" 
+       oninput="calculateInvoice()" 
+       class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
                             </div>
 
-                            <button onclick="saveInvoice()" class="w-full bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow mt-10">
+                            <div id="credit-panel" class="hidden bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-slate-800">اعتبار پاداش مشتری</p>
+                                        <p class="text-xs text-emerald-600 font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-400">استفاده از اعتبار</span>
+                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-emerald-600 accent-emerald-600">
+                                </div>
+                            </div>
+
+                            <button onclick="saveInvoice()" class="w-full bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow">
                                 تایید و چاپ فاکتور
                             </button>
                         </div>
                     </div>
 
-                    <!-- خلاصه محاسبات (بدون تغییر) -->
+                    <!-- خلاصه محاسبات -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
                             <h4 class="text-center font-black text-slate-800 mb-8 pb-4 border-b">خلاصه محاسبات</h4>
                             <div class="space-y-6 text-lg">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-slate-500 font-bold">قیمت خام:</span>
+                                    <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
                                     <span id="sum-raw" class="font-black number text-slate-700 persian-number">۰</span>
                                 </div>
                                 <div class="flex justify-between items-center">
@@ -614,127 +615,6 @@ function formatWithDots(num) {
             }
         }
 
-// ==================== مدیریت نوع طلا و سکه ====================
-function handleGoldTypeChange() {
-    const type = document.getElementById('gold-type-select').value;
-    const isCoin = type.includes('سکه');
-    const isOther = type === 'سایر';
-
-    // نمایش فیلد دست‌نویس
-    document.getElementById('gold-type-custom').classList.toggle('hidden', !isOther);
-
-    // سوئیچ بین حالت طلا و سکه
-    document.getElementById('gold-mode').classList.toggle('hidden', isCoin);
-    document.getElementById('coin-mode').classList.toggle('hidden', !isCoin);
-
-    calculateInvoice();
-}
-
-function getGoldType() {
-    const selectValue = document.getElementById('gold-type-select').value;
-    if (selectValue === 'سایر') {
-        return document.getElementById('gold-type-custom').value.trim() || 'سایر';
-    }
-    return selectValue;
-}
-
-// ==================== محاسبه فاکتور ====================
-function calculateInvoice() {
-    const type = document.getElementById('gold-type-select').value;
-    const isCoin = type.includes('سکه');
-
-    if (isCoin) {
-        // === حالت سکه ===
-        const coinPrice = parsePersianNumber(document.getElementById('coin-price').value);
-        const coinProfitPer = parseFloat(document.getElementById('coin-profit').value) || 0;
-
-        const raw = coinPrice;
-        const profitAmount = raw * (coinProfitPer / 100);
-        const total = raw + profitAmount;
-
-        // نمایش خلاصه
-        document.getElementById('sum-raw').innerText = formatWithDots(raw);
-        document.getElementById('sum-wage').innerText = "۰";
-        document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
-        document.getElementById('sum-tax').innerText = "۰";
-        document.getElementById('sum-credit').innerText = "۰";
-        document.getElementById('sum-total').innerText = formatWithDots(total);
-
-    } else {
-        // === حالت طلای آب‌شده ===
-        const price = parsePersianNumber(document.getElementById('gold-price').value);
-        const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const wType = document.getElementById('wage-type').value;
-        const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-        const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-        const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-
-        const raw = price * weight;
-        let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-        const profitAmount = (raw + wage) * (profitPer / 100);
-        const tax = (raw + wage + profitAmount) * (taxPer / 100);
-        const total = raw + wage + profitAmount + tax;
-
-        document.getElementById('sum-raw').innerText = formatWithDots(raw);
-        document.getElementById('sum-wage').innerText = formatWithDots(wage);
-        document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
-        document.getElementById('sum-tax').innerText = formatWithDots(tax);
-        document.getElementById('sum-credit').innerText = "۰";
-        document.getElementById('sum-total').innerText = formatWithDots(total);
-    }
-}
-
-// ==================== ذخیره فاکتور ====================
-function saveInvoice() {
-    if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-
-    const type = document.getElementById('gold-type-select').value;
-    const isCoin = type.includes('سکه');
-    const goldType = getGoldType();
-
-    let weight = 0, price = 0, total = 0;
-
-    if (isCoin) {
-        price = parsePersianNumber(document.getElementById('coin-price').value);
-        if (price <= 0) return toast("قیمت سکه را وارد کنید", "error");
-        const profitPer = parseFloat(document.getElementById('coin-profit').value) || 0;
-        total = price * (1 + profitPer / 100);
-    } else {
-        const weightInput = document.getElementById('weight').value;
-        if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را وارد کنید", "error");
-        weight = parseFloat(weightInput);
-        price = parsePersianNumber(document.getElementById('gold-price').value);
-        if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
-        total = parsePersianNumber(document.getElementById('sum-total').innerText);
-    }
-
-    const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-    if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
-
-    // ثبت فاکتور
-    invoices.push({
-        id: Date.now(),
-        customerName: customers[cIndex].name,
-        customerId: selectedCustomer.inv,
-        goldType: goldType,
-        weight: weight,
-        goldPrice: price,
-        total: total,
-        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-        fullDate: new Date().toISOString()
-    });
-
-    toast("فاکتور با موفقیت ثبت شد", "success");
-
-    // ریست فرم
-    clearSelection('inv');
-    document.getElementById('weight').value = "";
-    document.getElementById('gold-price').value = "";
-    document.getElementById('coin-price').value = "";
-
-    refreshAll();
-}
-     
   // ==================== ماشین حساب طلای آب‌شده ====================
 function calcTradeGold() {
     const pricePerGram = parsePersianNumber(document.getElementById('trade-gold-price').value);
@@ -825,7 +705,7 @@ function calcTradeGold() {
     if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
 
     const weight = parseFloat(weightInput);
-    const goldType = getGoldType();
+    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
     const total = parsePersianNumber(document.getElementById('sum-total').innerText);
 
     const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
@@ -1164,10 +1044,6 @@ window.addEventListener('load', () => {
     // محاسبه اولیه
     setTimeout(calculateInvoice, 500);
 });
-         // بعد از لود اولیه
-    setTimeout(() => {
-        handleGoldTypeChange();
-    }, 800);
      
     </script>
 
