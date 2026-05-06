@@ -616,25 +616,32 @@ function formatWithDots(num) {
         }
 
         // ماشین حساب طلای آب‌شده
-        function calcTradeGold() {
-            const price = parsePersianNumber(document.getElementById('trade-gold-price').value);
-            let profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
-            const amount = parsePersianNumber(document.getElementById('trade-amount').value);
-            const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;
+        // ==================== ماشین حساب طلای آب‌شده ====================
+function calcTradeGold() {
+    const price = parsePersianNumber(document.getElementById('trade-gold-price').value);     // قیمت روز طلا
+    const profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
+    const desiredAmount = parsePersianNumber(document.getElementById('trade-amount').value); // مبلغ مورد نظر (تومان)
+    const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;   // وزن مورد نظر (گرم)
 
-            let weight = 0, total = 0;
-            if (amount > 0 && price > 0) {
-                weight = amount / (price * (1 + profitPercent / 100));
-                total = amount;
-            } else if (desiredWeight > 0 && price > 0) {
-                weight = desiredWeight;
-                total = weight * price * (1 + profitPercent / 100);
-            }
+    let weight = 0;
+    let totalWithProfit = 0;
 
-            document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
-            document.getElementById('trade-res-total').innerText = formatWithDots(total);
-        }
+    if (desiredAmount > 0 && price > 0) {
+        // حالت ۱: کاربر مبلغ مورد نظر را زده → محاسبه وزن قابل خرید
+        const priceWithProfit = price * (1 + profitPercent / 100);
+        weight = desiredAmount / priceWithProfit;
+        totalWithProfit = desiredAmount;                    // ارزش کل = همان مبلغ وارد شده
 
+    } else if (desiredWeight > 0 && price > 0) {
+        // حالت ۲: کاربر وزن مورد نظر را زده → محاسبه ارزش کل
+        weight = desiredWeight;
+        totalWithProfit = weight * price * (1 + profitPercent / 100);
+    }
+
+    // نمایش نتایج
+    document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
+    document.getElementById('trade-res-total').innerText = formatWithDots(totalWithProfit);
+}
         // محاسبه فاکتور
      function calculateInvoice() {
     // خواندن مقادیر
