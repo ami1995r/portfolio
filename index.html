@@ -800,32 +800,33 @@ document.getElementById('sum-total').innerText  = formatNumber(finalTotal, 0);
     
     refreshAll();
 }
-       function renderInvoices(filtered = null) {
+     function renderInvoices(filtered = null) {
     const tbody = document.getElementById('invoices-tbody');
     const data = filtered || invoices;
     
-    tbody.innerHTML = data.map(i => `
-        <tr class="invoice-row">
+    tbody.innerHTML = data.map(i => {
+        // تعیین وضعیت فاکتور (برای نمایش)
+        const status = i.total > 10000000 ? 'paid' : 'unpaid';
+        const statusText = i.total > 10000000 ? 'تسویه شده' : 'در انتظار';
+        
+        return `
+        <tr class="invoice-row ${i.total > 10000000 ? 'invoice-row-highlight' : ''}" data-id="${i.id}">
             <td class="p-4 text-slate-400 text-xs">${i.date}</td>
             <td class="p-4 font-black">${i.customerName}</td>
             <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
-            <<td class="p-4 font-mono persian-number">${formatNumber(i.goldPrice, 0)}</td>
-<td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatNumber(i.total, 0)}</td>
-<td class="p-4 font-mono persian-number">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</td>
+            <td class="p-4 font-mono persian-number">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</td>
+            <td class="p-4 font-mono persian-number">${formatNumber(i.goldPrice, 0)}</td>
+            <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatNumber(i.total, 0)}</td>
             <td class="p-4 text-center">
+                <span class="invoice-status ${status === 'paid' ? 'status-paid' : 'status-unpaid'}">
+                    ${statusText}
+                </span>
                 <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-4 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
                 <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
 }
-        function deleteInvoice(id) {
-            if (confirm("آیا از حذف این فاکتور اطمینان دارید؟")) {
-                invoices = invoices.filter(i => i.id !== id);
-                refreshAll();
-                toast("فاکتور حذف شد", "success");
-            }
-        }
 
         function filterInvoices() {
             const q = document.getElementById('invoice-search').value.toLowerCase().trim();
