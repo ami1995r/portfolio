@@ -1106,6 +1106,38 @@ function calcTradeGold() {
             setTimeout(() => t.remove(), 3000);
         }
 
+// ==================== مدیریت نوع طلا و سکه ====================
+function handleGoldTypeChange() {
+    const type = document.getElementById('gold-type-select').value;
+    const isCoin = type.includes('سکه');
+    const isOther = type === 'سایر';
+
+    // نمایش/مخفی کردن فیلد دست‌نویس
+    document.getElementById('gold-type-custom').classList.toggle('hidden', !isOther);
+
+    // نمایش فیلدهای سکه یا طلا
+    const isGold = type === 'طلای آب‌شده' || isOther;
+
+    document.getElementById('gold-weight-section').classList.toggle('hidden', !isGold);
+    document.getElementById('gold-weight-section2').classList.toggle('hidden', !isGold);
+    document.getElementById('coin-price-section').classList.toggle('hidden', !isCoin);
+
+    // کنترل بخش اجرت و سود
+    document.getElementById('wage-profit-section').classList.toggle('hidden', isCoin);
+
+    calculateInvoice();
+}
+
+function getGoldType() {
+    const select = document.getElementById('gold-type-select').value;
+    if (select === 'سایر') {
+        return document.getElementById('gold-type-custom').value.trim() || 'سایر';
+    }
+    return select;
+}
+
+
+     
   // ==================== Event Listeners ====================
 function initInvoiceCalculations() {
     const fields = ['gold-price', 'weight', 'wage-value', 'profit', 'tax', 'wage-type', 'use-credit'];
