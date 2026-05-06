@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
-                                   <input type="number" id="profit" value="7" 
+                                  <input type="number" id="profit" value="7" 
        oninput="calculateInvoice()" 
        class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
                                 </div>
@@ -1004,20 +1004,29 @@ function formatWithDots(num) {
         }
 
       // ==================== Event Listeners برای محاسبه زنده ====================
-document.addEventListener('input', function(e) {
-    const id = e.target.id;
+// ==================== Event Listeners محاسبه زنده ====================
+function attachInvoiceListeners() {
+    const inputs = ['gold-price', 'weight', 'wage-value', 'profit', 'tax'];
     
-    // همه فیلدهایی که باید محاسبه زنده داشته باشن
-    if (['gold-price', 'weight', 'wage-value', 'profit', 'tax'].includes(id) || 
-        id === 'wage-type' || 
-        id === 'use-credit') {
-        
-        calculateInvoice();
-    }
-});
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', calculateInvoice);
+            el.addEventListener('change', calculateInvoice);
+        }
+    });
 
-// برای select هم جداگانه
-document.getElementById('wage-type').addEventListener('change', calculateInvoice);
+    // برای select اجرت
+    const wageType = document.getElementById('wage-type');
+    if (wageType) wageType.addEventListener('change', calculateInvoice);
+
+    // برای چک‌باکس اعتبار
+    const useCredit = document.getElementById('use-credit');
+    if (useCredit) useCredit.addEventListener('change', calculateInvoice);
+}
+
+// فراخوانی اولیه
+window.addEventListener('load', attachInvoiceListeners);
     </script>
 
 
