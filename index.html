@@ -57,6 +57,38 @@
     border-image: linear-gradient(135deg, #475569, #94a3b8) 1;
 }
 
+
+        /* نوار کناری مینیمال بهبود یافته */
+.nav-btn-minimal {
+    transition: all 0.3s ease;
+    border-radius: 16px;
+    position: relative;
+}
+
+.nav-btn-minimal:hover {
+    background: #f1f5f9;
+    color: #059669;
+}
+
+.nav-btn-minimal.active {
+    background: #f0fdf4;
+    color: #059669;
+    border-right: 4px solid #059669;
+    box-shadow: none;
+}
+
+.nav-btn-minimal.active span {
+    font-weight: 800;
+}
+
+.nav-btn-minimal.active svg {
+    color: #059669;
+}
+
+/* برای حالت موبایل */
+.nav-btn-minimal:active {
+    transform: scale(0.97);
+}
         
     </style>
 </head>
@@ -77,32 +109,31 @@
                 <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-emerald-600">قصه</span></h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
-            
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <button onclick="switchTab('dashboard')" class="nav-btn sidebar-active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    <span class="font-bold">پیشخوان</span>
-                </button>
-                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="font-bold">صدور فاکتور</span>
-                </button>
-                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
-                    <span class="font-bold">فاکتورهای صادر شده</span>
-                </button>
-                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                    <span class="font-bold">بانک طلا</span>
-                </button>
-                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <span class="font-bold">مشتریان</span>
-                </button>
-                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 hover:bg-slate-50 transition-all border-t mt-4 pt-4">
-                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="font-bold text-emerald-700">مرکز گزارشات</span>
-                </button>
+            <nav>
+          <button onclick="switchTab('dashboard')" class="nav-btn-minimal active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+    <span class="font-bold">پیشخوان</span>
+</button>
+                <button onclick="switchTab('invoice')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+    <span class="font-bold">صدور فاکتور</span>
+</button>
+                <button onclick="switchTab('invoices-list')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+    <span class="font-bold">فاکتورهای صادر شده</span>
+</button>
+                <button onclick="switchTab('gold-bank')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+    <span class="font-bold">بانک طلا</span>
+</button>
+               <button onclick="switchTab('customers')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+    <span class="font-bold">مشتریان</span>
+</button>
+                <button onclick="switchTab('reports')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600 border-t mt-4 pt-4">
+    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+    <span class="font-bold text-emerald-700">مرکز گزارشات</span>
+</button>
             </nav>
         </aside>
 
@@ -608,15 +639,24 @@ function formatWithDots(num) {
             document.getElementById('sidebar').classList.toggle('translate-x-full'); 
         }
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('sidebar-active');
-                if (btn.getAttribute('onclick').includes(id)) btn.classList.add('sidebar-active');
-            });
-            if (window.innerWidth < 1024) toggleSidebar();
+       // تابع جدید (جایگزین)
+function switchTab(id) {
+    // مخفی کردن همه تب‌ها
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    // نمایش تب انتخاب شده
+    document.getElementById(id).classList.add('active');
+    
+    // بروزرسانی دکمه‌های نوار کناری (با کلاس جدید nav-btn-minimal)
+    document.querySelectorAll('.nav-btn-minimal').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick').includes(id)) {
+            btn.classList.add('active');
         }
+    });
+    
+    // بستن نوار کناری در موبایل
+    if (window.innerWidth < 1024) toggleSidebar();
+}
 
         // Live Search
         function liveSearch(query, context) {
