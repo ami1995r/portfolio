@@ -999,12 +999,21 @@ function formatWithDots(num) {
             setTimeout(() => t.remove(), 3000);
         }
 
-        // Event listeners
-        document.addEventListener('input', function(e) {
-            if (e.target.id === 'profit' || e.target.id === 'tax') {
-                calculateInvoice();
-            }
-        });
+      // ==================== Event Listeners برای محاسبه زنده ====================
+document.addEventListener('input', function(e) {
+    const id = e.target.id;
+    
+    // همه فیلدهایی که باید محاسبه زنده داشته باشن
+    if (['gold-price', 'weight', 'wage-value', 'profit', 'tax'].includes(id) || 
+        id === 'wage-type' || 
+        id === 'use-credit') {
+        
+        calculateInvoice();
+    }
+});
+
+// برای select هم جداگانه
+document.getElementById('wage-type').addEventListener('change', calculateInvoice);
     </script>
 
 
