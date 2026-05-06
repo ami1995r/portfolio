@@ -692,7 +692,7 @@ function calcTradeGold() {
     document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
     document.getElementById('sum-total').innerText  = formatWithDots(finalTotal);
 }
-        function saveInvoice() {
+       function saveInvoice() {
     // اعتبارسنجی
     if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
     
@@ -726,9 +726,15 @@ function calcTradeGold() {
         customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - deducted);
     }
 
-    // پاداش ۱٪ از مبلغ نهایی پرداخت شده
-    const reward = Math.round(total * 0.01);
-    customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
+    // ==================== منطق پاداش اعتبار ====================
+    // فقط برای خرید "طلای آب‌شده" یا طلا (نه سکه)
+    const goldTypeLower = goldType.toLowerCase();
+    const isGoldPurchase = !goldTypeLower.includes('سکه');
+
+    if (isGoldPurchase && total > 0) {
+        const reward = Math.round(total * 0.01);     // ۱٪ پاداش
+        customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
+    }
 
     // ثبت فاکتور
     invoices.push({
@@ -740,11 +746,12 @@ function calcTradeGold() {
         goldPrice: price,
         total: total,
         deductedCredit: deducted,
+        rewardAdded: isGoldPurchase ? Math.round(total * 0.01) : 0,
         date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
         fullDate: new Date().toISOString()
     });
 
-    toast("فاکتور با موفقیت ثبت و ذخیره شد", "success");
+    toast("فاکتور با موفقیت ثبت شد", "success");
     
     // ریست فرم
     clearSelection('inv');
