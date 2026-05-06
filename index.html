@@ -180,24 +180,47 @@
                                     </div>
                                 </div>
                                 <div class="space-y-3">
-    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-    <select id="gold-type-select" onchange="handleGoldTypeChange()" 
-            class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
-        <option value="طلای آب‌شده">طلای آب‌شده</option>
-        <option value="سکه تمام طرح جدید">سکه تمام طرح جدید</option>
-        <option value="سکه تمام طرح قدیم">سکه تمام طرح قدیم</option>
-        <option value="نیم سکه">نیم سکه</option>
-        <option value="ربع سکه">ربع سکه</option>
-        <option value="سکه پارسیان">سکه پارسیان</option>
-        <option value="سایر">سایر (دست‌نویس)</option>
-    </select>
-    
-    <!-- فیلد نوشتاری برای سایر موارد -->
-    <input type="text" id="gold-type-custom" placeholder="نوع طلا را بنویسید..." 
-           class="hidden w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none mt-3">
+   <!-- نوع طلا -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div class="space-y-3">
+        <label class="text-xs font-black text-slate-500 mr-1">نوع طلا / سکه</label>
+        <select id="gold-type-select" onchange="handleGoldTypeChange()" 
+                class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+            <option value="طلای آب‌شده">طلای آب‌شده</option>
+            <option value="سکه تمام طرح جدید">سکه تمام طرح جدید</option>
+            <option value="سکه تمام طرح قدیم">سکه تمام طرح قدیم</option>
+            <option value="نیم سکه">نیم سکه</option>
+            <option value="ربع سکه">ربع سکه</option>
+            <option value="سکه پارسیان">سکه پارسیان</option>
+            <option value="سایر">سایر (دست‌نویس)</option>
+        </select>
+        
+        <input type="text" id="gold-type-custom" placeholder="نوع طلا را بنویسید..." 
+               class="hidden w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+    </div>
 </div>
-                            </div>
 
+<!-- فیلدهای динамиک -->
+<div id="gold-fields" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <!-- وزن و قیمت طلا (برای طلای آب‌شده) -->
+    <div id="gold-weight-section" class="space-y-2">
+        <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
+        <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" 
+               class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
+    </div>
+    <div id="gold-weight-section2" class="space-y-2">
+        <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
+        <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" 
+               class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+    </div>
+
+    <!-- فیلدهای سکه -->
+    <div id="coin-price-section" class="space-y-2 hidden">
+        <label class="text-xs font-black text-slate-500">قیمت روز سکه (تومان)</label>
+        <input type="text" id="coin-price" oninput="formatNumberInput(this); calculateInvoice()" 
+               class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
+    </div>
+</div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
