@@ -516,11 +516,15 @@ function saveData() {
             return str.toString().replace(/[0-9]/g, w => persian[w]);
         }
 
-        function formatWithDots(num) {
-            if (num == null) return '۰';
-            const str = Math.round(num).toString();
-            return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        }
+       // اضافه کردن تابع جدید:
+function formatNumber(num, decimals = 0) {
+    if (num == null || isNaN(num)) return '۰';
+    const fixed = Number(num).toFixed(decimals);
+    const parts = fixed.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const result = parts.join('.');
+    return toPersianDigits(result);
+}
 
         // ==================== توابع فرمتینگ اعداد ====================
 function parsePersianNumber(str) {
@@ -601,7 +605,7 @@ function formatWithDots(num) {
             document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
             if (context === 'inv') {
                 document.getElementById('credit-panel').classList.remove('hidden');
-                document.getElementById('inv-credit-val').innerText = formatWithDots(credit);
+                document.getElementById('inv-credit-val').innerText = formatNumber(credit, 0);
                 calculateInvoice();
             }
         }
@@ -648,8 +652,8 @@ function calcTradeGold() {
     }
 
     // نمایش نتایج
-    document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
-    document.getElementById('trade-res-total').innerText = formatWithDots(Math.round(totalWithProfit));
+    document.getElementById('trade-res-weight').innerText = formatNumber(weight, 3);
+document.getElementById('trade-res-total').innerText = formatNumber(Math.round(totalWithProfit), 0);
 }
         // محاسبه فاکتور
      function calculateInvoice() {
@@ -687,12 +691,12 @@ function calcTradeGold() {
     const finalTotal = totalBeforeCredit - deducted;
 
     // نمایش نتایج
-    document.getElementById('sum-raw').innerText    = formatWithDots(raw);
-    document.getElementById('sum-wage').innerText   = formatWithDots(wage);
-    document.getElementById('sum-profit').innerText = formatWithDots(profitAmount);
-    document.getElementById('sum-tax').innerText    = formatWithDots(tax);
-    document.getElementById('sum-credit').innerText = deducted ? "-" + formatWithDots(deducted) : "۰";
-    document.getElementById('sum-total').innerText  = formatWithDots(finalTotal);
+    document.getElementById('sum-raw').innerText    = formatNumber(raw, 0);
+document.getElementById('sum-wage').innerText   = formatNumber(wage, 0);
+document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
+document.getElementById('sum-tax').innerText    = formatNumber(tax, 0);
+document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
+document.getElementById('sum-total').innerText  = formatNumber(finalTotal, 0);
 }
        function saveInvoice() {
     // اعتبارسنجی
@@ -771,9 +775,9 @@ function calcTradeGold() {
             <td class="p-4 text-slate-400 text-xs">${i.date}</td>
             <td class="p-4 font-black">${i.customerName}</td>
             <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
-            <td class="p-4 font-mono persian-number">${i.weight ? i.weight.toFixed(3).replace('.', '٫') + ' گرم' : '—'}</td>
-            <td class="p-4 font-mono persian-number">${formatWithDots(i.goldPrice)}</td>
-            <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatWithDots(i.total)}</td>
+            <<td class="p-4 font-mono persian-number">${formatNumber(i.goldPrice, 0)}</td>
+<td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatNumber(i.total, 0)}</td>
+<td class="p-4 font-mono persian-number">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</td>
             <td class="p-4 text-center">
                 <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-4 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
                 <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
@@ -836,7 +840,7 @@ function calcTradeGold() {
                 return `
                     <tr class="hover:bg-slate-50">
                         <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                        <td class="p-5 font-black text-amber-600 persian-number">${totalWeight.toFixed(3).replace('.', '٫')} گرم</td>
+                        <td class="p-5 font-black text-amber-600 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
                         <td class="p-5 text-center">
                             <button onclick="showGoldDetails(${cid})" 
                                     class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
@@ -858,16 +862,16 @@ function calcTradeGold() {
             const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
             const totalValue = customerGold.reduce((sum, g) => sum + (g.weight * (g.goldPrice || 0)), 0);
 
-            document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(3).replace('.', '٫') + " گرم";
-            document.getElementById('modal-total-debt').innerText = formatWithDots(customer.credit || 0) + " تومان";
-            document.getElementById('modal-total-value').innerText = formatWithDots(totalValue) + " تومان";
+            document.getElementById('modal-total-weight').innerText = formatNumber(totalWeight, 3) + " گرم";
+document.getElementById('modal-total-debt').innerText = formatNumber(customer.credit || 0, 0) + " تومان";
+document.getElementById('modal-total-value').innerText = formatNumber(totalValue, 0) + " تومان";
 
             const tbody = document.getElementById('gold-detail-tbody');
             tbody.innerHTML = customerGold.map(g => `
                 <tr>
                     <td class="p-4">${g.date}</td>
-                    <td class="p-4 font-black text-amber-600 persian-number">${g.weight.toFixed(3).replace('.', '٫')}</td>
-                    <td class="p-4 font-mono persian-number">${g.goldPrice ? formatWithDots(g.goldPrice) : '—'}</td>
+                    <td class="p-4 font-black text-amber-600 persian-number">${formatNumber(g.weight, 3)}</td>
+                    <td class="p-4 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
                     <td class="p-4 text-slate-500">${g.note || '-'}</td>
                     <td class="p-4 text-center">
                         <button onclick="deleteGoldEntry(${g.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
@@ -921,9 +925,9 @@ function calcTradeGold() {
     const totalGold = goldBank.reduce((sum, g) => sum + (g.weight || 0), 0);
 
     // به‌روزرسانی کارت‌ها
-    document.getElementById('dash-sales-total').innerText = formatWithDots(totalSales);
-    document.getElementById('dash-gold-total').innerText = totalGold.toFixed(3).replace('.', '٫');
-    document.getElementById('dash-cust-total').innerText = customers.length;
+    document.getElementById('dash-sales-total').innerText = formatNumber(totalSales, 0);
+    document.getElementById('dash-gold-total').innerText = formatNumber(totalGold, 3);
+    document.getElementById('dash-cust-total').innerText = formatNumber(customers.length, 0);
 
     // اضافه کردن فروش امروز (اختیاری - اگر بخوای نمایش بدی)
     console.log(`📊 فروش امروز: ${formatWithDots(todaySales)} تومان`);
@@ -937,7 +941,7 @@ function calcTradeGold() {
                     <td class="p-6 font-black text-slate-700">${c.name}</td>
                     <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
                     <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
-                    <td class="p-6 font-black text-emerald-600 persian-number">${formatWithDots(c.credit || 0)}</td>
+                    <td class="p-6 font-black text-emerald-600 persian-number">${formatNumber(c.credit || 0, 0)}</td>
                     <td class="p-6 text-center">
                         <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
                     </td>
@@ -1037,7 +1041,7 @@ function editInvoice(id) {
 
     // پر کردن فیلدها
     document.getElementById('gold-type').value = invoice.goldType || "طلای آب‌شده";
-    document.getElementById('gold-price').value = invoice.goldPrice ? formatWithDots(invoice.goldPrice) : "";
+    document.getElementById('gold-price').value = invoice.goldPrice ? formatNumber(invoice.goldPrice, 0) : "";
     document.getElementById('weight').value = invoice.weight || "";
 
     calculateInvoice();
