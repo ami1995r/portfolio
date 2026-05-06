@@ -616,32 +616,39 @@ function formatWithDots(num) {
         }
 
        // ==================== ماشین حساب طلای آب‌شده ====================
+// ==================== ماشین حساب طلای آب‌شده ====================
 function calcTradeGold() {
-    const pricePerGram = parsePersianNumber(document.getElementById('trade-gold-price').value);   // قیمت لحظه‌ای
+    const pricePerGram = parsePersianNumber(document.getElementById('trade-gold-price').value);
     let profitPercent = parseFloat(document.getElementById('trade-profit-percent').value) || 0;
-    const desiredAmount = parsePersianNumber(document.getElementById('trade-amount').value);     // مبلغ مورد نظر (تومان)
-    const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;       // وزن مورد نظر
+    const desiredAmount = parsePersianNumber(document.getElementById('trade-amount').value);   // مبلغ مورد نظر
+    const desiredWeight = parseFloat(document.getElementById('trade-weight').value) || 0;     // وزن مورد نظر
 
-    let finalWeight = 0;
-    let finalTotal = 0;
+    let weight = 0;
+    let totalWithProfit = 0;
 
-    // محاسبه قیمت هر گرم با سود
+    if (pricePerGram <= 0) {
+        document.getElementById('trade-res-weight').innerText = "۰٫۰۰۰";
+        document.getElementById('trade-res-total').innerText = "۰";
+        return;
+    }
+
     const priceWithProfit = pricePerGram * (1 + profitPercent / 100);
 
-    if (desiredAmount > 0 && pricePerGram > 0) {
-        // حالت ۱: وارد کردن مبلغ مورد نظر → محاسبه وزن قابل دریافت
-        finalWeight = desiredAmount / priceWithProfit;
-        finalTotal = desiredAmount;                    // ارزش کل = همان مبلغی که مشتری می‌خواهد پرداخت کند
+    if (desiredAmount > 0) {
+        // حالت ۱: کاربر مبلغ مورد نظر را وارد کرده
+        // وزن = مبلغ / (قیمت + سود)
+        weight = desiredAmount / priceWithProfit;
+        totalWithProfit = desiredAmount * (1 + profitPercent / 100);   // ← اینجا تغییر اصلی
 
-    } else if (desiredWeight > 0 && pricePerGram > 0) {
-        // حالت ۲: وارد کردن وزن → محاسبه ارزش کل با سود
-        finalWeight = desiredWeight;
-        finalTotal = finalWeight * priceWithProfit;
+    } else if (desiredWeight > 0) {
+        // حالت ۲: کاربر وزن را وارد کرده
+        weight = desiredWeight;
+        totalWithProfit = weight * priceWithProfit;
     }
 
     // نمایش نتایج
-    document.getElementById('trade-res-weight').innerText = finalWeight.toFixed(3).replace('.', '٫');
-    document.getElementById('trade-res-total').innerText = formatWithDots(finalTotal);
+    document.getElementById('trade-res-weight').innerText = weight.toFixed(3).replace('.', '٫');
+    document.getElementById('trade-res-total').innerText = formatWithDots(Math.round(totalWithProfit));
 }
         // محاسبه فاکتور
      function calculateInvoice() {
