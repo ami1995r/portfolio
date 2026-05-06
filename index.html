@@ -180,9 +180,22 @@
                                     </div>
                                 </div>
                                 <div class="space-y-3">
-                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
-                                </div>
+    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
+    <select id="gold-type-select" onchange="handleGoldTypeChange()" 
+            class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+        <option value="طلای آب‌شده">طلای آب‌شده</option>
+        <option value="سکه تمام طرح جدید">سکه تمام طرح جدید</option>
+        <option value="سکه تمام طرح قدیم">سکه تمام طرح قدیم</option>
+        <option value="نیم سکه">نیم سکه</option>
+        <option value="ربع سکه">ربع سکه</option>
+        <option value="سکه پارسیان">سکه پارسیان</option>
+        <option value="سایر">سایر (دست‌نویس)</option>
+    </select>
+    
+    <!-- فیلد نوشتاری برای سایر موارد -->
+    <input type="text" id="gold-type-custom" placeholder="نوع طلا را بنویسید..." 
+           class="hidden w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none mt-3">
+</div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -615,6 +628,51 @@ function formatWithDots(num) {
             }
         }
 
+// ==================== مدیریت نوع طلا ====================
+function handleGoldTypeChange() {
+    const select = document.getElementById('gold-type-select');
+    const customInput = document.getElementById('gold-type-custom');
+    const isOther = select.value === 'سایر';
+
+    customInput.classList.toggle('hidden', !isOther);
+    
+    if (!isOther) {
+        customInput.value = '';
+    }
+
+    calculateInvoice();
+    toggleWageSection();
+}
+
+function getGoldType() {
+    const select = document.getElementById('gold-type-select');
+    if (select.value === 'سایر') {
+        return document.getElementById('gold-type-custom').value.trim() || 'سایر';
+    }
+    return select.value;
+}
+
+function toggleWageSection() {
+    const goldType = getGoldType().toLowerCase();
+    const isCoin = goldType.includes('سکه');
+    
+    const wageTypeSelect = document.getElementById('wage-type');
+    const wageValueInput = document.getElementById('wage-value');
+    
+    if (isCoin) {
+        // برای سکه‌ها اجرت را غیرفعال می‌کنیم
+        wageTypeSelect.value = 'fixed';
+        wageValueInput.value = '0';
+        wageValueInput.disabled = true;
+        wageTypeSelect.disabled = true;
+    } else {
+        wageValueInput.disabled = false;
+        wageTypeSelect.disabled = false;
+    }
+    
+    calculateInvoice();
+}
+     
   // ==================== ماشین حساب طلای آب‌شده ====================
 function calcTradeGold() {
     const pricePerGram = parsePersianNumber(document.getElementById('trade-gold-price').value);
@@ -705,7 +763,7 @@ function calcTradeGold() {
     if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
 
     const weight = parseFloat(weightInput);
-    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+    const goldType = getGoldType();
     const total = parsePersianNumber(document.getElementById('sum-total').innerText);
 
     const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
@@ -1044,6 +1102,10 @@ window.addEventListener('load', () => {
     // محاسبه اولیه
     setTimeout(calculateInvoice, 500);
 });
+         // بعد از لود اولیه
+    setTimeout(() => {
+        handleGoldTypeChange();
+    }, 800);
      
     </script>
 
