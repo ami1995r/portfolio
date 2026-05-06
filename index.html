@@ -763,24 +763,25 @@ function calcTradeGold() {
     
     refreshAll();
 }
-        function renderInvoices(filtered = null) {
-            const tbody = document.getElementById('invoices-tbody');
-            const data = filtered || invoices;
-            tbody.innerHTML = data.map(i => `
-                <tr class="invoice-row">
-                    <td class="p-4 text-slate-400 text-xs">${i.date}</td>
-                    <td class="p-4 font-black">${i.customerName}</td>
-                    <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
-                    <td class="p-4 font-mono persian-number">${i.weight.toFixed(3).replace('.', '٫')} گرم</td>
-                    <td class="p-4 font-mono persian-number">${formatWithDots(i.goldPrice)}</td>
-                    <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatWithDots(i.total)}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
+       function renderInvoices(filtered = null) {
+    const tbody = document.getElementById('invoices-tbody');
+    const data = filtered || invoices;
+    
+    tbody.innerHTML = data.map(i => `
+        <tr class="invoice-row">
+            <td class="p-4 text-slate-400 text-xs">${i.date}</td>
+            <td class="p-4 font-black">${i.customerName}</td>
+            <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
+            <td class="p-4 font-mono persian-number">${i.weight ? i.weight.toFixed(3).replace('.', '٫') + ' گرم' : '—'}</td>
+            <td class="p-4 font-mono persian-number">${formatWithDots(i.goldPrice)}</td>
+            <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatWithDots(i.total)}</td>
+            <td class="p-4 text-center">
+                <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-4 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
+                <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
+            </td>
+        </tr>
+    `).join('');
+}
         function deleteInvoice(id) {
             if (confirm("آیا از حذف این فاکتور اطمینان دارید؟")) {
                 invoices = invoices.filter(i => i.id !== id);
@@ -1021,7 +1022,6 @@ function calcTradeGold() {
         }
 
 
-// ==================== ویرایش فاکتور ====================
 let editingInvoiceId = null;
 
 function editInvoice(id) {
@@ -1030,30 +1030,63 @@ function editInvoice(id) {
 
     editingInvoiceId = id;
 
-    // پر کردن فرم
+    // انتخاب مشتری
     selectedCustomer.inv = invoice.customerId;
-    
     document.getElementById('inv-selected-name').innerText = invoice.customerName;
     document.getElementById('inv-selected-badge').classList.remove('hidden');
     document.getElementById('credit-panel').classList.remove('hidden');
 
     // پر کردن فیلدها
     document.getElementById('gold-type').value = invoice.goldType || "طلای آب‌شده";
-    document.getElementById('gold-price').value = formatWithDots(invoice.goldPrice);
-    document.getElementById('weight').value = invoice.weight;
+    document.getElementById('gold-price').value = invoice.goldPrice ? formatWithDots(invoice.goldPrice) : "";
+    document.getElementById('weight').value = invoice.weight || "";
 
-    // محاسبه و نمایش خلاصه
     calculateInvoice();
 
-    // تغییر متن دکمه
-    const saveBtn = document.querySelector('button[onclick="saveInvoice()"]');
-    saveBtn.innerText = "ذخیره تغییرات فاکتور";
-    saveBtn.onclick = updateInvoice;
+    // تغییر دکمه
+    const saveBtn = document.querySelector('button[onclick^="saveInvoice"]');
+    if (saveBtn) {
+        saveBtn.textContent = "💾 ذخیره تغییرات فاکتور";
+        saveBtn.onclick = updateInvoice;
+    }
 
-    // رفتن به تب صدور فاکتور
     switchTab('invoice');
+    toast("فاکتور در حالت ویرایش باز شد", "success");
+}
 
-    toast("فاکتور برای ویرایش باز شد", "success");
+function updateInvoice() {
+    if (!editingInvoiceId) return;
+
+    const index = invoices.findIndex(i => i.id === editingInvoiceId);
+    if (index === -1) return toast("فاکتور یافت نشد", "error");
+
+    const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+    const weight = parseFloat(document.getElementById('weight').value) || 0;
+    const price = parsePersianNumber(document.getElementById('gold-price').value);
+
+    invoices[index].goldType = goldType;
+    invoices[index].weight = weight;
+    invoices[index].goldPrice = price;
+    invoices[index].total = total;
+    invoices[index].date = new Intl.DateTimeFormat('fa-IR').format(new Date());
+
+    toast("فاکتور با موفقیت ویرایش شد", "success");
+
+    // ریست حالت
+    editingInvoiceId = null;
+    const saveBtn = document.querySelector('button[onclick^="saveInvoice"]');
+    if (saveBtn) {
+        saveBtn.textContent = "تایید و چاپ فاکتور";
+        saveBtn.onclick = saveInvoice;
+    }
+
+    clearSelection('inv');
+    document.getElementById('weight').value = "";
+    document.getElementById('gold-price').value = "";
+
+    refreshAll();
+    switchTab('invoices-list');
 }
 
 function updateInvoice() {
