@@ -35,28 +35,14 @@
         .input-number { font-size: 16px !important; }
         .persian-number { font-family: 'Vazirmatn', sans-serif; }
 
-/* بهبود نمایش اعداد */
-.number {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-}
-
 .persian-number {
     font-family: 'Vazirmatn', sans-serif;
-    letter-spacing: -0.5px;
     font-weight: 700;
 }
 
-/* خلاصه محاسبات شیک‌تر */
-#sum-total {
-    font-size: 2.25rem !important;
-    letter-spacing: -1px;
+.number {
+    font-variant-numeric: tabular-nums;
 }
-
-#sum-raw, #sum-wage, #sum-profit, #sum-tax, #sum-credit {
-    font-size: 1.1rem;
-}
-
         
     </style>
 </head>
@@ -575,16 +561,10 @@ function formatNumberInput(input) {
 // تابع کمکی نمایش اعداد با نقطه و فارسی
 function formatWithDots(num) {
     if (num == null || isNaN(num)) return '۰';
-    
-    // گرد کردن و تبدیل به رشته
-    let str = Math.round(num).toString();
-    
-    // اضافه کردن نقطه هر سه رقم
-    str = str.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    
-    // تبدیل به اعداد فارسی
-    return toPersianDigits(str);
+    const str = Math.round(num).toString();
+    return toPersianDigits(str.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
 }
+
         window.onload = () => {
     loadData();   // ← اضافه شد
     document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
