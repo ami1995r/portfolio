@@ -320,33 +320,33 @@
             </div>
 
             <!-- فاکتورهای صادر شده -->
-            <div id="invoices-list" class="tab-content">
-                <td class="p-4 text-center">
-</td>
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                    <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
-                        <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
-                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-72">
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right">
-                            <thead class="bg-slate-50 text-slate-500 sticky top-0">
-                                <tr>
-                                    <th class="p-5 font-black">تاریخ</th>
-                                    <th class="p-5 font-black">مشتری</th>
-                                    <th class="p-5 font-black">نوع طلا</th>
-                                    <th class="p-5 font-black">وزن (گرم)</th>
-                                    <th class="p-5 font-black">قیمت طلا</th>
-                                    <th class="p-5 font-black">مبلغ کل</th>
-                                    <th class="p-5 font-black text-center">عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+           
+               <div id="invoices-list" class="tab-content">
+    <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+        <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
+            <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
+            <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-72">
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-right">
+                <thead class="bg-slate-50 text-slate-500 sticky top-0">
+                    <tr>
+                        <th class="p-5 font-black">تاریخ</th>
+                        <th class="p-5 font-black">مشتری</th>
+                        <th class="p-5 font-black">نوع طلا</th>
+                        <th class="p-5 font-black">وزن (گرم)</th>
+                        <th class="p-5 font-black">قیمت طلا</th>
+                        <th class="p-5 font-black">مبلغ کل</th>
+                        <th class="p-5 font-black text-center">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+            
             <!-- بانک طلا -->
             <div id="gold-bank" class="tab-content space-y-8">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
