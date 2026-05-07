@@ -7,28 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
+        /* ===== پایه ===== */
         body { 
             font-family: 'Vazirmatn', sans-serif; 
             background-color: #f8fafc; 
             color: #0f172a; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { 
-            -webkit-appearance: none; margin: 0; 
-        }
-        .custom-shadow { 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); 
-        }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .custom-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02); }
         .search-item:hover { background-color: #f1f5f9; cursor: pointer; }
         .invoice-row:hover { background-color: #f8fafc; }
         .number { font-variant-numeric: tabular-nums; }
         .input-number { font-size: 16px !important; }
         .persian-number { font-family: 'Vazirmatn', sans-serif; }
 
-        /* بهبود کارت‌های داشبورد */
+        /* ===== کارت‌های داشبورد ===== */
         .dashboard-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -43,43 +40,37 @@
             transform: scale(1.1) rotate(-3deg);
         }
 
-        /* نوار کناری مینیمال - ساده و شیک */
+        /* ===== نوار کناری ===== */
         .nav-btn {
-    transition: all 0.2s ease;
-    border-radius: 0;
-    position: relative;
-    padding: 12px 20px;
-    background: transparent;
-    color: #475569;
-    font-weight: 600;
-    border-bottom: 1px solid transparent;
-}
-.nav-btn:hover {
-    background: #f1f5f9;
-    color: #003333;
-}
-       .nav-btn.active {
-    background: #003333;
-    color: #ffffff;
-    border-bottom: 2px solid #003333;
-}
-.nav-btn.active span {
-    font-weight: 800;
-}
-.nav-btn.active svg {
-    color: #ffffff;
-}
+            transition: all 0.2s ease;
+            border-radius: 0;
+            position: relative;
+            padding: 12px 20px;
+            background: transparent;
+            color: #475569;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: #1F6F5F;
+        }
+        .nav-btn.active {
+            background: #1F6F5F;
+            color: #ffffff;
+            border-bottom: 2px solid #1F6F5F;
+        }
         .nav-btn.active span {
             font-weight: 800;
         }
         .nav-btn.active svg {
-            color: #0f172a;
+            color: #ffffff;
         }
         .nav-btn:active {
             transform: scale(0.98);
         }
 
-        /* استایل وضعیت فاکتور */
+        /* ===== وضعیت فاکتور ===== */
         .invoice-status {
             display: inline-block;
             padding: 2px 12px;
@@ -95,443 +86,437 @@
             background: #fee2e2;
             color: #991b1b;
         }
-        .invoice-row-highlight {
-            border-right: 4px solid #059669;
+
+        /* ===== رنگ‌های اصلی ===== */
+        :root {
+            --primary-color: #1F6F5F;
+            --secondary-color: #EEEEEE;
+            --text-light: #FFFFFF;
+            --text-dark: #1F2937;
+            --bg-light: #FFFFFF;
+            --bg-dark: #1F2937;
+        }
+        .bg-primary { background-color: var(--primary-color); }
+        .bg-secondary { background-color: var(--secondary-color); }
+        .text-primary { color: var(--primary-color); }
+        .text-secondary { color: var(--secondary-color); }
+        .border-primary { border-color: var(--primary-color); }
+        .border-secondary { border-color: var(--secondary-color); }
+        .hover-bg-primary:hover { background-color: var(--primary-color); }
+        .hover-bg-secondary:hover { background-color: var(--secondary-color); }
+        .hover-text-primary:hover { color: var(--primary-color); }
+        .hover-text-secondary:hover { color: var(--secondary-color); }
+
+        /* ===== حالت شب ===== */
+        body.night-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+        body.night-mode .bg-white {
+            background-color: #374151;
+        }
+        body.night-mode .bg-slate-50 {
+            background-color: #374151;
+        }
+        body.night-mode .bg-slate-100 {
+            background-color: #4B5563;
+        }
+        body.night-mode .text-slate-800 {
+            color: var(--text-light);
+        }
+        body.night-mode .text-slate-700 {
+            color: #D1D5DB;
+        }
+        body.night-mode .text-slate-600 {
+            color: #9CA3AF;
+        }
+        body.night-mode .text-slate-500 {
+            color: #9CA3AF;
+        }
+        body.night-mode .text-slate-400 {
+            color: #6B7280;
+        }
+        body.night-mode .border-slate-100 {
+            border-color: #4B5563;
+        }
+        body.night-mode .border-slate-200 {
+            border-color: #4B5563;
+        }
+        body.night-mode .nav-btn {
+            color: #9CA3AF;
+        }
+        body.night-mode .nav-btn:hover {
+            background: #4B5563;
+            color: var(--primary-color);
+        }
+        body.night-mode .nav-btn.active {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+        body.night-mode .nav-btn.active svg {
+            color: var(--text-light);
+        }
+        body.night-mode #sidebar {
+            background-color: #1F2937;
+            border-color: #374151;
+        }
+        body.night-mode .custom-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        body.night-mode .dashboard-card {
+            background-color: #374151;
+        }
+        body.night-mode .dashboard-card .icon-wrapper {
+            background-color: rgba(31, 111, 95, 0.2);
+        }
+        body.night-mode .dashboard-card h3 {
+            color: var(--text-light);
+        }
+        body.night-mode .dashboard-card p {
+            color: #9CA3AF;
+        }
+        body.night-mode .bg-slate-900 {
+            background-color: #1F2937;
+        }
+        body.night-mode input {
+            background-color: #4B5563;
+            color: var(--text-light);
+        }
+        body.night-mode select {
+            background-color: #4B5563;
+            color: var(--text-light);
+        }
+        body.night-mode .bg-slate-50 {
+            background-color: #374151;
+        }
+        body.night-mode .border-slate-100 {
+            border-color: #4B5563;
+        }
+        body.night-mode .bg-red-50 {
+            background-color: rgba(239, 68, 68, 0.2);
+        }
+        body.night-mode .bg-emerald-50 {
+            background-color: rgba(31, 111, 95, 0.2);
+        }
+        body.night-mode .bg-amber-50 {
+            background-color: rgba(217, 119, 6, 0.2);
+        }
+        body.night-mode .modal-content {
+            background-color: #1F2937;
+            color: var(--text-light);
+        }
+        body.night-mode #gold-detail-modal .bg-white {
+            background-color: #1F2937;
+        }
+        body.night-mode #credit-detail-modal .bg-white {
+            background-color: #1F2937;
+        }
+        body.night-mode #add-cust-modal .bg-white {
+            background-color: #1F2937;
         }
 
-/* رنگ ثانویه - سبز پادشاهی */
-.bg-royal-green {
-    background-color: #003333;
-}
-.text-royal-green {
-    color: #003333;
-}
-.border-royal-green {
-    border-color: #003333;
-}
-.hover-bg-royal-green:hover {
-    background-color: #003333;
-}
-.hover-text-royal-green:hover {
-    color: #003333;
-}
-
-/* بهبود ریسپانسیو برای موبایل */
-@media (max-width: 640px) {
-    body {
-        font-size: 14px;
-    }
-    .nav-btn {
-        padding: 8px 14px;
-        font-size: 12px;
-    }
-    .dashboard-card {
-        padding: 12px;
-    }
-    .dashboard-card h3 {
-        font-size: 1.25rem;
-    }
-    .dashboard-card p {
-        font-size: 10px;
-    }
-    .dashboard-card .icon-wrapper {
-        width: 32px;
-        height: 32px;
-    }
-    .dashboard-card .icon-wrapper svg {
-        width: 16px;
-        height: 16px;
-    }
-    #sidebar {
-        width: 280px;
-    }
-    .tab-content {
-        padding: 12px;
-    }
-}
-        
-/* رنگ‌های اصلی - یکدست */
-:root {
-    --primary-color: #1F6F5F;
-    --secondary-color: #EEEEEE;
-    --text-light: #FFFFFF;
-    --text-dark: #1F2937;
-    --bg-light: #FFFFFF;
-    --bg-dark: #1F2937;
-}
-
-.bg-primary { background-color: var(--primary-color); }
-.bg-secondary { background-color: var(--secondary-color); }
-.text-primary { color: var(--primary-color); }
-.text-secondary { color: var(--secondary-color); }
-.border-primary { border-color: var(--primary-color); }
-.border-secondary { border-color: var(--secondary-color); }
-.hover-bg-primary:hover { background-color: var(--primary-color); }
-.hover-bg-secondary:hover { background-color: var(--secondary-color); }
-.hover-text-primary:hover { color: var(--primary-color); }
-.hover-text-secondary:hover { color: var(--secondary-color); }
-
-/* حالت شب */
-body.night-mode {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-}
-body.night-mode .bg-white {
-    background-color: #374151;
-}
-body.night-mode .bg-slate-50 {
-    background-color: #374151;
-}
-body.night-mode .bg-slate-100 {
-    background-color: #4B5563;
-}
-body.night-mode .text-slate-800 {
-    color: var(--text-light);
-}
-body.night-mode .text-slate-700 {
-    color: #D1D5DB;
-}
-body.night-mode .text-slate-600 {
-    color: #9CA3AF;
-}
-body.night-mode .text-slate-500 {
-    color: #9CA3AF;
-}
-body.night-mode .text-slate-400 {
-    color: #6B7280;
-}
-body.night-mode .border-slate-100 {
-    border-color: #4B5563;
-}
-body.night-mode .border-slate-200 {
-    border-color: #4B5563;
-}
-body.night-mode .nav-btn {
-    color: #9CA3AF;
-}
-body.night-mode .nav-btn:hover {
-    background: #4B5563;
-    color: var(--primary-color);
-}
-body.night-mode .nav-btn.active {
-    background: var(--primary-color);
-    color: var(--text-light);
-}
-body.night-mode .nav-btn.active svg {
-    color: var(--text-light);
-}
-body.night-mode #sidebar {
-    background-color: #1F2937;
-    border-color: #374151;
-}
-body.night-mode .custom-shadow {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-}
-body.night-mode .dashboard-card {
-    background-color: #374151;
-}
-body.night-mode .dashboard-card .icon-wrapper {
-    background-color: rgba(31, 111, 95, 0.2);
-}
-body.night-mode .dashboard-card h3 {
-    color: var(--text-light);
-}
-body.night-mode .dashboard-card p {
-    color: #9CA3AF;
-}
-body.night-mode .bg-slate-900 {
-    background-color: #1F2937;
-}
-body.night-mode input {
-    background-color: #4B5563;
-    color: var(--text-light);
-}
-body.night-mode select {
-    background-color: #4B5563;
-    color: var(--text-light);
-}
-body.night-mode .bg-slate-50 {
-    background-color: #374151;
-}
-body.night-mode .border-slate-100 {
-    border-color: #4B5563;
-}
-body.night-mode .bg-red-50 {
-    background-color: rgba(239, 68, 68, 0.2);
-}
-body.night-mode .bg-emerald-50 {
-    background-color: rgba(31, 111, 95, 0.2);
-}
-body.night-mode .bg-amber-50 {
-    background-color: rgba(217, 119, 6, 0.2);
-}
-body.night-mode .modal-content {
-    background-color: #1F2937;
-    color: var(--text-light);
-}
-body.night-mode #gold-detail-modal .bg-white {
-    background-color: #1F2937;
-}
-body.night-mode #credit-detail-modal .bg-white {
-    background-color: #1F2937;
-}
-body.night-mode #add-cust-modal .bg-white {
-    background-color: #1F2937;
-}
-        
+        /* ===== ریسپانسیو موبایل ===== */
+        @media (max-width: 640px) {
+            body {
+                font-size: 14px;
+            }
+            .nav-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+            .dashboard-card {
+                padding: 12px;
+            }
+            .dashboard-card h3 {
+                font-size: 1.25rem;
+            }
+            .dashboard-card p {
+                font-size: 10px;
+            }
+            .dashboard-card .icon-wrapper {
+                width: 32px;
+                height: 32px;
+            }
+            .dashboard-card .icon-wrapper svg {
+                width: 16px;
+                height: 16px;
+            }
+            #sidebar {
+                width: 280px;
+            }
+            .tab-content {
+                padding: 8px;
+            }
+            /* جدول‌ها در موبایل اسکرول شوند */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .table-responsive table {
+                min-width: 600px;
+            }
+            /* دکمه‌ها در موبایل فشرده‌تر */
+            .btn-mobile {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            /* فونت کوچک‌تر در موبایل */
+            .mobile-small {
+                font-size: 11px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Mobile Header -->
-   <div class="lg:hidden bg-white border-b p-4 flex justify-between items-center fixed top-0 w-full z-50">
-    <span class="font-black text-slate-800 text-lg">گالری قصه</span>
-    <div class="flex items-center gap-2">
-        <button onclick="toggleNightMode()" class="p-2 bg-slate-100 rounded-xl text-slate-600">
-            <svg id="night-mode-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-        </button>
-        <button onclick="toggleSidebar()" class="p-2 bg-slate-100 rounded-xl text-slate-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-        </button>
+    <!-- ===== Mobile Header ===== -->
+    <div class="lg:hidden bg-white border-b p-3 flex justify-between items-center fixed top-0 w-full z-50">
+        <span class="font-black text-slate-800 text-base">گالری قصه</span>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleNightMode()" class="p-1.5 bg-slate-100 rounded-lg text-slate-600">
+                <svg id="night-mode-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+            <button onclick="toggleSidebar()" class="p-1.5 bg-slate-100 rounded-lg text-slate-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
     </div>
-</div>
 
-    <div class="flex min-h-screen pt-16 lg:pt-0">
-        <!-- Sidebar -->
+    <!-- ===== Sidebar ===== -->
+    <div class="flex min-h-screen pt-14 lg:pt-0">
         <aside id="sidebar" class="w-72 bg-slate-50 border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
             <div class="p-6 border-b border-slate-200 flex justify-between items-center">
-    <div>
-        <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
-        <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
-    </div>
-    <button onclick="toggleNightMode()" class="p-2 bg-slate-100 rounded-xl text-slate-600 hover:bg-slate-200 transition-all">
-        <svg id="night-mode-icon-sidebar" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-    </button>
-</div>
+                <div>
+                    <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
+                    <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
+                </div>
+                <button onclick="toggleNightMode()" class="p-2 bg-slate-100 rounded-lg text-slate-600 hover:bg-slate-200 transition-all">
+                    <svg id="night-mode-icon-sidebar" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+            </div>
             <nav class="flex-1 p-2 space-y-1">
-<button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
+                <button data-tab="dashboard" class="nav-btn active w-full flex items-center gap-3 transition-all text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="font-bold">پیشخوان</span>
                 </button>
-                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                <button data-tab="invoice" class="nav-btn w-full flex items-center gap-3 transition-all text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="font-bold">صدور فاکتور</span>
                 </button>
-                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                <button data-tab="invoices-list" class="nav-btn w-full flex items-center gap-3 transition-all text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
                     <span class="font-bold">فاکتورهای صادر شده</span>
                 </button>
-                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                <button data-tab="gold-bank" class="nav-btn w-full flex items-center gap-3 transition-all text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     <span class="font-bold">بانک طلا</span>
                 </button>
-                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                <button data-tab="customers" class="nav-btn w-full flex items-center gap-3 transition-all text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     <span class="font-bold">مشتریان</span>
                 </button>
-                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
+                <button data-tab="reports" class="nav-btn w-full flex items-center gap-3 transition-all text-sm border-t mt-4 pt-4">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="font-bold">مرکز گزارشات</span>
                 </button>
             </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 mr-0 lg:mr-72 p-4 lg:p-10 space-y-8">
+        <!-- ===== Main Content ===== -->
+        <main class="flex-1 mr-0 lg:mr-72 p-3 lg:p-10 space-y-6">
 
-            <!-- Dashboard -->
-            <div id="dashboard" class="tab-content active space-y-8">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <!-- ===== Dashboard ===== -->
+            <div id="dashboard" class="tab-content active space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div>
-                        <h2 class="text-3xl font-black text-slate-800">خوش آمدید!</h2>
-                        <p id="today-date" class="text-slate-500 font-bold mt-1"></p>
+                        <h2 class="text-2xl lg:text-3xl font-black text-slate-800">خوش آمدید!</h2>
+                        <p id="today-date" class="text-slate-500 font-bold mt-1 text-sm"></p>
                     </div>
                 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <!-- کارت اول: فروش -->
-    <div class="dashboard-card bg-secondary p-4 rounded-[1.5rem] border-l-4 border-primary custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">فروش کل دوره</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
-            </div>
-        </div>
-        <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
-            <div class="flex items-center gap-1">
-                <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">▲ +۱۲٪</span>
-                <span class="text-[10px] text-slate-400">ماهانه</span>
-            </div>
-            <p id="dash-today-sales" class="text-[11px] text-slate-600 font-bold">امروز: ۰ تومان</p>
-        </div>
-    </div>
 
-    <!-- کارت دوم: بانک طلا -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">موجودی طلا</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-gold-total">۰٫۰۰۰</h3>
-            </div>
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100">
-            <p class="text-[10px] text-slate-500">گرم</p>
-        </div>
-    </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <!-- کارت اول: فروش -->
+                    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-primary custom-shadow">
+                        <div class="flex items-center gap-3">
+                            <div class="icon-wrapper w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400">فروش کل دوره</p>
+                                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+                            <div class="flex items-center gap-1">
+                                <span class="text-[10px] text-primary font-bold bg-primary/10 px-1.5 py-0.5 rounded">▲ +۱۲٪</span>
+                                <span class="text-[10px] text-slate-400">ماهانه</span>
+                            </div>
+                            <p id="dash-today-sales" class="text-[11px] text-slate-600 font-bold">امروز: ۰ تومان</p>
+                        </div>
+                    </div>
 
-    <!-- کارت سوم: مشتریان -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">مشتریان فعال</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-cust-total">۰</h3>
-            </div>
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100">
-            <p class="text-[10px] text-slate-500">نفر</p>
-        </div>
-    </div>
-</div>
+                    <!-- کارت دوم: بانک طلا -->
+                    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-primary custom-shadow">
+                        <div class="flex items-center gap-3">
+                            <div class="icon-wrapper w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400">موجودی طلا</p>
+                                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-gold-total">۰٫۰۰۰</h3>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-slate-100">
+                            <p class="text-[10px] text-slate-500">گرم</p>
+                        </div>
+                    </div>
+
+                    <!-- کارت سوم: مشتریان -->
+                    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-primary custom-shadow">
+                        <div class="flex items-center gap-3">
+                            <div class="icon-wrapper w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400">مشتریان فعال</p>
+                                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-cust-total">۰</h3>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-slate-100">
+                            <p class="text-[10px] text-slate-500">نفر</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- ماشین حساب طلای آب‌شده -->
-                <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-64 h-64 bg-slate-500/10 blur-[100px] rounded-full"></div>
+                <div class="bg-slate-900 text-white p-6 lg:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
                     <div class="relative z-10">
-                        <div class="flex items-center gap-3 mb-6">
-                            <span class="bg-slate-500 w-3 h-8 rounded-full"></span>
-                            <h3 class="text-xl font-black italic">حساب خرید و فروش طلای آب‌شده</h3>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="bg-primary w-3 h-8 rounded-full"></span>
+                            <h3 class="text-lg font-black italic">حساب خرید و فروش طلای آب‌شده</h3>
                         </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div class="lg:col-span-2 space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            <div class="lg:col-span-2 space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">قیمت روز طلا (تومان/گرم)</label>
-                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
+                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" class="input-number w-full bg-white/10 border-0 p-3 rounded-xl text-center font-bold focus:ring-2 ring-primary outline-none persian-number">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">درصد سود گالری (%)</label>
-                                        <input type="number" id="trade-profit-percent" value="1.5" step="0.01" min="0" oninput="calcTradeGold()" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none">
+                                        <input type="number" id="trade-profit-percent" value="1.5" step="0.01" min="0" oninput="calcTradeGold()" class="input-number w-full bg-white/10 border-0 p-3 rounded-xl text-center font-bold focus:ring-2 ring-primary outline-none">
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">مبلغ مورد نظر (تومان)</label>
-                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
+                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" class="input-number w-full bg-white/10 border-0 p-3 rounded-xl text-center font-bold focus:ring-2 ring-primary outline-none persian-number">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">وزن مورد نظر (گرم)</label>
-                                        <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none">
+                                        <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" class="input-number w-full bg-white/10 border-0 p-3 rounded-xl text-center font-bold focus:ring-2 ring-primary outline-none">
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/10 flex flex-col justify-center">
                                 <p class="text-slate-400 text-sm font-bold mb-2">وزن قابل معامله (گرم)</p>
-                                <h4 id="trade-res-weight" class="text-4xl font-black text-slate-400 mb-6 persian-number">۰٫۰۰۰</h4>
+                                <h4 id="trade-res-weight" class="text-3xl font-black text-primary mb-4 persian-number">۰٫۰۰۰</h4>
                                 <p class="text-slate-400 text-sm font-bold mb-2">ارزش کل با سود گالری</p>
-                                <h4 id="trade-res-total" class="text-3xl font-black text-white persian-number">۰</h4>
+                                <h4 id="trade-res-total" class="text-2xl font-black text-white persian-number">۰</h4>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- صدور فاکتور -->
+            <!-- ===== صدور فاکتور ===== -->
             <div id="invoice" class="tab-content">
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    <!-- ستون سمت چپ: فرم فاکتور -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                     <div class="xl:col-span-2">
-                        <div class="bg-white p-6 lg:p-12 rounded-[3rem] border border-slate-100 custom-shadow">
-                            <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-slate-500 pr-4">صدور فاکتور جدید</h3>
+                        <div class="bg-white p-6 lg:p-10 rounded-[2.5rem] border border-slate-100 custom-shadow">
+                            <h3 class="text-2xl font-black text-slate-800 mb-8 border-r-4 border-primary pr-4">صدور فاکتور جدید</h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div class="space-y-3 relative">
                                     <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
                                     <div class="relative">
-                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none pr-12">
-                                        <svg class="w-6 h-6 absolute right-4 top-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-primary outline-none pr-10">
+                                        <svg class="w-5 h-5 absolute right-3 top-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
-                                    <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-56 overflow-y-auto hidden"></div>
-                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl">
-                                        <span id="inv-selected-name" class="font-black text-slate-700"></span>
-                                        <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">حذف</button>
+                                    <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
+                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-3 bg-primary/10 border border-primary/20 rounded-xl">
+                                        <span id="inv-selected-name" class="font-black text-primary text-sm"></span>
+                                        <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-1 rounded-lg text-xs transition-all">حذف</button>
                                     </div>
                                 </div>
                                 <div class="space-y-3">
                                     <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none">
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
-                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-slate-500 outline-none persian-number">
+                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-4 rounded-xl font-black text-left text-lg focus:ring-2 ring-primary outline-none persian-number">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
-                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
+                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">نوع اجرت</label>
-                                    <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-5 rounded-2xl font-bold outline-none">
+                                    <select id="wage-type" onchange="calculateInvoice()" class="w-full bg-slate-50 p-4 rounded-xl font-bold outline-none">
                                         <option value="percent">درصدی (%)</option>
                                         <option value="fixed">مبلغ ثابت (تومان)</option>
                                     </select>
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
+                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
-                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
+                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مالیات ارزش افزوده (%)</label>
-                                    <input type="number" id="tax" value="2" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
+                                    <input type="number" id="tax" value="2" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">توضیحات (اختیاری)</label>
-                                    <input type="text" id="invoice-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none">
+                                    <input type="text" id="invoice-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
                                 </div>
                             </div>
 
-                            <div id="credit-panel" class="hidden bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-slate-600 rounded-2xl flex items-center justify-center text-white">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <div id="credit-panel" class="hidden bg-primary/5 p-4 rounded-xl border border-primary/20 flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-black text-slate-800">اعتبار پاداش مشتری</p>
-                                        <p class="text-xs text-slate-600 font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
+                                        <p class="text-xs text-primary font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-bold text-slate-400">استفاده از اعتبار</span>
-                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-slate-600 accent-slate-600">
+                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-6 h-6 rounded-lg text-primary accent-primary">
                                 </div>
                             </div>
 
-                            <!-- دکمه‌های عملیات -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <button onclick="saveInvoice()" class="bg-primary text-white py-6 rounded-2xl font-black text-xl hover:bg-primary/90 transition-all custom-shadow">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <button onclick="saveInvoice()" class="bg-primary text-white py-4 rounded-xl font-black text-lg hover:bg-primary/90 transition-all custom-shadow">
                                     ثبت فاکتور
                                 </button>
-                                <button id="print-btn" onclick="printInvoice()" class="bg-white border-2 border-slate-200 text-slate-700 py-6 rounded-2xl font-black text-xl hover:bg-slate-50 hover:border-slate-300 transition-all custom-shadow">
+                                <button id="print-btn" onclick="printInvoice()" class="bg-white border-2 border-slate-200 text-slate-700 py-4 rounded-xl font-black text-lg hover:bg-slate-50 hover:border-primary transition-all custom-shadow">
                                     چاپ فاکتور
                                 </button>
                             </div>
@@ -539,71 +524,73 @@ body.night-mode #add-cust-modal .bg-white {
                     </div>
 
                     <!-- ستون راست: خلاصه محاسبات -->
-                    <div class="space-y-6">
-                        <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
-                            <div class="flex items-center gap-3 mb-6 pb-4 border-b">
-                                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
+                            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+                                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6m-6 4h6M4 7h.01M4 11h.01M4 15h.01M4 19h.01"></path></svg>
                                 </div>
-                                <h4 class="font-black text-xl text-slate-800">خلاصه محاسبات</h4>
+                                <h4 class="font-black text-lg text-slate-800">خلاصه محاسبات</h4>
                             </div>
                             
-                            <div class="space-y-4 text-lg">
-                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
-                                    <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                                    <span class="font-bold text-slate-500">قیمت خام طلا</span>
                                     <span id="sum-raw" class="font-black text-slate-700 persian-number">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
-                                    <span class="text-slate-500 font-bold">کل اجرت:</span>
+                                <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                                    <span class="font-bold text-slate-500">اجرت</span>
                                     <span id="sum-wage" class="font-black text-slate-700 persian-number">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
-                                    <span class="text-slate-500 font-bold">سود فروشنده:</span>
+                                <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                                    <span class="font-bold text-slate-500">سود فروشنده</span>
                                     <span id="sum-profit" class="font-black text-slate-700 persian-number">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
-                                    <span class="text-slate-500 font-bold">مالیات:</span>
+                                <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
+                                    <span class="font-bold text-slate-500">مالیات</span>
                                     <span id="sum-tax" class="font-black text-slate-700 persian-number">۰</span>
                                 </div>
-                                <div class="flex justify-between items-center p-3 bg-red-50 rounded-2xl">
-                                    <span class="text-red-600 font-bold">کسر اعتبار:</span>
+                                <div class="flex justify-between items-center p-2 bg-red-50 rounded-xl">
+                                    <span class="font-bold text-red-600">کسر اعتبار</span>
                                     <span id="sum-credit" class="font-black text-red-600 persian-number">-۰</span>
                                 </div>
-                                
-                                <div class="pt-6 border-t border-dashed border-slate-200">
-                                    <div class="flex justify-between items-center p-4 bg-royal-green rounded-2xl text-white shadow-lg">
-                                        <span class="font-bold text-lg">مبلغ نهایی:</span>
-                                        <span id="sum-total" class="text-3xl font-black number persian-number">۰</span>
-                                    </div>
-                                </div>
-                                
-                                <button onclick="printInvoice()" class="w-full mt-4 bg-secondary border border-slate-200 text-slate-700 py-3 rounded-2xl font-bold text-sm hover:bg-slate-50 hover:border-primary transition-all">
-                                    چاپ فاکتور
-                                </button>
                             </div>
+
+                            <div class="my-4 border-t border-dashed border-slate-200"></div>
+
+                            <div class="p-4 bg-primary rounded-xl text-white shadow-md">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-base">مبلغ نهایی</span>
+                                    <span id="sum-total" class="text-2xl font-black number persian-number">۰</span>
+                                </div>
+                            </div>
+
+                            <button onclick="printInvoice()" class="w-full mt-3 bg-white border border-slate-200 text-slate-700 py-2 rounded-xl font-bold text-sm hover:bg-slate-50 hover:border-primary transition-all">
+                                چاپ فاکتور
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- فاکتورهای صادر شده -->
+            <!-- ===== فاکتورهای صادر شده ===== -->
             <div id="invoices-list" class="tab-content">
-                <div class="bg-slate-50 rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                    <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
-                        <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
-                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-slate-500 outline-none w-72">
+                <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
+                    <div class="p-4 border-b bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <h3 class="font-black text-xl text-slate-800">فاکتورهای صادر شده</h3>
+                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-4 py-2 rounded-xl text-sm focus:ring-2 ring-primary outline-none w-full sm:w-64">
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto table-responsive">
                         <table class="w-full text-right">
                             <thead class="bg-slate-50 text-slate-500 sticky top-0">
                                 <tr>
-                                    <th class="p-5 font-black">تاریخ</th>
-                                    <th class="p-5 font-black">مشتری</th>
-                                    <th class="p-5 font-black">نوع طلا</th>
-                                    <th class="p-5 font-black">وزن (گرم)</th>
-                                    <th class="p-5 font-black">قیمت طلا</th>
-                                    <th class="p-5 font-black">مبلغ کل</th>
-                                    <th class="p-5 font-black text-center">عملیات</th>
+                                    <th class="p-4 font-black text-sm">تاریخ</th>
+                                    <th class="p-4 font-black text-sm">مشتری</th>
+                                    <th class="p-4 font-black text-sm">نوع طلا</th>
+                                    <th class="p-4 font-black text-sm">وزن (گرم)</th>
+                                    <th class="p-4 font-black text-sm">قیمت طلا</th>
+                                    <th class="p-4 font-black text-sm">مبلغ کل</th>
+                                    <th class="p-4 font-black text-sm text-center">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
@@ -612,119 +599,119 @@ body.night-mode #add-cust-modal .bg-white {
                 </div>
             </div>
 
-            <!-- بانک طلا -->
-            <div id="gold-bank" class="tab-content space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="w-10 h-10 bg-slate-500 rounded-xl flex items-center justify-center text-white">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <!-- ===== بانک طلا ===== -->
+            <div id="gold-bank" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow h-fit">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             </div>
                             <h3 class="text-xl font-black text-slate-800">ثبت امانت جدید</h3>
                         </div>
-                        <div class="space-y-6">
+                        <div class="space-y-4">
                             <div class="space-y-2 relative">
                                 <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
-                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none">
-                                <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
-                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl mt-2">
-                                    <span id="gb-selected-name" class="font-black text-slate-700 text-sm"></span>
-                                    <button onclick="clearSelection('gb')" class="text-red-500 text-xs font-bold">حذف</button>
+                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-3 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
+                                <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
+                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-2 bg-primary/10 border border-primary/20 rounded-xl">
+                                    <span id="gb-selected-name" class="font-black text-primary text-sm"></span>
+                                    <button onclick="clearSelection('gb')" class="text-red-500 hover:bg-red-50 p-1 rounded-lg text-xs transition-all">حذف</button>
                                 </div>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
-                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-slate-500 outline-none">
+                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-3 rounded-xl font-bold text-left focus:ring-2 ring-primary">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
-                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
+                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-3 rounded-xl font-bold focus:ring-2 ring-primary outline-none persian-number">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
-                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none">
+                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-3 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
                             </div>
-                           <button onclick="saveToGoldBank()" class="w-full bg-primary text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-primary/90 transition-all">ثبت در بانک طلا</button>
+                            <button onclick="saveToGoldBank()" class="w-full bg-primary text-white py-3 rounded-xl font-black text-lg shadow-lg hover:bg-primary/90 transition-all">ثبت در بانک طلا</button>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                        <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
-                            <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
-                            <div class="flex gap-3">
-                                <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-slate-500 outline-none w-56">
-                            </div>
+                    <div class="lg:col-span-2 bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
+                        <div class="p-4 border-b bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <h3 class="font-black text-xl text-slate-800">امانات طلای آب‌شده</h3>
+                            <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-xl text-sm focus:ring-2 ring-primary outline-none w-full sm:w-56">
                         </div>
-                        <div class="overflow-x-auto">
-                           <table class="w-full text-right">
-    <thead class="bg-slate-50 text-slate-500">
-    <tr>
-        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
-        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
-        <th class="p-5 font-black">عملیات</th>
-    </tr>
-</thead>
-    <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
-</table>
+                        <div class="overflow-x-auto table-responsive">
+                            <table class="w-full text-right">
+                                <thead class="bg-slate-50 text-slate-500">
+                                    <tr>
+                                        <th class="p-4 font-black cursor-pointer text-sm" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
+                                        <th class="p-4 font-black cursor-pointer text-sm" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
+                                        <th class="p-4 font-black text-sm">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- مشتریان -->
-            <div id="customers" class="tab-content space-y-8">
-                <div class="flex justify-between items-center">
+            <!-- ===== مشتریان ===== -->
+            <div id="customers" class="tab-content space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
                     <h2 class="text-2xl font-black text-slate-800">مدیریت مشتریان</h2>
-                   <button onclick="openAddModal()" class="bg-primary text-white px-8 py-3.5 rounded-2xl font-black text-sm transition-all hover:bg-primary/90">مشتری جدید +</button>
+                    <button onclick="openAddModal()" class="bg-primary text-white px-6 py-2.5 rounded-xl font-black text-sm transition-all hover:bg-primary/90">مشتری جدید +</button>
                 </div>
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                    <table class="w-full text-right text-sm">
-                        <thead class="bg-slate-50 text-slate-400">
-                            <tr>
-                                <th class="p-6 font-black">نام و نام خانوادگی</th>
-                                <th class="p-6 font-black">کد ملی</th>
-                                <th class="p-6 font-black">تلفن</th>
-                                <th class="p-6 font-black">اعتبار (تومان)</th>
-                                <th class="p-6 font-black text-center">عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
-                    </table>
+                <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
+                    <div class="overflow-x-auto table-responsive">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-50 text-slate-400">
+                                <tr>
+                                    <th class="p-4 font-black">نام و نام خانوادگی</th>
+                                    <th class="p-4 font-black">کد ملی</th>
+                                    <th class="p-4 font-black">تلفن</th>
+                                    <th class="p-4 font-black cursor-pointer">اعتبار (تومان)</th>
+                                    <th class="p-4 font-black text-center">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- گزارشات -->
-            <div id="reports" class="tab-content space-y-8">
-               <div class="bg-primary text-white p-10 rounded-[3rem] shadow-2xl">
-                    <h2 class="text-3xl font-black mb-2">مرکز گزارشات و خروجی</h2>
-                    <p class="opacity-80 font-bold">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
+            <!-- ===== گزارشات ===== -->
+            <div id="reports" class="tab-content space-y-6">
+                <div class="bg-primary text-white p-8 rounded-[2.5rem] shadow-2xl">
+                    <h2 class="text-2xl font-black mb-2">مرکز گزارشات و خروجی</h2>
+                    <p class="opacity-80 font-bold text-sm">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
                 </div>
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+                <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="divide-y">
-                        <button onclick="exportData('customers')" class="w-full p-8 hover:bg-secondary transition-all flex items-center gap-6 group text-right">
-                        <button onclick="exportData('invoices')" class="w-full p-8 hover:bg-slate-50 transition-all flex items-center gap-6 group text-right">خروجی فاکتورها</button>
-                        <button onclick="exportData('gold')" class="w-full p-8 hover:bg-slate-50 transition-all flex items-center gap-6 group text-right">خروجی بانک طلا</button>
-                        <button onclick="exportData('all')" class="w-full p-8 hover:bg-slate-50 transition-all flex items-center gap-6 group text-right">خروجی کلی سیستم</button>
+                        <button onclick="exportData('customers')" class="w-full p-6 hover:bg-slate-50 transition-all flex items-center gap-4 group text-right text-sm font-bold">خروجی مشتریان</button>
+                        <button onclick="exportData('invoices')" class="w-full p-6 hover:bg-slate-50 transition-all flex items-center gap-4 group text-right text-sm font-bold">خروجی فاکتورها</button>
+                        <button onclick="exportData('gold')" class="w-full p-6 hover:bg-slate-50 transition-all flex items-center gap-4 group text-right text-sm font-bold">خروجی بانک طلا</button>
+                        <button onclick="exportData('all')" class="w-full p-6 hover:bg-slate-50 transition-all flex items-center gap-4 group text-right text-sm font-bold">خروجی کلی سیستم</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- مودال جزئیات امانات -->
-    <div id="gold-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl rounded-[2.5rem] p-8 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
+    <!-- ===== مودال جزئیات امانات ===== -->
+    <div id="gold-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-3">
+        <div class="bg-white w-full max-w-3xl rounded-[2rem] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
                 <h3 class="text-2xl font-black" id="modal-customer-name"></h3>
-                <div class="flex gap-3">
-                    <button onclick="exportGoldDetail()" class="px-5 py-2 bg-slate-800 text-white rounded-2xl text-sm font-bold hover:bg-slate-700">خروجی اکسل</button>
+                <div class="flex gap-2">
+                    <button onclick="exportGoldDetail()" class="px-4 py-1.5 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90">خروجی اکسل</button>
                     <button onclick="closeGoldDetailModal()" class="text-slate-400 hover:text-slate-600">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-4 mb-8 bg-slate-50 p-6 rounded-3xl">
+            <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-50 p-4 rounded-2xl">
                 <div>
                     <p class="text-xs text-slate-500 font-bold">مجموع وزن امانت</p>
                     <p id="modal-total-weight" class="text-2xl font-black text-slate-700 persian-number">۰٫۰۰۰ گرم</p>
@@ -738,79 +725,78 @@ body.night-mode #add-cust-modal .bg-white {
             <table class="w-full">
                 <thead>
                     <tr class="border-b">
-                        <th class="p-4 text-right font-black">تاریخ</th>
-                        <th class="p-4 text-right font-black">وزن (گرم)</th>
-                        <th class="p-4 text-right font-black">قیمت روز</th>
-                        <th class="p-4 text-right font-black">یادداشت</th>
-                        <th class="p-4 text-center font-black">عملیات</th>
+                        <th class="p-3 text-right font-black text-sm">تاریخ</th>
+                        <th class="p-3 text-right font-black text-sm">وزن (گرم)</th>
+                        <th class="p-3 text-right font-black text-sm">قیمت روز</th>
+                        <th class="p-3 text-right font-black text-sm">یادداشت</th>
+                        <th class="p-3 text-center font-black text-sm">عملیات</th>
                     </tr>
                 </thead>
                 <tbody id="gold-detail-tbody" class="divide-y"></tbody>
             </table>
 
-            <div class="mt-8 flex gap-4">
-               <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-primary text-white py-4 rounded-2xl font-black text-lg hover:bg-primary/90 transition-all">
+            <div class="mt-6 flex gap-3">
+                <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-lg hover:bg-primary/90 transition-all">
                     تسویه حساب
                 </button>
-                <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
+                <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-black text-lg">بستن</button>
             </div>
         </div>
     </div>
 
-    <!-- مودال افزودن مشتری -->
-    <!-- مودال جزئیات اعتبار مشتری -->
-<div id="credit-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
-    <div class="bg-white w-full max-w-3xl rounded-[2.5rem] p-8 shadow-2xl max-h-[92vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-black" id="credit-modal-customer-name"></h3>
-            <div class="flex gap-3">
+    <!-- ===== مودال جزئیات اعتبار ===== -->
+    <div id="credit-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-3">
+        <div class="bg-white w-full max-w-3xl rounded-[2rem] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-black" id="credit-modal-customer-name"></h3>
                 <button onclick="closeCreditDetailModal()" class="text-slate-400 hover:text-slate-600">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
                 </button>
             </div>
-        </div>
 
-        <div class="mb-8 bg-slate-50 p-6 rounded-3xl">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-xs text-slate-500 font-bold">مجموع اعتبار قابل استفاده</p>
-                    <p id="credit-modal-total" class="text-3xl font-black text-slate-800 persian-number">۰ تومان</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-500 font-bold">تعداد پاداش‌ها</p>
-                    <p id="credit-modal-count" class="text-3xl font-black text-slate-800 persian-number">۰</p>
+            <div class="mb-6 bg-slate-50 p-4 rounded-2xl">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold">مجموع اعتبار قابل استفاده</p>
+                        <p id="credit-modal-total" class="text-2xl font-black text-slate-800 persian-number">۰ تومان</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-bold">تعداد پاداش‌ها</p>
+                        <p id="credit-modal-count" class="text-2xl font-black text-slate-800 persian-number">۰</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <table class="w-full">
-            <thead>
-                <tr class="border-b">
-                    <th class="p-4 text-right font-black">تاریخ</th>
-                    <th class="p-4 text-right font-black">مبلغ (تومان)</th>
-                    <th class="p-4 text-right font-black">موجودی باقی‌مانده</th>
-                    <th class="p-4 text-right font-black">یادداشت</th>
-                    <th class="p-4 text-center font-black">عملیات</th>
-                </tr>
-            </thead>
-            <tbody id="credit-detail-tbody" class="divide-y"></tbody>
-        </table>
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b">
+                        <th class="p-3 text-right font-black text-sm">تاریخ</th>
+                        <th class="p-3 text-right font-black text-sm">مبلغ (تومان)</th>
+                        <th class="p-3 text-right font-black text-sm">موجودی باقی‌مانده</th>
+                        <th class="p-3 text-right font-black text-sm">یادداشت</th>
+                        <th class="p-3 text-center font-black text-sm">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="credit-detail-tbody" class="divide-y"></tbody>
+            </table>
 
-        <div class="mt-8 flex gap-4">
-            <button onclick="closeCreditDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
+            <div class="mt-6">
+                <button onclick="closeCreditDetailModal()" class="w-full bg-slate-100 text-slate-600 py-3 rounded-xl font-black text-lg">بستن</button>
+            </div>
         </div>
     </div>
-</div>
-    <div id="add-cust-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl">
-            <h3 class="text-2xl font-black text-slate-800 mb-8">افزودن مشتری جدید</h3>
-            <div class="space-y-4">
-                <input type="text" id="m-name" placeholder="نام و نام خانوادگی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500">
-                <input type="text" id="m-national" placeholder="کد ملی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
-                <input type="text" id="m-phone" placeholder="شماره تماس" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
-                <div class="flex gap-4 mt-8">
-                    <button onclick="saveCustomer()" class="flex-1 bg-primary text-white py-4 rounded-2xl font-black">ذخیره</button>
-                    <button onclick="closeAddModal()" class="flex-1 bg-slate-100 text-slate-500 py-4 rounded-2xl font-black">انصراف</button>
+
+    <!-- ===== مودال افزودن مشتری ===== -->
+    <div id="add-cust-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden items-center justify-center p-3">
+        <div class="bg-white w-full max-w-md rounded-[2rem] p-8 shadow-2xl">
+            <h3 class="text-2xl font-black text-slate-800 mb-6">افزودن مشتری جدید</h3>
+            <div class="space-y-3">
+                <input type="text" id="m-name" placeholder="نام و نام خانوادگی" class="w-full bg-slate-50 p-4 rounded-xl font-bold border-0 outline-none focus:ring-2 ring-primary">
+                <input type="text" id="m-national" placeholder="کد ملی" class="w-full bg-slate-50 p-4 rounded-xl font-bold border-0 outline-none focus:ring-2 ring-primary text-left">
+                <input type="text" id="m-phone" placeholder="شماره تماس" class="w-full bg-slate-50 p-4 rounded-xl font-bold border-0 outline-none focus:ring-2 ring-primary text-left">
+                <div class="flex gap-3 mt-4">
+                    <button onclick="saveCustomer()" class="flex-1 bg-primary text-white py-3 rounded-xl font-black">ذخیره</button>
+                    <button onclick="closeAddModal()" class="flex-1 bg-slate-100 text-slate-500 py-3 rounded-xl font-black">انصراف</button>
                 </div>
             </div>
         </div>
@@ -832,20 +818,21 @@ body.night-mode #add-cust-modal .bg-white {
                 const savedCustomers = localStorage.getItem('ghesseh_v64_customers');
                 const savedInvoices = localStorage.getItem('ghesseh_v64_invoices');
                 const savedGold = localStorage.getItem('ghesseh_v64_gold');
+                const savedCredits = localStorage.getItem('ghesseh_v64_credits');
 
                 customers = savedCustomers ? JSON.parse(savedCustomers) : [];
                 invoices = savedInvoices ? JSON.parse(savedInvoices) : [];
                 goldBank = savedGold ? JSON.parse(savedGold) : [];
-                
+                credits = savedCredits ? JSON.parse(savedCredits) : [];
             } catch (e) {
                 console.error("خطا در لود داده‌ها:", e);
                 customers = [];
                 invoices = [];
                 goldBank = [];
+                credits = [];
             }
         }
-const savedCredits = localStorage.getItem('ghesseh_v64_credits');
-credits = savedCredits ? JSON.parse(savedCredits) : [];
+
         function saveData() {
             try {
                 localStorage.setItem('ghesseh_v64_customers', JSON.stringify(customers));
@@ -900,7 +887,7 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
         // ==================== Toast Notification ====================
         function toast(msg, type = "success") {
             const t = document.createElement('div');
-            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-primary' : 'bg-red-500'}`;
+            t.className = `fixed bottom-8 left-8 px-6 py-3 rounded-xl text-white font-black z-[1000] ${type === 'success' ? 'bg-primary' : 'bg-red-500'}`;
             t.textContent = msg;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
@@ -923,7 +910,7 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
+                if (btn.dataset.tab === id) {
                     btn.classList.add('active');
                 }
             });
@@ -933,46 +920,40 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             }
         }
 
-// ==================== Night Mode ====================
-function toggleNightMode() {
-    document.body.classList.toggle('night-mode');
-    const isNight = document.body.classList.contains('night-mode');
-    localStorage.setItem('nightMode', isNight ? 'true' : 'false');
-    
-    // تغییر آیکون
-    const icons = document.querySelectorAll('#night-mode-icon, #night-mode-icon-sidebar');
-    icons.forEach(icon => {
-        if (isNight) {
-            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707.707M6.343 6.343l-.707.707m12.728 0l-.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-        } else {
-            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+        // ==================== Night Mode ====================
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            const isNight = document.body.classList.contains('night-mode');
+            localStorage.setItem('nightMode', isNight ? 'true' : 'false');
+            
+            const icons = document.querySelectorAll('#night-mode-icon, #night-mode-icon-sidebar');
+            icons.forEach(icon => {
+                if (isNight) {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707.707M6.343 6.343l-.707.707m12.728 0l-.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+                } else {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+                }
+            });
         }
-    });
-}
 
-// لود حالت شب از localStorage
-function loadNightMode() {
-    const isNight = localStorage.getItem('nightMode') === 'true';
-    if (isNight) {
-        document.body.classList.add('night-mode');
-        // تنظیم آیکون
-        const icons = document.querySelectorAll('#night-mode-icon, #night-mode-icon-sidebar');
-        icons.forEach(icon => {
-            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707.707M6.343 6.343l-.707.707m12.728 0l-.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-        });
-    }
-}
+        function loadNightMode() {
+            const isNight = localStorage.getItem('nightMode') === 'true';
+            if (isNight) {
+                document.body.classList.add('night-mode');
+                const icons = document.querySelectorAll('#night-mode-icon, #night-mode-icon-sidebar');
+                icons.forEach(icon => {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707.707M6.343 6.343l-.707.707m12.728 0l-.707-.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+                });
+            }
+        }
 
-
-
-        
         // ==================== Live Search ====================
         function liveSearch(query, context) {
             const resultsDiv = document.getElementById(`${context}-search-results`);
             if (!query) { resultsDiv.classList.add('hidden'); return; }
             const filtered = customers.filter(c => (c.name && c.name.includes(query)) || (c.national && c.national.includes(query)));
             resultsDiv.innerHTML = filtered.map(c => `
-                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" class="search-item p-4 border-b flex justify-between items-center">
+                <div onclick="selectUser('${c.id}', '${c.name}', '${c.credit || 0}', '${context}')" class="search-item p-3 border-b flex justify-between items-center">
                     <span class="font-bold text-slate-700">${c.name}</span>
                     <span class="text-xs font-mono text-slate-400">${c.national || ''}</span>
                 </div>
@@ -980,20 +961,19 @@ function loadNightMode() {
             resultsDiv.classList.toggle('hidden', filtered.length === 0);
         }
 
-       function selectUser(id, name, credit, context) {
-    selectedCustomer[context] = id;
-    document.getElementById(`${context}-search-results`).classList.add('hidden');
-    document.getElementById(`${context}-selected-name`).innerText = name;
-    document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
-    if (context === 'inv') {
-        document.getElementById('credit-panel').classList.remove('hidden');
-        // محاسبه مجموع اعتبار از آرایه credits
-        const customerCredits = credits.filter(c => c.customerId == id && c.remaining > 0);
-        const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
-        document.getElementById('inv-credit-val').innerText = formatNumber(totalCredit, 0);
-        calculateInvoice();
-    }
-}
+        function selectUser(id, name, credit, context) {
+            selectedCustomer[context] = id;
+            document.getElementById(`${context}-search-results`).classList.add('hidden');
+            document.getElementById(`${context}-selected-name`).innerText = name;
+            document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+            if (context === 'inv') {
+                document.getElementById('credit-panel').classList.remove('hidden');
+                const customerCredits = credits.filter(c => c.customerId == id && c.remaining > 0);
+                const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+                document.getElementById('inv-credit-val').innerText = formatNumber(totalCredit, 0);
+                calculateInvoice();
+            }
+        }
 
         function clearSelection(context) {
             selectedCustomer[context] = null;
@@ -1036,104 +1016,102 @@ function loadNightMode() {
 
         // ==================== Invoice Calculations ====================
         function calculateInvoice() {
-    const price = parsePersianNumber(document.getElementById('gold-price').value);
-    const weight = parseFloat(document.getElementById('weight').value) || 0;
-    const wType = document.getElementById('wage-type').value;
-    const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-    const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-    const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-    const useCredit = document.getElementById('use-credit').checked;
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const wType = document.getElementById('wage-type').value;
+            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
+            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
+            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
+            const useCredit = document.getElementById('use-credit').checked;
 
-    const raw = price * weight;
-    let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-    const profitAmount = (raw + wage) * (profitPer / 100);
-    const tax = (raw + wage + profitAmount) * (taxPer / 100);
-    const totalBeforeCredit = raw + wage + profitAmount + tax;
+            const raw = price * weight;
+            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+            const profitAmount = (raw + wage) * (profitPer / 100);
+            const tax = (raw + wage + profitAmount) * (taxPer / 100);
+            const totalBeforeCredit = raw + wage + profitAmount + tax;
 
-    let deducted = 0;
-    if (useCredit && selectedCustomer.inv) {
-        // محاسبه مجموع اعتبار از آرایه credits
-        const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
-        const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
-        deducted = Math.min(totalBeforeCredit, totalCredit);
-    }
+            let deducted = 0;
+            if (useCredit && selectedCustomer.inv) {
+                const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+                const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+                deducted = Math.min(totalBeforeCredit, totalCredit);
+            }
 
-    const finalTotal = totalBeforeCredit - deducted;
+            const finalTotal = totalBeforeCredit - deducted;
 
-    document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
-    document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
-    document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
-    document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
-    document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
-    document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
-}
+            document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
+            document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
+            document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
+            document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
+            document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
+            document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
+        }
 
         // ==================== Save Invoice ====================
-     function saveInvoice() {
-    if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-    const weightInput = document.getElementById('weight').value;
-    if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
-    const price = parsePersianNumber(document.getElementById('gold-price').value);
-    if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
+        function saveInvoice() {
+            if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
+            const weightInput = document.getElementById('weight').value;
+            if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
 
-    const weight = parseFloat(weightInput);
-    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
-    const total = parsePersianNumber(document.getElementById('sum-total').innerText);
-    const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-    if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+            const weight = parseFloat(weightInput);
+            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+            const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
 
-    const useCredit = document.getElementById('use-credit').checked;
-    let deducted = 0;
-    if (useCredit) {
-        // کسر از اعتبارات موجود (به ترتیب FIFO)
-        const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
-        let remainingDeduction = total;
-        for (let i = 0; i < customerCredits.length && remainingDeduction > 0; i++) {
-            const credit = customerCredits[i];
-            const amount = Math.min(remainingDeduction, credit.remaining);
-            credit.remaining -= amount;
-            remainingDeduction -= amount;
-            deducted += amount;
+            const useCredit = document.getElementById('use-credit').checked;
+            let deducted = 0;
+            if (useCredit) {
+                const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+                let remainingDeduction = total;
+                for (let i = 0; i < customerCredits.length && remainingDeduction > 0; i++) {
+                    const credit = customerCredits[i];
+                    const amount = Math.min(remainingDeduction, credit.remaining);
+                    credit.remaining -= amount;
+                    remainingDeduction -= amount;
+                    deducted += amount;
+                }
+            }
+
+            const goldTypeLower = goldType.toLowerCase();
+            const isGoldPurchase = !goldTypeLower.includes('سکه');
+            let reward = 0;
+            if (isGoldPurchase && total > 0) {
+                reward = Math.round(total * 0.01);
+                credits.push({
+                    id: Date.now(),
+                    customerId: selectedCustomer.inv,
+                    customerName: customers[cIndex].name,
+                    amount: reward,
+                    remaining: reward,
+                    date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                    invoiceId: Date.now(),
+                    note: "پاداش خرید طلا"
+                });
+            }
+
+            invoices.push({
+                id: Date.now(),
+                customerName: customers[cIndex].name,
+                customerId: selectedCustomer.inv,
+                goldType: goldType,
+                weight: weight,
+                goldPrice: price,
+                total: total,
+                deductedCredit: deducted,
+                rewardAdded: reward,
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                fullDate: new Date().toISOString()
+            });
+
+            toast("فاکتور با موفقیت ثبت شد", "success");
+            clearSelection('inv');
+            document.getElementById('weight').value = "";
+            document.getElementById('gold-price').value = "";
+            refreshAll();
         }
-    }
-
-    const goldTypeLower = goldType.toLowerCase();
-    const isGoldPurchase = !goldTypeLower.includes('سکه');
-    let reward = 0;
-    if (isGoldPurchase && total > 0) {
-        reward = Math.round(total * 0.01); // ۱٪ پاداش
-        credits.push({
-            id: Date.now(),
-            customerId: selectedCustomer.inv,
-            customerName: customers[cIndex].name,
-            amount: reward,
-            remaining: reward,
-            date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-            invoiceId: Date.now(),
-            note: "پاداش خرید طلا"
-        });
-    }
-
-    invoices.push({
-        id: Date.now(),
-        customerName: customers[cIndex].name,
-        customerId: selectedCustomer.inv,
-        goldType: goldType,
-        weight: weight,
-        goldPrice: price,
-        total: total,
-        deductedCredit: deducted,
-        rewardAdded: reward,
-        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-        fullDate: new Date().toISOString()
-    });
-
-    toast("فاکتور با موفقیت ثبت شد", "success");
-    clearSelection('inv');
-    document.getElementById('weight').value = "";
-    document.getElementById('gold-price').value = "";
-    refreshAll();
-}
 
         // ==================== Render Invoices ====================
         function renderInvoices(filtered = null) {
@@ -1152,8 +1130,8 @@ function loadNightMode() {
                     <td class="p-4 font-mono font-bold text-slate-700 persian-number">${formatNumber(i.total, 0)}</td>
                     <td class="p-4 text-center">
                         <span class="invoice-status ${status === 'paid' ? 'status-paid' : 'status-unpaid'}">${statusText}</span>
-                        <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-4 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
-                        <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-4 py-1 rounded-xl text-sm font-bold">حذف</button>
+                        <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
+                        <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm font-bold">حذف</button>
                     </td>
                 </tr>`;
             }).join('');
@@ -1245,117 +1223,126 @@ function loadNightMode() {
             refreshAll();
         }
 
-     function renderGoldBank() {
-    const tbody = document.getElementById('gold-bank-tbody');
-    
-    // گروه‌بندی امانات بر اساس مشتری
-    const grouped = {};
-    goldBank.forEach(item => {
-        if (!grouped[item.customerId]) {
-            grouped[item.customerId] = [];
+        function renderGoldBank() {
+            const tbody = document.getElementById('gold-bank-tbody');
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) {
+                    grouped[item.customerId] = [];
+                }
+                grouped[item.customerId].push(item);
+            });
+            tbody.innerHTML = Object.keys(grouped).map(customerId => {
+                const items = grouped[customerId];
+                const cust = customers.find(c => c.id == customerId);
+                const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+                const count = items.length;
+                return `
+                    <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${customerId})">
+                        <td class="p-4 font-black flex items-center justify-between">
+                            <span>${cust ? cust.name : 'نامشخص'}</span>
+                            <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-xl text-xs font-bold">${count} امانت</span>
+                        </td>
+                        <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                        <td class="p-4 font-black text-slate-600">
+                            <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
+                                    class="bg-primary text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                                جزئیات امانات
+                            </button>
+                        </td>
+                    </tr>`;
+            }).join('');
         }
-        grouped[item.customerId].push(item);
-    });
-    
-    // نمایش هر مشتری به صورت یک ردیف
-    tbody.innerHTML = Object.keys(grouped).map(customerId => {
-        const items = grouped[customerId];
-        const cust = customers.find(c => c.id == customerId);
-        const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-        const count = items.length;
-        return `
-            <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${customerId})">
-                <td class="p-5 font-black flex items-center justify-between">
-                    <span>${cust ? cust.name : 'نامشخص'}</span>
-                    <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-xl text-xs font-bold">${count} امانت</span>
-                </td>
-                <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
-                <td class="p-5 font-black text-slate-600">
-                   <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
-        class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-primary/90 transition-all">
-                        جزئیات امانات
-                    </button>
-                </td>
-            </tr>`;
-    }).join('');
-}
-function renderGoldBankFiltered(filteredIds = null) {
-    const tbody = document.getElementById('gold-bank-tbody');
-    let filteredGold = goldBank;
-    if (filteredIds) {
-        filteredGold = goldBank.filter(item => filteredIds.includes(item.customerId.toString()));
-    }
-    // مرتب‌سازی از جدیدترین به قدیمی‌ترین
-    const sortedGold = [...filteredGold].reverse();
-    tbody.innerHTML = sortedGold.map(item => {
-        const cust = customers.find(c => c.id == item.customerId);
-        return `
-            <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
-                <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(item.weight, 3)} گرم</td>
-                <td class="p-5 font-black text-slate-600">${item.date}</td>
-                <td class="p-5 font-black text-slate-600">${item.goldPrice ? formatNumber(item.goldPrice, 0) : '—'}</td>
-            </tr>`;
-    }).join('');
- }
- 
-  function sortGoldBank(field) {
-    if (!goldSortDirection[field]) goldSortDirection[field] = 'asc';
-    else goldSortDirection[field] = goldSortDirection[field] === 'asc' ? 'desc' : 'asc';
-    
-    // گروه‌بندی امانات بر اساس مشتری
-    const grouped = {};
-    goldBank.forEach(item => {
-        if (!grouped[item.customerId]) {
-            grouped[item.customerId] = [];
+
+        function filterGoldBank() {
+            const q = document.getElementById('gold-bank-search').value.toLowerCase().trim();
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) {
+                    grouped[item.customerId] = [];
+                }
+                grouped[item.customerId].push(item);
+            });
+            const filtered = Object.keys(grouped).filter(cid => {
+                const cust = customers.find(c => c.id == cid);
+                return cust && cust.name.toLowerCase().includes(q);
+            });
+            const tbody = document.getElementById('gold-bank-tbody');
+            tbody.innerHTML = filtered.map(customerId => {
+                const items = grouped[customerId];
+                const cust = customers.find(c => c.id == customerId);
+                const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+                const count = items.length;
+                return `
+                    <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${customerId})">
+                        <td class="p-4 font-black flex items-center justify-between">
+                            <span>${cust ? cust.name : 'نامشخص'}</span>
+                            <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-xl text-xs font-bold">${count} امانت</span>
+                        </td>
+                        <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                        <td class="p-4 font-black text-slate-600">
+                            <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
+                                    class="bg-primary text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                                جزئیات امانات
+                            </button>
+                        </td>
+                    </tr>`;
+            }).join('');
         }
-        grouped[item.customerId].push(item);
-    });
-    
-    // تبدیل به آرایه برای مرتب‌سازی
-    const groupedArray = Object.keys(grouped).map(customerId => {
-        const items = grouped[customerId];
-        const cust = customers.find(c => c.id == customerId);
-        return {
-            customerId: customerId,
-            customerName: cust ? cust.name : 'نامشخص',
-            totalWeight: items.reduce((sum, item) => sum + item.weight, 0),
-            count: items.length
-        };
-    });
-    
-    // مرتب‌سازی
-    groupedArray.sort((a, b) => {
-        let valA, valB;
-        if (field === 'customerName') {
-            valA = a.customerName;
-            valB = b.customerName;
-        } else if (field === 'weight') {
-            valA = a.totalWeight;
-            valB = b.totalWeight;
+
+        function sortGoldBank(field) {
+            if (!goldSortDirection[field]) goldSortDirection[field] = 'asc';
+            else goldSortDirection[field] = goldSortDirection[field] === 'asc' ? 'desc' : 'asc';
+            
+            const grouped = {};
+            goldBank.forEach(item => {
+                if (!grouped[item.customerId]) {
+                    grouped[item.customerId] = [];
+                }
+                grouped[item.customerId].push(item);
+            });
+            
+            const groupedArray = Object.keys(grouped).map(customerId => {
+                const items = grouped[customerId];
+                const cust = customers.find(c => c.id == customerId);
+                return {
+                    customerId: customerId,
+                    customerName: cust ? cust.name : 'نامشخص',
+                    totalWeight: items.reduce((sum, item) => sum + item.weight, 0),
+                    count: items.length
+                };
+            });
+            
+            groupedArray.sort((a, b) => {
+                let valA, valB;
+                if (field === 'customerName') {
+                    valA = a.customerName;
+                    valB = b.customerName;
+                } else if (field === 'weight') {
+                    valA = a.totalWeight;
+                    valB = b.totalWeight;
+                }
+                if (goldSortDirection[field] === 'asc') return valA > valB ? 1 : -1;
+                else return valA < valB ? 1 : -1;
+            });
+            
+            const tbody = document.getElementById('gold-bank-tbody');
+            tbody.innerHTML = groupedArray.map(item => `
+                <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
+                    <td class="p-4 font-black flex items-center justify-between">
+                        <span>${item.customerName}</span>
+                        <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-xl text-xs font-bold">${item.count} امانت</span>
+                    </td>
+                    <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(item.totalWeight, 3)} گرم</td>
+                    <td class="p-4 font-black text-slate-600">
+                        <button onclick="event.stopPropagation(); showGoldDetails(${item.customerId})" 
+                                class="bg-primary text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                            جزئیات امانات
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         }
-        if (goldSortDirection[field] === 'asc') return valA > valB ? 1 : -1;
-        else return valA < valB ? 1 : -1;
-    });
-    
-    // نمایش نتایج
-    const tbody = document.getElementById('gold-bank-tbody');
-    tbody.innerHTML = groupedArray.map(item => `
-        <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
-            <td class="p-5 font-black flex items-center justify-between">
-                <span>${item.customerName}</span>
-                <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-xl text-xs font-bold">${item.count} امانت</span>
-            </td>
-            <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(item.totalWeight, 3)} گرم</td>
-            <td class="p-5 font-black text-slate-600">
-                <button onclick="event.stopPropagation(); showGoldDetails(${item.customerId})" 
-                        class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition-all">
-                    جزئیات امانات
-                </button>
-            </td>
-        </tr>
-    `).join('');
-}
 
         // ==================== Gold Details Modal ====================
         function showGoldDetails(customerId) {
@@ -1368,11 +1355,11 @@ function renderGoldBankFiltered(filteredIds = null) {
             if (settleButton) {
                 if (isSettled) {
                     settleButton.textContent = "✅ تسویه شده";
-                    settleButton.className = "flex-1 bg-slate-300 text-slate-500 py-4 rounded-2xl font-black text-lg cursor-not-allowed";
+                    settleButton.className = "flex-1 bg-slate-300 text-slate-500 py-3 rounded-xl font-black text-lg cursor-not-allowed";
                     settleButton.disabled = true;
                 } else {
                     settleButton.textContent = "تسویه حساب";
-                    settleButton.className = "flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all";
+                    settleButton.className = "flex-1 bg-primary text-white py-3 rounded-xl font-black text-lg hover:bg-primary/90 transition-all";
                     settleButton.disabled = false;
                 }
             }
@@ -1383,13 +1370,13 @@ function renderGoldBankFiltered(filteredIds = null) {
             const tbody = document.getElementById('gold-detail-tbody');
             tbody.innerHTML = customerGold.map(g => `
                 <tr>
-                    <td class="p-4">${g.date}</td>
-                    <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(g.weight, 3)}</td>
-                    <td class="p-4 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
-                    <td class="p-4 text-slate-500">${g.note || '-'}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="editGoldEntry(${g.id})" class="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-xl text-sm mx-1">ویرایش</button>
-                        <button onclick="deleteGoldEntry(${g.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
+                    <td class="p-3 text-slate-500 text-sm">${g.date}</td>
+                    <td class="p-3 font-black text-slate-700 persian-number">${formatNumber(g.weight, 3)}</td>
+                    <td class="p-3 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
+                    <td class="p-3 text-slate-500">${g.note || '-'}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="editGoldEntry(${g.id})" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded-lg text-xs mx-1">ویرایش</button>
+                        <button onclick="deleteGoldEntry(${g.id})" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg text-xs">حذف</button>
                     </td>
                 </tr>`).join('');
             document.getElementById('gold-detail-modal').classList.replace('hidden', 'flex');
@@ -1476,30 +1463,29 @@ function renderGoldBankFiltered(filteredIds = null) {
             document.getElementById('dash-sales-total').innerText = formatNumber(totalSales, 0);
             document.getElementById('dash-gold-total').innerText = formatNumber(totalGold, 3);
             document.getElementById('dash-cust-total').innerText = formatNumber(customers.length, 0);
-            console.log(`📊 فروش امروز: ${formatWithDots(todaySales)} تومان`);
         }
 
         // ==================== Customers ====================
-       function renderCustomers() {
-    const tbody = document.getElementById('customers-tbody');
-    tbody.innerHTML = customers.map(c => {
-        const customerCredits = credits.filter(cr => cr.customerId == c.id);
-        const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
-        return `
-            <tr class="hover:bg-slate-50 transition-all">
-                <td class="p-6 font-black text-slate-700">${c.name}</td>
-                <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
-                <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
-                <td class="p-6 font-black text-emerald-600 persian-number cursor-pointer hover:bg-emerald-50 p-2 rounded-xl transition-all" 
-                    onclick="showCreditDetails(${c.id})">
-                    ${formatNumber(totalCredit, 0)}
-                </td>
-                <td class="p-6 text-center">
-                    <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
-                </td>
-            </tr>`;
-    }).join('');
-}
+        function renderCustomers() {
+            const tbody = document.getElementById('customers-tbody');
+            tbody.innerHTML = customers.map(c => {
+                const customerCredits = credits.filter(cr => cr.customerId == c.id);
+                const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
+                return `
+                    <tr class="hover:bg-slate-50 transition-all">
+                        <td class="p-4 font-black text-slate-700">${c.name}</td>
+                        <td class="p-4 font-mono text-slate-500">${c.national || ''}</td>
+                        <td class="p-4 font-mono text-slate-500">${c.phone || ''}</td>
+                        <td class="p-4 font-black text-primary persian-number cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
+                            onclick="showCreditDetails(${c.id})">
+                            ${formatNumber(totalCredit, 0)}
+                        </td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
 
         function saveCustomer() {
             const n = document.getElementById('m-name').value.trim();
@@ -1563,50 +1549,44 @@ function renderGoldBankFiltered(filteredIds = null) {
             toast("فایل با موفقیت دانلود شد", "success");
         }
 
+        // ==================== Credit Functions ====================
+        function showCreditDetails(customerId) {
+            const customer = customers.find(c => c.id == customerId);
+            if (!customer) return;
+            document.getElementById('credit-modal-customer-name').innerText = customer.name;
+            const customerCredits = credits.filter(c => c.customerId == customerId);
+            const totalRemaining = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+            document.getElementById('credit-modal-total').innerText = formatNumber(totalRemaining, 0) + " تومان";
+            document.getElementById('credit-modal-count').innerText = formatNumber(customerCredits.length, 0);
+            const tbody = document.getElementById('credit-detail-tbody');
+            tbody.innerHTML = customerCredits.map(c => `
+                <tr>
+                    <td class="p-3 text-slate-500 text-sm">${c.date}</td>
+                    <td class="p-3 font-black text-primary persian-number">${formatNumber(c.amount, 0)}</td>
+                    <td class="p-3 font-black text-slate-700 persian-number">${formatNumber(c.remaining || 0, 0)}</td>
+                    <td class="p-3 text-slate-500">${c.note || '-'}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deleteCredit(${c.id}, ${customerId})" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg text-xs">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+            document.getElementById('credit-detail-modal').classList.replace('hidden', 'flex');
+        }
 
-// ==================== Credit Functions ====================
-function showCreditDetails(customerId) {
-    const customer = customers.find(c => c.id == customerId);
-    if (!customer) return;
-    
-    document.getElementById('credit-modal-customer-name').innerText = customer.name;
-    
-    const customerCredits = credits.filter(c => c.customerId == customerId);
-    const totalRemaining = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
-    
-    document.getElementById('credit-modal-total').innerText = formatNumber(totalRemaining, 0) + " تومان";
-    document.getElementById('credit-modal-count').innerText = formatNumber(customerCredits.length, 0);
-    
-    const tbody = document.getElementById('credit-detail-tbody');
-    tbody.innerHTML = customerCredits.map(c => `
-        <tr>
-            <td class="p-4">${c.date}</td>
-            <td class="p-4 font-black text-emerald-600 persian-number">${formatNumber(c.amount, 0)}</td>
-            <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(c.remaining || 0, 0)}</td>
-            <td class="p-4 text-slate-500">${c.note || '-'}</td>
-            <td class="p-4 text-center">
-                <button onclick="deleteCredit(${c.id}, ${customerId})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
-            </td>
-        </tr>
-    `).join('');
-    
-    document.getElementById('credit-detail-modal').classList.replace('hidden', 'flex');
-}
+        function deleteCredit(creditId, customerId) {
+            if (confirm("آیا از حذف این پاداش اطمینان دارید؟")) {
+                credits = credits.filter(c => c.id !== creditId);
+                saveData();
+                showCreditDetails(customerId);
+                refreshAll();
+                toast("پاداش حذف شد", "success");
+            }
+        }
 
-function deleteCredit(creditId, customerId) {
-    if (confirm("آیا از حذف این پاداش اطمینان دارید؟")) {
-        credits = credits.filter(c => c.id !== creditId);
-        saveData();
-        showCreditDetails(customerId);
-        refreshAll();
-        toast("پاداش حذف شد", "success");
-    }
-}
+        function closeCreditDetailModal() {
+            document.getElementById('credit-detail-modal').classList.replace('flex', 'hidden');
+        }
 
-function closeCreditDetailModal() {
-    document.getElementById('credit-detail-modal').classList.replace('flex', 'hidden');
-}
-        
         // ==================== Print Invoice ====================
         function printInvoice() {
             if (invoices.length === 0) {
@@ -1746,20 +1726,19 @@ function closeCreditDetailModal() {
         }
 
         window.onload = () => {
-    loadData();
-    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-    refreshAll();
-    initInvoiceCalculations();
-    setTimeout(calculateInvoice, 500);
-    loadNightMode(); // ← این خط را اضافه کنید
-    // اضافه کردن رویداد کلیک به دکمه‌های نوار کناری
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            switchTab(tabId);
-        });
-    });
-};
+            loadData();
+            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+            refreshAll();
+            initInvoiceCalculations();
+            setTimeout(calculateInvoice, 500);
+            loadNightMode();
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+        };
     </script>
 
 </body>
