@@ -1430,7 +1430,7 @@ function editInvoice(id) {
     // تغییر دکمه
     const saveBtn = document.querySelector('button[onclick^="saveInvoice"]');
     if (saveBtn) {
-        saveBtn.textContent = "💾 ذخیره تغییرات فاکتور";
+saveBtn.textContent = "ذخیره تغییرات فاکتور";
         saveBtn.onclick = updateInvoice;
     }
 
@@ -1449,6 +1449,7 @@ function updateInvoice() {
     const weight = parseFloat(document.getElementById('weight').value) || 0;
     const price = parsePersianNumber(document.getElementById('gold-price').value);
 
+    // به‌روزرسانی فاکتور
     invoices[index].goldType = goldType;
     invoices[index].weight = weight;
     invoices[index].goldPrice = price;
@@ -1461,7 +1462,7 @@ function updateInvoice() {
     editingInvoiceId = null;
     const saveBtn = document.querySelector('button[onclick^="saveInvoice"]');
     if (saveBtn) {
-        saveBtn.textContent = "تایید و چاپ فاکتور";
+        saveBtn.textContent = "ثبت فاکتور";
         saveBtn.onclick = saveInvoice;
     }
 
@@ -1472,41 +1473,6 @@ function updateInvoice() {
     refreshAll();
     switchTab('invoices-list');
 }
-
-function updateInvoice() {
-    if (!editingInvoiceId) return;
-
-    const invoiceIndex = invoices.findIndex(i => i.id === editingInvoiceId);
-    if (invoiceIndex === -1) return toast("فاکتور یافت نشد", "error");
-
-    const total = parsePersianNumber(document.getElementById('sum-total').innerText);
-    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
-    const weight = parseFloat(document.getElementById('weight').value) || 0;
-    const price = parsePersianNumber(document.getElementById('gold-price').value);
-
-    // به‌روزرسانی فاکتور
-    invoices[invoiceIndex].goldType = goldType;
-    invoices[invoiceIndex].weight = weight;
-    invoices[invoiceIndex].goldPrice = price;
-    invoices[invoiceIndex].total = total;
-    invoices[invoiceIndex].date = new Intl.DateTimeFormat('fa-IR').format(new Date());
-
-    toast("فاکتور با موفقیت ویرایش شد", "success");
-
-    // ریست حالت ویرایش
-    editingInvoiceId = null;
-    document.querySelector('button[onclick="saveInvoice()"]').innerText = "تایید و چاپ فاکتور";
-    document.querySelector('button[onclick="saveInvoice()"]').onclick = saveInvoice;
-
-    clearSelection('inv');
-    document.getElementById('weight').value = "";
-    document.getElementById('gold-price').value = "";
-
-    refreshAll();
-    switchTab('invoices-list');
-}
-
-
 
 
 
