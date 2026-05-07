@@ -731,17 +731,20 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             resultsDiv.classList.toggle('hidden', filtered.length === 0);
         }
 
-        function selectUser(id, name, credit, context) {
-            selectedCustomer[context] = id;
-            document.getElementById(`${context}-search-results`).classList.add('hidden');
-            document.getElementById(`${context}-selected-name`).innerText = name;
-            document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
-            if (context === 'inv') {
-                document.getElementById('credit-panel').classList.remove('hidden');
-                document.getElementById('inv-credit-val').innerText = formatNumber(credit, 0);
-                calculateInvoice();
-            }
-        }
+       function selectUser(id, name, credit, context) {
+    selectedCustomer[context] = id;
+    document.getElementById(`${context}-search-results`).classList.add('hidden');
+    document.getElementById(`${context}-selected-name`).innerText = name;
+    document.getElementById(`${context}-selected-badge`).classList.remove('hidden');
+    if (context === 'inv') {
+        document.getElementById('credit-panel').classList.remove('hidden');
+        // محاسبه مجموع اعتبار از آرایه credits
+        const customerCredits = credits.filter(c => c.customerId == id && c.remaining > 0);
+        const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+        document.getElementById('inv-credit-val').innerText = formatNumber(totalCredit, 0);
+        calculateInvoice();
+    }
+}
 
         function clearSelection(context) {
             selectedCustomer[context] = null;
@@ -784,40 +787,40 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
 
         // ==================== Invoice Calculations ====================
         function calculateInvoice() {
-            const price = parsePersianNumber(document.getElementById('gold-price').value);
-            const weight = parseFloat(document.getElementById('weight').value) || 0;
-            const wType = document.getElementById('wage-type').value;
-            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
-            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
-            const useCredit = document.getElementById('use-credit').checked;
+    const price = parsePersianNumber(document.getElementById('gold-price').value);
+    const weight = parseFloat(document.getElementById('weight').value) || 0;
+    const wType = document.getElementById('wage-type').value;
+    const wVal = parsePersianNumber(document.getElementById('wage-value').value);
+    const profitPer = parseFloat(document.getElementById('profit').value) || 0;
+    const taxPer = parseFloat(document.getElementById('tax').value) || 0;
+    const useCredit = document.getElementById('use-credit').checked;
 
-            const raw = price * weight;
-            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-            const profitAmount = (raw + wage) * (profitPer / 100);
-            const tax = (raw + wage + profitAmount) * (taxPer / 100);
-            const totalBeforeCredit = raw + wage + profitAmount + tax;
+    const raw = price * weight;
+    let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+    const profitAmount = (raw + wage) * (profitPer / 100);
+    const tax = (raw + wage + profitAmount) * (taxPer / 100);
+    const totalBeforeCredit = raw + wage + profitAmount + tax;
 
-            let deducted = 0;
-            if (useCredit && selectedCustomer.inv) {
-                const customer = customers.find(c => c.id == selectedCustomer.inv);
-                if (customer) {
-                    deducted = Math.min(totalBeforeCredit, customer.credit || 0);
-                }
-            }
+    let deducted = 0;
+    if (useCredit && selectedCustomer.inv) {
+        // محاسبه مجموع اعتبار از آرایه credits
+        const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+        const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+        deducted = Math.min(totalBeforeCredit, totalCredit);
+    }
 
-            const finalTotal = totalBeforeCredit - deducted;
+    const finalTotal = totalBeforeCredit - deducted;
 
-            document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
-            document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
-            document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
-            document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
-            document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
-            document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
-        }
+    document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
+    document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
+    document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
+    document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
+    document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
+    document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
+}
 
         // ==================== Save Invoice ====================
-        function saveInvoice() {
+     function saveInvoice() {
     if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
     const weightInput = document.getElementById('weight').value;
     if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
