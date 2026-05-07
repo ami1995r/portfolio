@@ -131,32 +131,32 @@
                 <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
-            <nav class="flex-1 p-2 space-y-1">
-<button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    <span class="font-bold">پیشخوان</span>
-                </button>
-                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="font-bold">صدور فاکتور</span>
-                </button>
-                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
-                    <span class="font-bold">فاکتورهای صادر شده</span>
-                </button>
-                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                    <span class="font-bold">بانک طلا</span>
-                </button>
-                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <span class="font-bold">مشتریان</span>
-                </button>
-                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="font-bold">مرکز گزارشات</span>
-                </button>
-            </nav>
+          <nav class="flex-1 p-2 space-y-1">
+    <button data-tab="dashboard" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="font-bold">پیشخوان</span>
+    </button>
+    <button data-tab="invoice" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <span class="font-bold">صدور فاکتور</span>
+    </button>
+    <button data-tab="invoices-list" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+        <span class="font-bold">فاکتورهای صادر شده</span>
+    </button>
+    <button data-tab="gold-bank" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+        <span class="font-bold">بانک طلا</span>
+    </button>
+    <button data-tab="customers" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <span class="font-bold">مشتریان</span>
+    </button>
+    <button data-tab="reports" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        <span class="font-bold">مرکز گزارشات</span>
+    </button>
+</nav>
         </aside>
 
         <!-- Main Content -->
@@ -742,7 +742,7 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             document.getElementById('sidebar').classList.toggle('translate-x-full');
         }
 
-       function switchTab(id) {
+    function switchTab(id) {
     // مخفی کردن همه تب‌ها
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     const targetTab = document.getElementById(id);
@@ -756,11 +756,7 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
     // بروزرسانی دکمه‌های نوار کناری
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
-        // بررسی دقیق‌تر: اگر onclick شامل id باشد و id دقیقاً برابر با تب باشد
-        const onclickAttr = btn.getAttribute('onclick') || '';
-        // استخراج id از onclick
-        const match = onclickAttr.match(/switchTab\('([^']+)'\)/);
-        if (match && match[1] === id) {
+        if (btn.dataset.tab === id) {
             btn.classList.add('active');
         }
     });
@@ -1550,12 +1546,21 @@ function closeCreditDetailModal() {
         }
 
         window.onload = () => {
-            loadData();
-            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-            refreshAll();
-            initInvoiceCalculations();
-            setTimeout(calculateInvoice, 500);
-        };
+    loadData();
+    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+    refreshAll();
+    initInvoiceCalculations();
+    setTimeout(calculateInvoice, 500);
+    
+    // اضافه کردن رویداد کلیک به دکمه‌های نوار کناری
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            switchTab(tabId);
+        });
+    });
+};
+        
     </script>
 
 </body>
