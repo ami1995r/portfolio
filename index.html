@@ -451,18 +451,9 @@
                                     </div>
                                 </div>
                                 <div class="space-y-3">
-    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-    <select id="gold-type" onchange="toggleGoldType()" class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
-        <option value="طلای آب‌شده">طلای آب‌شده</option>
-        <option value="سکه">سکه</option>
-        <option value="سکه طرح جدید">سکه طرح جدید</option>
-        <option value="سکه طرح قدیم">سکه طرح قدیم</option>
-        <option value="نیم سکه">نیم سکه</option>
-        <option value="ربع سکه">ربع سکه</option>
-        <option value="سکه پارسیان">سکه سکه پارسیان"</option>
-        <option value="سکه گرمی">سکه گرمی</option>
-    </select>
-</div>
+                                    <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-primary outline-none">
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -505,26 +496,6 @@
                                 </div>
                             </div>
 
-<!-- فیلدهای سکه (پنهان در ابتدا) -->
-<div id="coin-fields" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="space-y-2">
-        <label class="text-xs font-black text-slate-500">قیمت سکه (تومان)</label>
-        <input type="text" id="coin-price" oninput="formatNumberInput(this); calculateInvoice()" placeholder="قیمت سکه" class="input-number w-full bg-slate-50 border-0 p-4 rounded-xl font-black text-left text-lg focus:ring-2 ring-primary outline-none persian-number">
-    </div>
-    <div class="space-y-2">
-        <label class="text-xs font-black text-slate-500">سود گالری (%)</label>
-        <input type="number" id="coin-profit" value="5" step="0.01" min="0" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
-    </div>
-    <div class="space-y-2">
-        <label class="text-xs font-black text-slate-500">تعداد سکه</label>
-        <input type="number" id="coin-weight" value="1" step="1" min="1" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-primary">
-    </div>
-</div>
-
-
-
-
-                            
                             <div id="credit-panel" class="hidden bg-primary/5 p-4 rounded-xl border border-primary/20 flex items-center justify-between mb-6">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
@@ -1042,157 +1013,103 @@
         }
 
         // ==================== Invoice Calculations ====================
-       function calculateInvoice() {
-    const goldType = document.getElementById('gold-type').value;
-    const isCoin = goldType.includes('سکه');
-    
-    let price, weight, wageVal, profitPer, taxPer, useCredit;
-    
-    if (isCoin) {
-        // سکه
-        price = parsePersianNumber(document.getElementById('coin-price').value);
-        weight = parseFloat(document.getElementById('weight').value) || 0;
-        wageVal = 0; // سکه اجرت ندارد
-        profitPer = parseFloat(document.getElementById('coin-profit').value) || 0;
-        taxPer = parseFloat(document.getElementById('tax').value) || 0;
-        useCredit = document.getElementById('use-credit').checked;
-        
-        // برای سکه، قیمت خام = قیمت سکه * تعداد
-        const raw = price * weight;
-        // سود گالری بر اساس قیمت سکه محاسبه می‌شود
-        const wage = 0;
-        const profitAmount = raw * (profitPer / 100);
-        const tax = (raw + profitAmount) * (taxPer / 100);
-        const totalBeforeCredit = raw + profitAmount + tax;
-        
-        let deducted = 0;
-        if (useCredit && selectedCustomer.inv) {
-            const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
-            const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
-            deducted = Math.min(totalBeforeCredit, totalCredit);
+        function calculateInvoice() {
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            const wType = document.getElementById('wage-type').value;
+            const wVal = parsePersianNumber(document.getElementById('wage-value').value);
+            const profitPer = parseFloat(document.getElementById('profit').value) || 0;
+            const taxPer = parseFloat(document.getElementById('tax').value) || 0;
+            const useCredit = document.getElementById('use-credit').checked;
+
+            const raw = price * weight;
+            let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
+            const profitAmount = (raw + wage) * (profitPer / 100);
+            const tax = (raw + wage + profitAmount) * (taxPer / 100);
+            const totalBeforeCredit = raw + wage + profitAmount + tax;
+
+            let deducted = 0;
+            if (useCredit && selectedCustomer.inv) {
+                const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+                const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+                deducted = Math.min(totalBeforeCredit, totalCredit);
+            }
+
+            const finalTotal = totalBeforeCredit - deducted;
+
+            document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
+            document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
+            document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
+            document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
+            document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
+            document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
         }
-        
-        const finalTotal = totalBeforeCredit - deducted;
-        
-        document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
-        document.getElementById('sum-wage').innerText = "۰";
-        document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
-        document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
-        document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
-        document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
-        
-    } else {
-        // طلای آب‌شده
-        price = parsePersianNumber(document.getElementById('gold-price').value);
-        weight = parseFloat(document.getElementById('weight').value) || 0;
-        const wType = document.getElementById('wage-type').value;
-        const wVal = parsePersianNumber(document.getElementById('wage-value').value);
-        profitPer = parseFloat(document.getElementById('profit').value) || 0;
-        taxPer = parseFloat(document.getElementById('tax').value) || 0;
-        useCredit = document.getElementById('use-credit').checked;
-        
-        const raw = price * weight;
-        let wage = (wType === 'percent') ? (raw * wVal / 100) : wVal;
-        const profitAmount = (raw + wage) * (profitPer / 100);
-        const tax = (raw + wage + profitAmount) * (taxPer / 100);
-        const totalBeforeCredit = raw + wage + profitAmount + tax;
-        
-        let deducted = 0;
-        if (useCredit && selectedCustomer.inv) {
-            const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
-            const totalCredit = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
-            deducted = Math.min(totalBeforeCredit, totalCredit);
+
+        // ==================== Save Invoice ====================
+        function saveInvoice() {
+            if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
+            const weightInput = document.getElementById('weight').value;
+            if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
+            const price = parsePersianNumber(document.getElementById('gold-price').value);
+            if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
+
+            const weight = parseFloat(weightInput);
+            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+            const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+
+            const useCredit = document.getElementById('use-credit').checked;
+            let deducted = 0;
+            if (useCredit) {
+                const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+                let remainingDeduction = total;
+                for (let i = 0; i < customerCredits.length && remainingDeduction > 0; i++) {
+                    const credit = customerCredits[i];
+                    const amount = Math.min(remainingDeduction, credit.remaining);
+                    credit.remaining -= amount;
+                    remainingDeduction -= amount;
+                    deducted += amount;
+                }
+            }
+
+            const goldTypeLower = goldType.toLowerCase();
+            const isGoldPurchase = !goldTypeLower.includes('سکه');
+            let reward = 0;
+            if (isGoldPurchase && total > 0) {
+                reward = Math.round(total * 0.01);
+                credits.push({
+                    id: Date.now(),
+                    customerId: selectedCustomer.inv,
+                    customerName: customers[cIndex].name,
+                    amount: reward,
+                    remaining: reward,
+                    date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                    invoiceId: Date.now(),
+                    note: "پاداش خرید طلا"
+                });
+            }
+
+            invoices.push({
+                id: Date.now(),
+                customerName: customers[cIndex].name,
+                customerId: selectedCustomer.inv,
+                goldType: goldType,
+                weight: weight,
+                goldPrice: price,
+                total: total,
+                deductedCredit: deducted,
+                rewardAdded: reward,
+                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+                fullDate: new Date().toISOString()
+            });
+
+            toast("فاکتور با موفقیت ثبت شد", "success");
+            clearSelection('inv');
+            document.getElementById('weight').value = "";
+            document.getElementById('gold-price').value = "";
+            refreshAll();
         }
-        
-        const finalTotal = totalBeforeCredit - deducted;
-        
-        document.getElementById('sum-raw').innerText = formatNumber(raw, 0);
-        document.getElementById('sum-wage').innerText = formatNumber(wage, 0);
-        document.getElementById('sum-profit').innerText = formatNumber(profitAmount, 0);
-        document.getElementById('sum-tax').innerText = formatNumber(tax, 0);
-        document.getElementById('sum-credit').innerText = deducted ? "-" + formatNumber(deducted, 0) : "۰";
-        document.getElementById('sum-total').innerText = formatNumber(finalTotal, 0);
-    }
-}
-
-       function saveInvoice() {
-    if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-    const weightInput = document.getElementById('weight').value;
-    if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
-    
-    const goldType = document.getElementById('gold-type').value;
-    const isCoin = goldType.includes('سکه');
-    
-    let price, weight, total;
-    
-    if (isCoin) {
-        price = parsePersianNumber(document.getElementById('coin-price').value);
-        weight = parseFloat(weightInput);
-        total = parsePersianNumber(document.getElementById('sum-total').innerText);
-    } else {
-        price = parsePersianNumber(document.getElementById('gold-price').value);
-        weight = parseFloat(weightInput);
-        total = parsePersianNumber(document.getElementById('sum-total').innerText);
-    }
-    
-    if (price <= 0) return toast("قیمت را وارد کنید", "error");
-    
-    const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-    if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
-
-    const useCredit = document.getElementById('use-credit').checked;
-    let deducted = 0;
-    if (useCredit) {
-        const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
-        let remainingDeduction = total;
-        for (let i = 0; i < customerCredits.length && remainingDeduction > 0; i++) {
-            const credit = customerCredits[i];
-            const amount = Math.min(remainingDeduction, credit.remaining);
-            credit.remaining -= amount;
-            remainingDeduction -= amount;
-            deducted += amount;
-        }
-    }
-
-    const goldTypeLower = goldType.toLowerCase();
-    const isGoldPurchase = !goldTypeLower.includes('سکه');
-    let reward = 0;
-    if (isGoldPurchase && total > 0) {
-        reward = Math.round(total * 0.01);
-        credits.push({
-            id: Date.now(),
-            customerId: selectedCustomer.inv,
-            customerName: customers[cIndex].name,
-            amount: reward,
-            remaining: reward,
-            date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-            invoiceId: Date.now(),
-            note: "پاداش خرید طلا"
-        });
-    }
-
-    invoices.push({
-        id: Date.now(),
-        customerName: customers[cIndex].name,
-        customerId: selectedCustomer.inv,
-        goldType: goldType,
-        weight: weight,
-        goldPrice: price,
-        total: total,
-        deductedCredit: deducted,
-        rewardAdded: reward,
-        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-        fullDate: new Date().toISOString()
-    });
-
-    toast("فاکتور با موفقیت ثبت شد", "success");
-    clearSelection('inv');
-    document.getElementById('weight').value = "";
-    document.getElementById('gold-price').value = "";
-    document.getElementById('coin-price').value = "";
-    document.getElementById('coin-profit').value = "5";
-    refreshAll();
-}
 
         // ==================== Render Invoices ====================
         function renderInvoices(filtered = null) {
@@ -1668,49 +1585,6 @@
             document.getElementById('credit-detail-modal').classList.replace('flex', 'hidden');
         }
 
-// ==================== Toggle Gold Type ====================
-function toggleGoldType() {
-    const goldType = document.getElementById('gold-type').value;
-    const coinFields = document.getElementById('coin-fields');
-    const goldPriceField = document.getElementById('gold-price');
-    const weightField = document.getElementById('weight');
-    
-    if (goldType === 'سکه' || goldType.includes('سکه')) {
-        // نمایش فیلدهای سکه
-        coinFields.classList.remove('hidden');
-        // تغییر لیبل‌ها
-        document.querySelector('#gold-price').closest('.space-y-2').querySelector('label').innerText = 'قیمت سکه (تومان)';
-        document.querySelector('#weight').closest('.space-y-2').querySelector('label').innerText = 'تعداد سکه';
-        // تغییر placeholder
-        goldPriceField.placeholder = 'قیمت سکه';
-        weightField.placeholder = 'تعداد سکه';
-    } else {
-        // مخفی کردن فیلدهای سکه
-        coinFields.classList.add('hidden');
-        // تغییر لیبل‌ها
-        document.querySelector('#gold-price').closest('.space-y-2').querySelector('label').innerText = 'قیمت طلا (تومان / گرم)';
-        document.querySelector('#weight').closest('.space-y-2').querySelector('label').innerText = 'وزن طلا (گرم)';
-        // تغییر placeholder
-        goldPriceField.placeholder = 'قیمت طلا';
-        weightField.placeholder = 'وزن طلا';
-    }
-    
-    // ریست مقادیر
-    goldPriceField.value = "";
-    weightField.value = "";
-    document.getElementById('coin-price').value = "";
-    document.getElementById('coin-profit').value = "5";
-    
-    calculateInvoice();
-}
-
-
-
-
-
-
-
-        
         // ==================== Print Invoice ====================
         function printInvoice() {
             if (invoices.length === 0) {
@@ -1863,8 +1737,6 @@ function toggleGoldType() {
                 });
             });
         };
-        toggleGoldType();
-
     </script>
 
 </body>
