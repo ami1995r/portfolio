@@ -58,11 +58,11 @@
             background: #f1f5f9;
             color: #0f172a;
         }
-        .nav-btn.active {
-            background: #f1f5f9;
-            color: #0f172a;
-            border-bottom: 2px solid #0f172a;
-        }
+       .nav-btn.active {
+    background: #e2e8f0;
+    color: #0f172a;
+    border-bottom: 2px solid #0f172a;
+}
         .nav-btn.active span {
             font-weight: 800;
         }
@@ -158,8 +158,8 @@
 
     <div class="flex min-h-screen pt-16 lg:pt-0">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
-            <div class="p-6 border-b">
+        <aside id="sidebar" class="w-72 bg-slate-50 border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
+            <div class="p-6 border-b border-slate-200">
                 <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
@@ -204,7 +204,7 @@
                 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <!-- کارت اول: فروش -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
+    <div class="dashboard-card bg-slate-50 p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
         <div class="flex items-center gap-3">
             <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -443,7 +443,7 @@
 
             <!-- فاکتورهای صادر شده -->
             <div id="invoices-list" class="tab-content">
-                <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+                <div class="bg-slate-50 rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
                         <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
                         <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-slate-500 outline-none w-72">
