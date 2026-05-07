@@ -118,11 +118,11 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
             <div class="p-8 border-b">
-                <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-emerald-600">قصه</span></h1>
+                <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-slate-800">قصه</span></h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
             <nav>
-                <button onclick="switchTab('dashboard')" class="nav-btn-minimal active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
+                <button onclick="switchTab('dashboard')" class="nav-btn-minimal active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-slate-800">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="font-bold">پیشخوان</span>
                 </button>
@@ -163,7 +163,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- کارت اول: فروش -->
-                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-emerald-500 custom-shadow">
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
                         <div class="icon-wrapper w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
@@ -365,7 +365,7 @@
                                 </div>
                                 
                                 <div class="pt-6 border-t border-dashed border-slate-200">
-                                    <div class="flex justify-between items-center p-4 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl text-white shadow-lg">
+                                    <div class="flex justify-between items-center p-4 bg-slate-800 rounded-2xl text-white shadow-lg">
                                         <span class="font-bold text-lg">مبلغ نهایی:</span>
                                         <span id="sum-total" class="text-3xl font-black number persian-number">۰</span>
                                     </div>
@@ -452,13 +452,12 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-right">
                                 <thead class="bg-slate-50 text-slate-500">
-                                    <tr>
-                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
-                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
-                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('count')">تعداد امانات ▾</th>
-                                        <th class="p-5 font-black text-center">عملیات</th>
-                                    </tr>
-                                </thead>
+    <tr>
+        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
+        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
+        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('count')">تعداد امانات ▾</th>
+    </tr>
+</thead>
                                 <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
@@ -544,9 +543,9 @@
             </table>
 
             <div class="mt-8 flex gap-4">
-                <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-emerald-700 transition-all">
-                    تسویه کامل حساب
-                </button>
+               <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all">
+    تسویه حساب
+    </button>
                 <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
             </div>
         </div>
@@ -991,21 +990,18 @@
             const tbody = document.getElementById('gold-bank-tbody');
             const keys = filteredIds || Object.keys(grouped);
             tbody.innerHTML = keys.map(cid => {
-                const items = grouped[cid];
-                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
-                const cust = customers.find(c => c.id == cid);
-                const count = items.length;
-                return `
-                    <tr class="hover:bg-slate-50 transition-all">
-                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                        <td class="p-5 font-black text-amber-600 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
-                        <td class="p-5 font-black text-slate-600">${count} عدد</td>
-                        <td class="p-5 text-center">
-                            <button onclick="showGoldDetails(${cid})" class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">جزئیات امانات</button>
-                        </td>
-                    </tr>`;
-            }).join('');
-        }
+    const items = grouped[cid];
+    const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+    const cust = customers.find(c => c.id == cid);
+    const count = items.length;
+    return `
+        <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${cid})">
+            <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+            <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+            <td class="p-5 font-black text-slate-600">${count} عدد</td>
+        </tr>
+    `;
+}).join('');
 
         function sortGoldBank(field) {
             if (!goldSortDirection[field]) goldSortDirection[field] = 'asc';
@@ -1042,11 +1038,20 @@
             const customerGold = goldBank.filter(g => g.customerId == customerId);
             const customer = customers.find(c => c.id == customerId);
             if (!customer) return;
-            const isSettled = customer.credit === 0 || customer.credit === undefined || customer.credit === null;
-            const settledLabel = isSettled ? 
-                ' <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-lg text-xs font-bold">✅ تسویه شده</span>' : 
-                ' <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-lg text-xs font-bold">⏳ تسویه نشده</span>';
-            document.getElementById('modal-customer-name').innerHTML = customer.name + settledLabel;
+           document.getElementById('modal-customer-name').innerText = customer.name;
+const isSettled = customer.credit === 0 || customer.credit === undefined || customer.credit === null;
+const settleButton = document.getElementById('settle-btn');
+if (settleButton) {
+    if (isSettled) {
+        settleButton.textContent = "✅ تسویه شده";
+        settleButton.className = "flex-1 bg-slate-300 text-slate-500 py-4 rounded-2xl font-black text-lg cursor-not-allowed";
+        settleButton.disabled = true;
+    } else {
+        settleButton.textContent = "تسویه حساب";
+        settleButton.className = "flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all";
+        settleButton.disabled = false;
+    }
+}
             const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
             const totalValue = customerGold.reduce((sum, g) => sum + (g.weight * (g.goldPrice || 0)), 0);
             document.getElementById('modal-total-weight').innerText = formatNumber(totalWeight, 3) + " گرم";
