@@ -542,6 +542,49 @@
     </div>
 
     <!-- مودال افزودن مشتری -->
+    <!-- مودال جزئیات اعتبار مشتری -->
+<div id="credit-detail-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-3xl rounded-[2.5rem] p-8 shadow-2xl max-h-[92vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-black" id="credit-modal-customer-name"></h3>
+            <div class="flex gap-3">
+                <button onclick="closeCreditDetailModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-8 bg-slate-50 p-6 rounded-3xl">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-xs text-slate-500 font-bold">مجموع اعتبار قابل استفاده</p>
+                    <p id="credit-modal-total" class="text-3xl font-black text-slate-800 persian-number">۰ تومان</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-bold">تعداد پاداش‌ها</p>
+                    <p id="credit-modal-count" class="text-3xl font-black text-slate-800 persian-number">۰</p>
+                </div>
+            </div>
+        </div>
+
+        <table class="w-full">
+            <thead>
+                <tr class="border-b">
+                    <th class="p-4 text-right font-black">تاریخ</th>
+                    <th class="p-4 text-right font-black">مبلغ (تومان)</th>
+                    <th class="p-4 text-right font-black">موجودی باقی‌مانده</th>
+                    <th class="p-4 text-right font-black">یادداشت</th>
+                    <th class="p-4 text-center font-black">عملیات</th>
+                </tr>
+            </thead>
+            <tbody id="credit-detail-tbody" class="divide-y"></tbody>
+        </table>
+
+        <div class="mt-8 flex gap-4">
+            <button onclick="closeCreditDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
+        </div>
+    </div>
+</div>
     <div id="add-cust-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl">
             <h3 class="text-2xl font-black text-slate-800 mb-8">افزودن مشتری جدید</h3>
@@ -559,6 +602,7 @@
 
     <script>
         // ==================== State Management ====================
+        let credits = [];
         let customers = [];
         let invoices = [];
         let goldBank = [];
@@ -576,6 +620,7 @@
                 customers = savedCustomers ? JSON.parse(savedCustomers) : [];
                 invoices = savedInvoices ? JSON.parse(savedInvoices) : [];
                 goldBank = savedGold ? JSON.parse(savedGold) : [];
+                
             } catch (e) {
                 console.error("خطا در لود داده‌ها:", e);
                 customers = [];
@@ -583,12 +628,14 @@
                 goldBank = [];
             }
         }
-
+const savedCredits = localStorage.getItem('ghesseh_v64_credits');
+credits = savedCredits ? JSON.parse(savedCredits) : [];
         function saveData() {
             try {
                 localStorage.setItem('ghesseh_v64_customers', JSON.stringify(customers));
                 localStorage.setItem('ghesseh_v64_invoices', JSON.stringify(invoices));
                 localStorage.setItem('ghesseh_v64_gold', JSON.stringify(goldBank));
+                localStorage.setItem('ghesseh_v64_credits', JSON.stringify(credits));
             } catch (e) {
                 console.error("خطا در ذخیره داده‌ها:", e);
                 toast("خطا در ذخیره اطلاعات!", "error");
@@ -771,57 +818,70 @@
 
         // ==================== Save Invoice ====================
         function saveInvoice() {
-            if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
-            const weightInput = document.getElementById('weight').value;
-            if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
-            const price = parsePersianNumber(document.getElementById('gold-price').value);
-            if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
+    if (!selectedCustomer.inv) return toast("ابتدا مشتری را انتخاب کنید", "error");
+    const weightInput = document.getElementById('weight').value;
+    if (!weightInput || parseFloat(weightInput) <= 0) return toast("وزن طلا را به صورت صحیح وارد کنید", "error");
+    const price = parsePersianNumber(document.getElementById('gold-price').value);
+    if (price <= 0) return toast("قیمت طلا را وارد کنید", "error");
 
-            const weight = parseFloat(weightInput);
-            const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
-            const total = parsePersianNumber(document.getElementById('sum-total').innerText);
-            const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
-            if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
+    const weight = parseFloat(weightInput);
+    const goldType = document.getElementById('gold-type').value.trim() || "طلای آب‌شده";
+    const total = parsePersianNumber(document.getElementById('sum-total').innerText);
+    const cIndex = customers.findIndex(c => c.id == selectedCustomer.inv);
+    if (cIndex === -1) return toast("خطا در یافتن مشتری", "error");
 
-            const useCredit = document.getElementById('use-credit').checked;
-            let deducted = 0;
-            if (useCredit) {
-                const raw = parsePersianNumber(document.getElementById('sum-raw').innerText);
-                const wage = parsePersianNumber(document.getElementById('sum-wage').innerText);
-                const profitAmount = parsePersianNumber(document.getElementById('sum-profit').innerText);
-                const tax = parsePersianNumber(document.getElementById('sum-tax').innerText);
-                const totalBeforeCredit = raw + wage + profitAmount + tax;
-                deducted = Math.min(totalBeforeCredit, customers[cIndex].credit || 0);
-                customers[cIndex].credit = Math.max(0, (customers[cIndex].credit || 0) - deducted);
-            }
-
-            const goldTypeLower = goldType.toLowerCase();
-            const isGoldPurchase = !goldTypeLower.includes('سکه');
-            if (isGoldPurchase && total > 0) {
-                const reward = Math.round(total * 0.01);
-                customers[cIndex].credit = (customers[cIndex].credit || 0) + reward;
-            }
-
-            invoices.push({
-                id: Date.now(),
-                customerName: customers[cIndex].name,
-                customerId: selectedCustomer.inv,
-                goldType: goldType,
-                weight: weight,
-                goldPrice: price,
-                total: total,
-                deductedCredit: deducted,
-                rewardAdded: isGoldPurchase ? Math.round(total * 0.01) : 0,
-                date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
-                fullDate: new Date().toISOString()
-            });
-
-            toast("فاکتور با موفقیت ثبت شد", "success");
-            clearSelection('inv');
-            document.getElementById('weight').value = "";
-            document.getElementById('gold-price').value = "";
-            refreshAll();
+    const useCredit = document.getElementById('use-credit').checked;
+    let deducted = 0;
+    if (useCredit) {
+        // کسر از اعتبارات موجود (به ترتیب FIFO)
+        const customerCredits = credits.filter(c => c.customerId == selectedCustomer.inv && c.remaining > 0);
+        let remainingDeduction = total;
+        for (let i = 0; i < customerCredits.length && remainingDeduction > 0; i++) {
+            const credit = customerCredits[i];
+            const amount = Math.min(remainingDeduction, credit.remaining);
+            credit.remaining -= amount;
+            remainingDeduction -= amount;
+            deducted += amount;
         }
+    }
+
+    const goldTypeLower = goldType.toLowerCase();
+    const isGoldPurchase = !goldTypeLower.includes('سکه');
+    let reward = 0;
+    if (isGoldPurchase && total > 0) {
+        reward = Math.round(total * 0.01); // ۱٪ پاداش
+        credits.push({
+            id: Date.now(),
+            customerId: selectedCustomer.inv,
+            customerName: customers[cIndex].name,
+            amount: reward,
+            remaining: reward,
+            date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+            invoiceId: Date.now(),
+            note: "پاداش خرید طلا"
+        });
+    }
+
+    invoices.push({
+        id: Date.now(),
+        customerName: customers[cIndex].name,
+        customerId: selectedCustomer.inv,
+        goldType: goldType,
+        weight: weight,
+        goldPrice: price,
+        total: total,
+        deductedCredit: deducted,
+        rewardAdded: reward,
+        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+        fullDate: new Date().toISOString()
+    });
+
+    toast("فاکتور با موفقیت ثبت شد", "success");
+    clearSelection('inv');
+    document.getElementById('weight').value = "";
+    document.getElementById('gold-price').value = "";
+    refreshAll();
+}
 
         // ==================== Render Invoices ====================
         function renderInvoices(filtered = null) {
@@ -1168,19 +1228,26 @@ function renderGoldBankFiltered(filteredIds = null) {
         }
 
         // ==================== Customers ====================
-        function renderCustomers() {
-            const tbody = document.getElementById('customers-tbody');
-            tbody.innerHTML = customers.map(c => `
-                <tr class="hover:bg-slate-50 transition-all">
-                    <td class="p-6 font-black text-slate-700">${c.name}</td>
-                    <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
-                    <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
-                    <td class="p-6 font-black text-slate-700 persian-number">${formatNumber(c.credit || 0, 0)}</td>
-                    <td class="p-6 text-center">
-                        <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
-                    </td>
-                </tr>`).join('');
-        }
+       function renderCustomers() {
+    const tbody = document.getElementById('customers-tbody');
+    tbody.innerHTML = customers.map(c => {
+        const customerCredits = credits.filter(cr => cr.customerId == c.id);
+        const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
+        return `
+            <tr class="hover:bg-slate-50 transition-all">
+                <td class="p-6 font-black text-slate-700">${c.name}</td>
+                <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
+                <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
+                <td class="p-6 font-black text-emerald-600 persian-number cursor-pointer hover:bg-emerald-50 p-2 rounded-xl transition-all" 
+                    onclick="showCreditDetails(${c.id})">
+                    ${formatNumber(totalCredit, 0)}
+                </td>
+                <td class="p-6 text-center">
+                    <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
+                </td>
+            </tr>`;
+    }).join('');
+}
 
         function saveCustomer() {
             const n = document.getElementById('m-name').value.trim();
@@ -1244,6 +1311,50 @@ function renderGoldBankFiltered(filteredIds = null) {
             toast("فایل با موفقیت دانلود شد", "success");
         }
 
+
+// ==================== Credit Functions ====================
+function showCreditDetails(customerId) {
+    const customer = customers.find(c => c.id == customerId);
+    if (!customer) return;
+    
+    document.getElementById('credit-modal-customer-name').innerText = customer.name;
+    
+    const customerCredits = credits.filter(c => c.customerId == customerId);
+    const totalRemaining = customerCredits.reduce((sum, c) => sum + (c.remaining || 0), 0);
+    
+    document.getElementById('credit-modal-total').innerText = formatNumber(totalRemaining, 0) + " تومان";
+    document.getElementById('credit-modal-count').innerText = formatNumber(customerCredits.length, 0);
+    
+    const tbody = document.getElementById('credit-detail-tbody');
+    tbody.innerHTML = customerCredits.map(c => `
+        <tr>
+            <td class="p-4">${c.date}</td>
+            <td class="p-4 font-black text-emerald-600 persian-number">${formatNumber(c.amount, 0)}</td>
+            <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(c.remaining || 0, 0)}</td>
+            <td class="p-4 text-slate-500">${c.note || '-'}</td>
+            <td class="p-4 text-center">
+                <button onclick="deleteCredit(${c.id}, ${customerId})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
+            </td>
+        </tr>
+    `).join('');
+    
+    document.getElementById('credit-detail-modal').classList.replace('hidden', 'flex');
+}
+
+function deleteCredit(creditId, customerId) {
+    if (confirm("آیا از حذف این پاداش اطمینان دارید؟")) {
+        credits = credits.filter(c => c.id !== creditId);
+        saveData();
+        showCreditDetails(customerId);
+        refreshAll();
+        toast("پاداش حذف شد", "success");
+    }
+}
+
+function closeCreditDetailModal() {
+    document.getElementById('credit-detail-modal').classList.replace('flex', 'hidden');
+}
+        
         // ==================== Print Invoice ====================
         function printInvoice() {
             if (invoices.length === 0) {
