@@ -442,13 +442,12 @@
                         <div class="overflow-x-auto">
                            <table class="w-full text-right">
     <thead class="bg-slate-50 text-slate-500">
-        <tr>
-            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
-            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">وزن (گرم) ▾</th>
-            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('date')">تاریخ ▾</th>
-            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('goldPrice')">قیمت روز ▾</th>
-        </tr>
-    </thead>
+    <tr>
+        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
+        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
+        <th class="p-5 font-black">عملیات</th>
+    </tr>
+</thead>
     <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
 </table>
                         </div>
@@ -934,22 +933,40 @@
             refreshAll();
         }
 
-       function renderGoldBank() {
+     function renderGoldBank() {
     const tbody = document.getElementById('gold-bank-tbody');
-    // مرتب‌سازی از جدیدترین به قدیمی‌ترین
-    const sortedGold = [...goldBank].reverse();
-    tbody.innerHTML = sortedGold.map(item => {
-        const cust = customers.find(c => c.id == item.customerId);
+    
+    // گروه‌بندی امانات بر اساس مشتری
+    const grouped = {};
+    goldBank.forEach(item => {
+        if (!grouped[item.customerId]) {
+            grouped[item.customerId] = [];
+        }
+        grouped[item.customerId].push(item);
+    });
+    
+    // نمایش هر مشتری به صورت یک ردیف
+    tbody.innerHTML = Object.keys(grouped).map(customerId => {
+        const items = grouped[customerId];
+        const cust = customers.find(c => c.id == customerId);
+        const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+        const count = items.length;
         return `
-            <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
-                <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(item.weight, 3)} گرم</td>
-                <td class="p-5 font-black text-slate-600">${item.date}</td>
-                <td class="p-5 font-black text-slate-600">${item.goldPrice ? formatNumber(item.goldPrice, 0) : '—'}</td>
+            <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${customerId})">
+                <td class="p-5 font-black flex items-center justify-between">
+                    <span>${cust ? cust.name : 'نامشخص'}</span>
+                    <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-xl text-xs font-bold">${count} امانت</span>
+                </td>
+                <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                <td class="p-5 font-black text-slate-600">
+                    <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
+                            class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition-all">
+                        جزئیات امانات
+                    </button>
+                </td>
             </tr>`;
     }).join('');
 }
-
 function renderGoldBankFiltered(filteredIds = null) {
     const tbody = document.getElementById('gold-bank-tbody');
     let filteredGold = goldBank;
@@ -970,42 +987,62 @@ function renderGoldBankFiltered(filteredIds = null) {
     }).join('');
  }
  
-      function sortGoldBank(field) {
+  function sortGoldBank(field) {
     if (!goldSortDirection[field]) goldSortDirection[field] = 'asc';
     else goldSortDirection[field] = goldSortDirection[field] === 'asc' ? 'desc' : 'asc';
     
-    const sorted = [...goldBank].sort((a, b) => {
+    // گروه‌بندی امانات بر اساس مشتری
+    const grouped = {};
+    goldBank.forEach(item => {
+        if (!grouped[item.customerId]) {
+            grouped[item.customerId] = [];
+        }
+        grouped[item.customerId].push(item);
+    });
+    
+    // تبدیل به آرایه برای مرتب‌سازی
+    const groupedArray = Object.keys(grouped).map(customerId => {
+        const items = grouped[customerId];
+        const cust = customers.find(c => c.id == customerId);
+        return {
+            customerId: customerId,
+            customerName: cust ? cust.name : 'نامشخص',
+            totalWeight: items.reduce((sum, item) => sum + item.weight, 0),
+            count: items.length
+        };
+    });
+    
+    // مرتب‌سازی
+    groupedArray.sort((a, b) => {
         let valA, valB;
         if (field === 'customerName') {
-            const custA = customers.find(c => c.id == a.customerId);
-            const custB = customers.find(c => c.id == b.customerId);
-            valA = custA ? custA.name : '';
-            valB = custB ? custB.name : '';
+            valA = a.customerName;
+            valB = b.customerName;
         } else if (field === 'weight') {
-            valA = a.weight;
-            valB = b.weight;
-        } else if (field === 'date') {
-            valA = a.date;
-            valB = b.date;
-        } else if (field === 'goldPrice') {
-            valA = a.goldPrice || 0;
-            valB = b.goldPrice || 0;
+            valA = a.totalWeight;
+            valB = b.totalWeight;
         }
         if (goldSortDirection[field] === 'asc') return valA > valB ? 1 : -1;
         else return valA < valB ? 1 : -1;
     });
     
+    // نمایش نتایج
     const tbody = document.getElementById('gold-bank-tbody');
-    tbody.innerHTML = sorted.map(item => {
-        const cust = customers.find(c => c.id == item.customerId);
-        return `
-            <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
-                <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(item.weight, 3)} گرم</td>
-                <td class="p-5 font-black text-slate-600">${item.date}</td>
-                <td class="p-5 font-black text-slate-600">${item.goldPrice ? formatNumber(item.goldPrice, 0) : '—'}</td>
-            </tr>`;
-    }).join('');
+    tbody.innerHTML = groupedArray.map(item => `
+        <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${item.customerId})">
+            <td class="p-5 font-black flex items-center justify-between">
+                <span>${item.customerName}</span>
+                <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded-xl text-xs font-bold">${item.count} امانت</span>
+            </td>
+            <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(item.totalWeight, 3)} گرم</td>
+            <td class="p-5 font-black text-slate-600">
+                <button onclick="event.stopPropagation(); showGoldDetails(${item.customerId})" 
+                        class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition-all">
+                    جزئیات امانات
+                </button>
+            </td>
+        </tr>
+    `).join('');
 }
 
         // ==================== Gold Details Modal ====================
