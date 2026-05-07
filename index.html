@@ -435,11 +435,8 @@
             <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
                 <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
                 <div class="flex gap-3">
-                    <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-amber-500 outline-none w-56">
-                    <button onclick="exportGoldBank()" class="bg-amber-500 text-white px-4 py-2 rounded-2xl text-sm font-bold hover:bg-amber-600 transition-all">
-                        📥 خروجی
-                    </button>
-                </div>
+    <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-amber-500 outline-none w-56">
+</div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-right">
@@ -513,17 +510,13 @@
 
             <div class="grid grid-cols-3 gap-4 mb-8 bg-slate-50 p-6 rounded-3xl">
                 <div>
-                    <p class="text-xs text-slate-500 font-bold">مجموع وزن امانت</p>
-                    <p id="modal-total-weight" class="text-3xl font-black text-amber-600 persian-number">۰٫۰۰۰ گرم</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-500 font-bold">مجموع بستانکاری</p>
-                    <p id="modal-total-debt" class="text-3xl font-black text-emerald-600 persian-number">۰ تومان</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-500 font-bold">ارزش تقریبی طلا</p>
-                    <p id="modal-total-value" class="text-3xl font-black text-slate-700 persian-number">۰ تومان</p>
-                </div>
+    <p class="text-xs text-slate-500 font-bold">مجموع وزن امانت</p>
+    <p id="modal-total-weight" class="text-2xl font-black text-amber-600 persian-number">۰٫۰۰۰ گرم</p>
+</div>
+<div>
+    <p class="text-xs text-slate-500 font-bold">ارزش تقریبی طلا</p>
+    <p id="modal-total-value" class="text-2xl font-black text-slate-700 persian-number">۰ تومان</p>
+</div>
             </div>
 
             <table class="w-full">
@@ -540,7 +533,10 @@
             </table>
 
             <div class="mt-8 flex gap-4">
-                <button onclick="settleCustomerGold()" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-black text-lg">تسویه کامل حساب</button>
+                <!-- کد جدید (جایگزین) -->
+<button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-emerald-700 transition-all">
+    تسویه کامل حساب
+</button>
                 <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
             </div>
         </div>
@@ -1163,29 +1159,104 @@ document.getElementById('sum-total').innerText  = formatNumber(finalTotal, 0);
         }
 
         function showGoldDetails(customerId) {
-            const customerGold = goldBank.filter(g => g.customerId == customerId);
-            const customer = customers.find(c => c.id == customerId);
-            if (!customer) return;
+    const customerGold = goldBank.filter(g => g.customerId == customerId);
+    const customer = customers.find(c => c.id == customerId);
+    if (!customer) return;
 
-            document.getElementById('modal-customer-name').innerText = customer.name;
+    // نمایش نام مشتری با لیبل تسویه
+    const isSettled = customer.credit === 0 || customer.credit === undefined || customer.credit === null;
+    const settledLabel = isSettled ? 
+        ' <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-lg text-xs font-bold">✅ تسویه شده</span>' : 
+        ' <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-lg text-xs font-bold">⏳ تسویه نشده</span>';
+    document.getElementById('modal-customer-name').innerHTML = customer.name + settledLabel;
 
-            const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
-            const totalValue = customerGold.reduce((sum, g) => sum + (g.weight * (g.goldPrice || 0)), 0);
+    const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
+    const totalValue = customerGold.reduce((sum, g) => sum + (g.weight * (g.goldPrice || 0)), 0);
 
-            document.getElementById('modal-total-weight').innerText = formatNumber(totalWeight, 3) + " گرم";
-document.getElementById('modal-total-debt').innerText = formatNumber(customer.credit || 0, 0) + " تومان";
-document.getElementById('modal-total-value').innerText = formatNumber(totalValue, 0) + " تومان";
+    document.getElementById('modal-total-weight').innerText = formatNumber(totalWeight, 3) + " گرم";
+    document.getElementById('modal-total-value').innerText = formatNumber(totalValue, 0) + " تومان";
 
-            const tbody = document.getElementById('gold-detail-tbody');
-            tbody.innerHTML = customerGold.map(g => `
-                <tr>
-                    <td class="p-4">${g.date}</td>
-                    <td class="p-4 font-black text-amber-600 persian-number">${formatNumber(g.weight, 3)}</td>
-                    <td class="p-4 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
-                    <td class="p-4 text-slate-500">${g.note || '-'}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="deleteGoldEntry(${g.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
-                    </td>
+    const tbody = document.getElementById('gold-detail-tbody');
+    tbody.innerHTML = customerGold.map(g => `
+        <tr>
+            <td class="p-4">${g.date}</td>
+            <td class="p-4 font-black text-amber-600 persian-number">${formatNumber(g.weight, 3)}</td>
+            <td class="p-4 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
+            <td class="p-4 text-slate-500">${g.note || '-'}</td>
+            <td class="p-4 text-center">
+                <button onclick="editGoldEntry(${g.id})" class="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-xl text-sm mx-1">ویرایش</button>
+                <button onclick="deleteGoldEntry(${g.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm">حذف</button>
+            </td>
+        </tr>
+    `).join('');
+
+    document.getElementById('gold-detail-modal').classList.replace('hidden', 'flex');
+}
+
+
+// ویرایش امانت
+function editGoldEntry(id) {
+    const entry = goldBank.find(g => g.id === id);
+    if (!entry) return toast("امانت یافت نشد", "error");
+    
+    // پر کردن فرم با مقادیر فعلی
+    document.getElementById('gb-weight').value = entry.weight;
+    document.getElementById('gb-gold-price').value = entry.goldPrice || "";
+    document.getElementById('gb-note').value = entry.note || "";
+    
+    // انتخاب مشتری
+    selectedCustomer.gb = entry.customerId;
+    const cust = customers.find(c => c.id == entry.customerId);
+    if (cust) {
+        document.getElementById('gb-selected-name').innerText = cust.name;
+        document.getElementById('gb-selected-badge').classList.remove('hidden');
+    }
+    
+    // تغییر دکمه ثبت به بروزرسانی
+    const saveBtn = document.querySelector('#gold-bank button[onclick="saveToGoldBank()"]');
+    if (saveBtn) {
+        saveBtn.textContent = " بروزرسانی امانت";
+        saveBtn.onclick = function() { updateGoldEntry(id); };
+    }
+    
+    // بستن مودال
+    closeGoldDetailModal();
+    
+    // رفتن به تب بانک طلا
+    switchTab('gold-bank');
+    toast("امانت در حالت ویرایش باز شد", "success");
+}
+
+// بروزرسانی امانت
+function updateGoldEntry(id) {
+    const index = goldBank.findIndex(g => g.id === id);
+    if (index === -1) return toast("امانت یافت نشد", "error");
+    
+    const weight = parseFloat(document.getElementById('gb-weight').value);
+    if (!weight) return toast("وزن را وارد کنید", "error");
+    
+    goldBank[index].weight = weight;
+    goldBank[index].goldPrice = parsePersianNumber(document.getElementById('gb-gold-price').value);
+    goldBank[index].note = document.getElementById('gb-note').value || '-';
+    
+    // ریست دکمه
+    const saveBtn = document.querySelector('#gold-bank button[onclick^="updateGoldEntry"]');
+    if (saveBtn) {
+        saveBtn.textContent = "ثبت در بانک طلا";
+        saveBtn.onclick = saveToGoldBank;
+    }
+    
+    clearSelection('gb');
+    document.getElementById('gb-weight').value = "";
+    document.getElementById('gb-gold-price').value = "";
+    document.getElementById('gb-note').value = "";
+    
+    refreshAll();
+    toast("امانت با موفقیت بروزرسانی شد", "success");
+}
+
+
+
                 </tr>
             `).join('');
 
@@ -1202,17 +1273,17 @@ document.getElementById('modal-total-value').innerText = formatNumber(totalValue
             }
         }
 
-        function settleCustomerGold() {
-            const currentCustName = document.getElementById('modal-customer-name').innerText;
-            const cust = customers.find(c => c.name === currentCustName);
-            if (cust && confirm("تسویه کامل انجام شود؟")) {
-                cust.credit = 0;
-                refreshAll();
-                toast("حساب مشتری تسویه شد", "success");
-                closeGoldDetailModal();
-            }
-        }
-
+       function settleCustomerGold() {
+    const currentCustName = document.getElementById('modal-customer-name').innerText.replace(/[✅⏳]/g, '').trim();
+    const cust = customers.find(c => c.name === currentCustName);
+    if (cust && confirm("آیا از تسویه حساب این مشتری اطمینان دارید؟")) {
+        // فقط اعتبار را صفر می‌کنیم، امانات باقی می‌مانند
+        cust.credit = 0;
+        refreshAll();
+        toast("حساب مشتری تسویه شد", "success");
+        closeGoldDetailModal();
+    }
+}
         function exportGoldDetail() {
             alert("خروجی جزئیات امانت در حال حاضر به صورت CSV دانلود می‌شود (قابل گسترش)");
         }
