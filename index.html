@@ -131,32 +131,32 @@
                 <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
-          <nav class="flex-1 p-2 space-y-1">
-    <button data-tab="dashboard" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        <span class="font-bold">پیشخوان</span>
-    </button>
-    <button data-tab="invoice" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-        <span class="font-bold">صدور فاکتور</span>
-    </button>
-    <button data-tab="invoices-list" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
-        <span class="font-bold">فاکتورهای صادر شده</span>
-    </button>
-    <button data-tab="gold-bank" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-        <span class="font-bold">بانک طلا</span>
-    </button>
-    <button data-tab="customers" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-        <span class="font-bold">مشتریان</span>
-    </button>
-    <button data-tab="reports" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-        <span class="font-bold">مرکز گزارشات</span>
-    </button>
-</nav>
+            <nav class="flex-1 p-2 space-y-1">
+<button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="font-bold">پیشخوان</span>
+                </button>
+                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-bold">صدور فاکتور</span>
+                </button>
+                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+                    <span class="font-bold">فاکتورهای صادر شده</span>
+                </button>
+                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    <span class="font-bold">بانک طلا</span>
+                </button>
+                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span class="font-bold">مشتریان</span>
+                </button>
+                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-bold">مرکز گزارشات</span>
+                </button>
+            </nav>
         </aside>
 
         <!-- Main Content -->
@@ -166,12 +166,12 @@
             <div id="dashboard" class="tab-content active space-y-8">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-3xl font-black text-slate-800">صفحه مدیریت گالری قصه</h2>
+                        <h2 class="text-3xl font-black text-slate-800">خوش آمدید!</h2>
                         <p id="today-date" class="text-slate-500 font-bold mt-1"></p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <!-- کارت اول: فروش -->
     <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
         <div class="flex items-center gap-3">
@@ -224,7 +224,6 @@
         </div>
     </div>
 </div>
-
                 <!-- ماشین حساب طلای آب‌شده -->
                 <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-64 h-64 bg-slate-500/10 blur-[100px] rounded-full"></div>
@@ -361,61 +360,54 @@
                             </div>
                         </div>
                     </div>
-<!-- ستون راست: خلاصه محاسبات -->
-<div class="space-y-6">
-    <div class="bg-white p-6 rounded-[2rem] border border-slate-100 custom-shadow">
-        <!-- هدر -->
-        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-royal-green rounded-xl flex items-center justify-center text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6m-6 4h6M4 7h.01M4 11h.01M4 15h.01M4 19h.01"></path></svg>
+
+                    <!-- ستون راست: خلاصه محاسبات -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
+                            <div class="flex items-center gap-3 mb-6 pb-4 border-b">
+                                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6m-6 4h6M4 7h.01M4 11h.01M4 15h.01M4 19h.01"></path></svg>
+                                </div>
+                                <h4 class="font-black text-xl text-slate-800">خلاصه محاسبات</h4>
+                            </div>
+                            
+                            <div class="space-y-4 text-lg">
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
+                                    <span class="text-slate-500 font-bold">قیمت خام طلا:</span>
+                                    <span id="sum-raw" class="font-black text-slate-700 persian-number">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
+                                    <span class="text-slate-500 font-bold">کل اجرت:</span>
+                                    <span id="sum-wage" class="font-black text-slate-700 persian-number">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
+                                    <span class="text-slate-500 font-bold">سود فروشنده:</span>
+                                    <span id="sum-profit" class="font-black text-slate-700 persian-number">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
+                                    <span class="text-slate-500 font-bold">مالیات:</span>
+                                    <span id="sum-tax" class="font-black text-slate-700 persian-number">۰</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-red-50 rounded-2xl">
+                                    <span class="text-red-600 font-bold">کسر اعتبار:</span>
+                                    <span id="sum-credit" class="font-black text-red-600 persian-number">-۰</span>
+                                </div>
+                                
+                                <div class="pt-6 border-t border-dashed border-slate-200">
+                                    <div class="flex justify-between items-center p-4 bg-royal-green rounded-2xl text-white shadow-lg">
+                                        <span class="font-bold text-lg">مبلغ نهایی:</span>
+                                        <span id="sum-total" class="text-3xl font-black number persian-number">۰</span>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="printInvoice()" class="w-full mt-4 bg-slate-100 text-slate-700 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all">
+                                    چاپ فاکتور
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="font-black text-lg text-slate-800">خلاصه محاسبات</h4>
             </div>
-            <span class="text-[10px] text-slate-400 bg-slate-50 px-2 py-1 rounded font-bold">فاکتور</span>
-        </div>
-        
-        <!-- اقلام محاسباتی -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                <span class="text-sm font-bold text-slate-500">قیمت خام طلا</span>
-                <span id="sum-raw" class="font-black text-slate-700 persian-number text-sm">۰</span>
-            </div>
-            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                <span class="text-sm font-bold text-slate-500">اجرت</span>
-                <span id="sum-wage" class="font-black text-slate-700 persian-number text-sm">۰</span>
-            </div>
-            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                <span class="text-sm font-bold text-slate-500">سود فروشنده</span>
-                <span id="sum-profit" class="font-black text-slate-700 persian-number text-sm">۰</span>
-            </div>
-            <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                <span class="text-sm font-bold text-slate-500">مالیات</span>
-                <span id="sum-tax" class="font-black text-slate-700 persian-number text-sm">۰</span>
-            </div>
-            <div class="flex justify-between items-center p-3 bg-red-50 rounded-xl">
-                <span class="text-sm font-bold text-red-600">کسر اعتبار</span>
-                <span id="sum-credit" class="font-black text-red-600 persian-number text-sm">-۰</span>
-            </div>
-        </div>
-
-        <!-- خط جداکننده -->
-        <div class="my-4 border-t border-dashed border-slate-200"></div>
-
-        <!-- مبلغ نهایی -->
-        <div class="p-4 bg-royal-green rounded-2xl text-white shadow-md">
-            <div class="flex justify-between items-center">
-                <span class="font-bold text-sm">مبلغ نهایی</span>
-                <span id="sum-total" class="text-2xl font-black number persian-number">۰</span>
-            </div>
-        </div>
-
-        <!-- دکمه چاپ -->
-        <button onclick="printInvoice()" class="w-full mt-4 bg-white border border-slate-200 text-slate-700 py-3 rounded-2xl font-bold text-sm hover:bg-slate-50 hover:border-royal-green transition-all">
-             چاپ فاکتور
-        </button>
-    </div>
-</div>
 
             <!-- فاکتورهای صادر شده -->
             <div id="invoices-list" class="tab-content">
@@ -742,34 +734,28 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             document.getElementById('sidebar').classList.toggle('translate-x-full');
         }
 
-   function switchTab(id) {
-    // مخفی کردن همه تب‌ها
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    
-    // نمایش تب انتخاب شده
-    const targetTab = document.getElementById(id);
-    if (targetTab) {
-        targetTab.classList.add('active');
-    } else {
-        document.getElementById('dashboard').classList.add('active');
-        id = 'dashboard';
-    }
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const targetTab = document.getElementById(id);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            } else {
+                document.getElementById('dashboard').classList.add('active');
+                id = 'dashboard';
+            }
 
-    // بروزرسانی دکمه‌های نوار کناری
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-        // چک کردن onclick یا data-tab
-        const onclickAttr = btn.getAttribute('onclick') || '';
-        const dataTab = btn.getAttribute('data-tab') || '';
-        if (onclickAttr.includes(id) || dataTab === id) {
-            btn.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebar').classList.add('translate-x-full');
+            }
         }
-    });
 
-    if (window.innerWidth < 1024) {
-        document.getElementById('sidebar').classList.add('translate-x-full');
-    }
-}
         // ==================== Live Search ====================
         function liveSearch(query, context) {
             const resultsDiv = document.getElementById(`${context}-search-results`);
@@ -1550,21 +1536,12 @@ function closeCreditDetailModal() {
         }
 
         window.onload = () => {
-    loadData();
-    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-    refreshAll();
-    initInvoiceCalculations();
-    setTimeout(calculateInvoice, 500);
-    
-    // اضافه کردن رویداد کلیک به دکمه‌های نوار کناری
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            switchTab(tabId);
-        });
-    });
-};
-        
+            loadData();
+            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+            refreshAll();
+            initInvoiceCalculations();
+            setTimeout(calculateInvoice, 500);
+        };
     </script>
 
 </body>
