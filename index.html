@@ -870,25 +870,32 @@ function formatWithDots(num) {
             document.getElementById('sidebar').classList.toggle('translate-x-full'); 
         }
 
-       // تابع جدید (جایگزین)
-function switchTab(id) {
+     function switchTab(id) {
     // مخفی کردن همه تب‌ها
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    // نمایش تب انتخاب شده
-    document.getElementById(id).classList.add('active');
     
-    // بروزرسانی دکمه‌های نوار کناری (با کلاس جدید nav-btn-minimal)
+    // نمایش تب انتخاب شده
+    const targetTab = document.getElementById(id);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    } else {
+        document.getElementById('dashboard').classList.add('active');
+        id = 'dashboard';
+    }
+    
+    // بروزرسانی دکمه‌های نوار کناری
     document.querySelectorAll('.nav-btn-minimal').forEach(btn => {
         btn.classList.remove('active');
-        if (btn.getAttribute('onclick').includes(id)) {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
             btn.classList.add('active');
         }
     });
     
     // بستن نوار کناری در موبایل
-    if (window.innerWidth < 1024) toggleSidebar();
+    if (window.innerWidth < 1024) {
+        document.getElementById('sidebar').classList.add('translate-x-full');
+    }
 }
-
         // Live Search
         function liveSearch(query, context) {
             const resultsDiv = document.getElementById(`${context}-search-results`);
