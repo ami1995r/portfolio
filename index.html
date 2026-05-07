@@ -396,60 +396,67 @@
 
             
             <!-- بانک طلا -->
-            <div id="gold-bank" class="tab-content space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            </div>
-                            <h3 class="text-xl font-black text-slate-800">ثبت امانت جدید</h3>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="space-y-2 relative">
-                                <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
-                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
-                                <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
-                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-xl mt-2">
-                                    <span id="gb-selected-name" class="font-black text-amber-700 text-sm"></span>
-                                    <button onclick="clearSelection('gb')" class="text-red-500 text-xs font-bold">حذف</button>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
-                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
-                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none persian-number">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-black text-slate-500">یادداشت</label>
-                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
-                            </div>
-                            <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-amber-600 transition-all">ثبت در بانک طلا</button>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
-                        <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
-                            <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-right">
-                                <thead class="bg-slate-50 text-slate-500">
-                                    <tr>
-                                        <th class="p-5 font-black">نام مشتری</th>
-                                        <th class="p-5 font-black">مجموع وزن (گرم)</th>
-                                        <th class="p-5 font-black text-center">عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
-                            </table>
-                        </div>
+           <div id="gold-bank" class="tab-content space-y-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                </div>
+                <h3 class="text-xl font-black text-slate-800">ثبت امانت جدید</h3>
+            </div>
+            <div class="space-y-6">
+                <div class="space-y-2 relative">
+                    <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
+                    <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                    <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
+                    <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-xl mt-2">
+                        <span id="gb-selected-name" class="font-black text-amber-700 text-sm"></span>
+                        <button onclick="clearSelection('gb')" class="text-red-500 text-xs font-bold">حذف</button>
                     </div>
                 </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
+                    <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
+                    <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none persian-number">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-black text-slate-500">یادداشت</label>
+                    <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                </div>
+                <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-amber-600 transition-all">ثبت در بانک طلا</button>
             </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
+            <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
+                <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
+                <div class="flex gap-3">
+                    <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-amber-500 outline-none w-56">
+                    <button onclick="exportGoldBank()" class="bg-amber-500 text-white px-4 py-2 rounded-2xl text-sm font-bold hover:bg-amber-600 transition-all">
+                        📥 خروجی
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right">
+                    <thead class="bg-slate-50 text-slate-500">
+                        <tr>
+                            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
+                            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
+                            <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('count')">تعداد امانات ▾</th>
+                            <th class="p-5 font-black text-center">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
             <!-- مشتریان -->
             <div id="customers" class="tab-content space-y-8">
@@ -1461,6 +1468,126 @@ window.addEventListener('load', () => {
     // محاسبه اولیه
     setTimeout(calculateInvoice, 500);
 });
+
+
+// فیلتر بانک طلا
+function filterGoldBank() {
+    const q = document.getElementById('gold-bank-search').value.toLowerCase().trim();
+    const grouped = {};
+    goldBank.forEach(item => {
+        if (!grouped[item.customerId]) grouped[item.customerId] = [];
+        grouped[item.customerId].push(item);
+    });
+    
+    const filtered = Object.keys(grouped).filter(cid => {
+        const cust = customers.find(c => c.id == cid);
+        return cust && cust.name.toLowerCase().includes(q);
+    });
+    
+    renderGoldBankFiltered(filtered);
+}
+
+// رندر بانک طلا با فیلتر
+function renderGoldBankFiltered(filteredIds = null) {
+    const grouped = {};
+    goldBank.forEach(item => {
+        if (!grouped[item.customerId]) grouped[item.customerId] = [];
+        grouped[item.customerId].push(item);
+    });
+
+    const tbody = document.getElementById('gold-bank-tbody');
+    const keys = filteredIds || Object.keys(grouped);
+    
+    tbody.innerHTML = keys.map(cid => {
+        const items = grouped[cid];
+        const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+        const cust = customers.find(c => c.id == cid);
+        const count = items.length;
+        return `
+            <tr class="hover:bg-slate-50 transition-all">
+                <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+                <td class="p-5 font-black text-amber-600 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                <td class="p-5 font-black text-slate-600">${count} عدد</td>
+                <td class="p-5 text-center">
+                    <button onclick="showGoldDetails(${cid})" 
+                            class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">
+                        جزئیات امانات
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// جایگزینی تابع renderGoldBank قبلی
+function renderGoldBank() {
+    renderGoldBankFiltered();
+}
+
+// مرتب‌سازی بانک طلا
+let goldSortDirection = {};
+
+function sortGoldBank(field) {
+    if (!goldSortDirection[field]) {
+        goldSortDirection[field] = 'asc';
+    } else {
+        goldSortDirection[field] = goldSortDirection[field] === 'asc' ? 'desc' : 'asc';
+    }
+    
+    const grouped = {};
+    goldBank.forEach(item => {
+        if (!grouped[item.customerId]) grouped[item.customerId] = [];
+        grouped[item.customerId].push(item);
+    });
+    
+    const sortedKeys = Object.keys(grouped).sort((a, b) => {
+        const itemsA = grouped[a];
+        const itemsB = grouped[b];
+        const custA = customers.find(c => c.id == a);
+        const custB = customers.find(c => c.id == b);
+        
+        let valA, valB;
+        
+        if (field === 'customerName') {
+            valA = custA ? custA.name : '';
+            valB = custB ? custB.name : '';
+        } else if (field === 'weight') {
+            valA = itemsA.reduce((s, i) => s + i.weight, 0);
+            valB = itemsB.reduce((s, i) => s + i.weight, 0);
+        } else if (field === 'count') {
+            valA = itemsA.length;
+            valB = itemsB.length;
+        }
+        
+        if (goldSortDirection[field] === 'asc') {
+            return valA > valB ? 1 : -1;
+        } else {
+            return valA < valB ? 1 : -1;
+        }
+    });
+    
+    renderGoldBankFiltered(sortedKeys);
+}
+
+// خروجی بانک طلا
+function exportGoldBank() {
+    let csv = "\uFEFF";
+    csv += "مشتری,وزن (گرم),تاریخ,توضیحات,قیمت روز\n";
+    
+    goldBank.forEach(g => csv += `"${g.customerName}",${g.weight},"${g.date}","${g.note || ''}",${g.goldPrice || 0}\n`);
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Ghesseh_GoldBank.csv";
+    link.click();
+    toast("فایل بانک طلا دانلود شد", "success");
+}
+
+
+
+
+
      
     </script>
 
