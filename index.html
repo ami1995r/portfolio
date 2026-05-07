@@ -742,9 +742,11 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             document.getElementById('sidebar').classList.toggle('translate-x-full');
         }
 
-    function switchTab(id) {
+   function switchTab(id) {
     // مخفی کردن همه تب‌ها
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    
+    // نمایش تب انتخاب شده
     const targetTab = document.getElementById(id);
     if (targetTab) {
         targetTab.classList.add('active');
@@ -756,7 +758,10 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
     // بروزرسانی دکمه‌های نوار کناری
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
-        if (btn.dataset.tab === id) {
+        // چک کردن onclick یا data-tab
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        const dataTab = btn.getAttribute('data-tab') || '';
+        if (onclickAttr.includes(id) || dataTab === id) {
             btn.classList.add('active');
         }
     });
@@ -765,7 +770,6 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
         document.getElementById('sidebar').classList.add('translate-x-full');
     }
 }
-
         // ==================== Live Search ====================
         function liveSearch(query, context) {
             const resultsDiv = document.getElementById(`${context}-search-results`);
