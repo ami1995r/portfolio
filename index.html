@@ -10,12 +10,7 @@
         body { 
             font-family: 'Vazirmatn', sans-serif; 
             background-color: #f8fafc; 
-            color: #21e2b4; 
-        }
-        .sidebar-active { 
-            background: #059669; 
-            color: white; 
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); 
+            color: #0f172a; 
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
@@ -47,40 +42,35 @@
         .dashboard-card:hover .icon-wrapper {
             transform: scale(1.1) rotate(-3deg);
         }
-        .border-gradient-emerald {
-            border-image: linear-gradient(135deg, #059669, #10b981) 1;
-        }
-        .border-gradient-amber {
-            border-image: linear-gradient(135deg, #d97706, #fbbf24) 1;
-        }
-        .border-gradient-slate {
-            border-image: linear-gradient(135deg, #475569, #94a3b8) 1;
-        }
 
-        /* نوار کناری مینیمال بهبود یافته */
-        .nav-btn-minimal {
-            transition: all 0.3s ease;
-            border-radius: 16px;
+        /* نوار کناری مینیمال - ساده و شیک */
+        .nav-btn {
+            transition: all 0.2s ease;
+            border-radius: 0;
             position: relative;
+            padding: 12px 20px;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
         }
-        .nav-btn-minimal:hover {
+        .nav-btn:hover {
             background: #f1f5f9;
-            color: #059669;
+            color: #0f172a;
         }
-        .nav-btn-minimal.active {
-            background: #f0fdf4;
-            color: #059669;
-            border-right: 4px solid #059669;
-            box-shadow: none;
+        .nav-btn.active {
+            background: #f1f5f9;
+            color: #0f172a;
+            border-bottom: 2px solid #0f172a;
         }
-        .nav-btn-minimal.active span {
+        .nav-btn.active span {
             font-weight: 800;
         }
-        .nav-btn-minimal.active svg {
-            color: #059669;
+        .nav-btn.active svg {
+            color: #0f172a;
         }
-        .nav-btn-minimal:active {
-            transform: scale(0.97);
+        .nav-btn:active {
+            transform: scale(0.98);
         }
 
         /* استایل وضعیت فاکتور */
@@ -108,7 +98,7 @@
 
     <!-- Mobile Header -->
     <div class="lg:hidden bg-white border-b p-4 flex justify-between items-center fixed top-0 w-full z-50">
-        <span class="font-black text-emerald-600 text-lg">گالری قصه</span>
+        <span class="font-black text-slate-800 text-lg">گالری قصه</span>
         <button onclick="toggleSidebar()" class="p-2 bg-slate-100 rounded-xl text-slate-600">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
         </button>
@@ -116,41 +106,41 @@
 
     <div class="flex min-h-screen pt-16 lg:pt-0">
         <!-- Sidebar -->
-        <aside id="sidebar" class="w-72 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
-            <div class="p-8 border-b">
-                <h1 class="text-2xl font-black text-slate-800">گالری <span class="text-slate-800">قصه</span></h1>
+        <aside id="sidebar" class="w-64 bg-white border-l fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 transform translate-x-full lg:translate-x-0">
+            <div class="p-6 border-b">
+                <h1 class="text-xl font-black text-slate-800">گالری قصه</h1>
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
-            <nav>
-                <button onclick="switchTab('dashboard')" class="nav-btn-minimal active w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-slate-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <nav class="flex-1 p-2 space-y-1">
+                <button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="font-bold">پیشخوان</span>
                 </button>
-                <button onclick="switchTab('invoice')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <button onclick="switchTab('invoice')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span class="font-bold">صدور فاکتور</span>
                 </button>
-                <button onclick="switchTab('invoices-list')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
+                <button onclick="switchTab('invoices-list')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2"></path></svg>
                     <span class="font-bold">فاکتورهای صادر شده</span>
                 </button>
-                <button onclick="switchTab('gold-bank')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                <button onclick="switchTab('gold-bank')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     <span class="font-bold">بانک طلا</span>
                 </button>
-                <button onclick="switchTab('customers')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <button onclick="switchTab('customers')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 15.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     <span class="font-bold">مشتریان</span>
                 </button>
-                <button onclick="switchTab('reports')" class="nav-btn-minimal w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all text-slate-500 hover:text-emerald-600 border-t mt-4 pt-4">
-                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span class="font-bold text-emerald-700">مرکز گزارشات</span>
+                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center gap-3 transition-all text-slate-500 text-sm border-t mt-4 pt-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-bold">مرکز گزارشات</span>
                 </button>
             </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 mr-0 lg:mr-72 p-4 lg:p-10 space-y-8">
+        <main class="flex-1 mr-0 lg:mr-64 p-4 lg:p-10 space-y-8">
 
             <!-- Dashboard -->
             <div id="dashboard" class="tab-content active space-y-8">
@@ -164,21 +154,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- کارت اول: فروش -->
                     <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
-                        <div class="icon-wrapper w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
+                        <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">فروش کل دوره</p>
                         <h3 class="text-3xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
                         <div class="flex items-center gap-2 mt-1">
-                            <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-xl">▲ +۱۲٪</span>
+                            <span class="text-xs text-slate-600 font-bold bg-slate-50 px-2 py-1 rounded-xl">▲ +۱۲٪</span>
                             <span class="text-xs text-slate-400">نسبت به ماه قبل</span>
                         </div>
-                        <p id="dash-today-sales" class="text-emerald-600 text-sm font-bold mt-1">فروش امروز: ۰ تومان</p>
+                        <p id="dash-today-sales" class="text-slate-600 text-sm font-bold mt-1">فروش امروز: ۰ تومان</p>
                     </div>
 
                     <!-- کارت دوم: بانک طلا -->
-                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-amber-500 custom-shadow">
-                        <div class="icon-wrapper w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4">
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
+                        <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
                         <p class="text-xs font-black text-slate-400 mb-1">موجودی بانک طلا (گرم)</p>
@@ -197,10 +187,10 @@
 
                 <!-- ماشین حساب طلای آب‌شده -->
                 <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
+                    <div class="absolute top-0 left-0 w-64 h-64 bg-slate-500/10 blur-[100px] rounded-full"></div>
                     <div class="relative z-10">
                         <div class="flex items-center gap-3 mb-6">
-                            <span class="bg-emerald-500 w-3 h-8 rounded-full"></span>
+                            <span class="bg-slate-500 w-3 h-8 rounded-full"></span>
                             <h3 class="text-xl font-black italic">حساب خرید و فروش طلای آب‌شده</h3>
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -208,27 +198,27 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">قیمت روز طلا (تومان/گرم)</label>
-                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none persian-number">
+                                        <input type="text" id="trade-gold-price" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مثلاً ۳۸۵۰۰۰۰" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">درصد سود گالری (%)</label>
-                                        <input type="number" id="trade-profit-percent" value="1.5" step="0.01" min="0" oninput="calcTradeGold()" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                        <input type="number" id="trade-profit-percent" value="1.5" step="0.01" min="0" oninput="calcTradeGold()" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">مبلغ مورد نظر (تومان)</label>
-                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none persian-number">
+                                        <input type="text" id="trade-amount" oninput="formatNumberInput(this); calcTradeGold()" placeholder="مبلغ مورد نظر" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[10px] text-slate-400 font-bold">وزن مورد نظر (گرم)</label>
-                                        <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                        <input type="number" id="trade-weight" step="0.001" oninput="calcTradeGold()" placeholder="0.000" class="input-number w-full bg-white/10 border-0 p-4 rounded-2xl text-center font-bold focus:ring-2 ring-slate-500 outline-none">
                                     </div>
                                 </div>
                             </div>
                             <div class="bg-white/5 p-6 rounded-3xl border border-white/10 flex flex-col justify-center">
                                 <p class="text-slate-400 text-sm font-bold mb-2">وزن قابل معامله (گرم)</p>
-                                <h4 id="trade-res-weight" class="text-4xl font-black text-emerald-400 mb-6 persian-number">۰٫۰۰۰</h4>
+                                <h4 id="trade-res-weight" class="text-4xl font-black text-slate-400 mb-6 persian-number">۰٫۰۰۰</h4>
                                 <p class="text-slate-400 text-sm font-bold mb-2">ارزش کل با سود گالری</p>
                                 <h4 id="trade-res-total" class="text-3xl font-black text-white persian-number">۰</h4>
                             </div>
@@ -243,35 +233,35 @@
                     <!-- ستون سمت چپ: فرم فاکتور -->
                     <div class="xl:col-span-2">
                         <div class="bg-white p-6 lg:p-12 rounded-[3rem] border border-slate-100 custom-shadow">
-                            <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-emerald-500 pr-4">صدور فاکتور جدید</h3>
+                            <h3 class="text-2xl font-black text-slate-800 mb-10 border-r-4 border-slate-500 pr-4">صدور فاکتور جدید</h3>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-3 relative">
                                     <label class="text-xs font-black text-slate-500 mr-1">جستجو و انتخاب مشتری</label>
                                     <div class="relative">
-                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none pr-12">
+                                        <input type="text" id="inv-cust-search" oninput="liveSearch(this.value, 'inv')" placeholder="نام یا کدملی مشتری..." class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none pr-12">
                                         <svg class="w-6 h-6 absolute right-4 top-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
                                     <div id="inv-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-56 overflow-y-auto hidden"></div>
-                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                                        <span id="inv-selected-name" class="font-black text-emerald-700"></span>
+                                    <div id="inv-selected-badge" class="hidden flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                                        <span id="inv-selected-name" class="font-black text-slate-700"></span>
                                         <button onclick="clearSelection('inv')" class="text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all">حذف</button>
                                     </div>
                                 </div>
                                 <div class="space-y-3">
                                     <label class="text-xs font-black text-slate-500 mr-1">نوع طلا</label>
-                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    <input type="text" id="gold-type" value="طلای آب‌شده" class="w-full bg-slate-50 border-0 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">قیمت طلا (تومان / گرم)</label>
-                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-emerald-500 outline-none persian-number">
+                                    <input type="text" id="gold-price" oninput="formatNumberInput(this); calculateInvoice()" class="input-number w-full bg-slate-50 border-0 p-5 rounded-2xl font-black text-left text-lg focus:ring-2 ring-slate-500 outline-none persian-number">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">وزن طلا (گرم)</label>
-                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="number" id="weight" step="0.001" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
                                 </div>
                             </div>
 
@@ -285,58 +275,58 @@
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مقدار اجرت</label>
-                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="text" id="wage-value" oninput="formatNumberInput(this); calculateInvoice()" value="7" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">سود فروشنده (%)</label>
-                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="number" id="profit" value="7" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">مالیات ارزش افزوده (%)</label>
-                                    <input type="number" id="tax" value="2" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-emerald-500">
+                                    <input type="number" id="tax" value="2" oninput="calculateInvoice()" class="input-number w-full bg-slate-50 p-5 rounded-2xl font-bold text-left focus:ring-2 ring-slate-500">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="text-xs font-black text-slate-500">توضیحات (اختیاری)</label>
-                                    <input type="text" id="invoice-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-emerald-500 outline-none">
+                                    <input type="text" id="invoice-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-5 rounded-2xl font-bold focus:ring-2 ring-slate-500 outline-none">
                                 </div>
                             </div>
 
                             <div id="credit-panel" class="hidden bg-slate-50 p-6 rounded-3xl border border-slate-100 flex items-center justify-between mb-8">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white">
+                                    <div class="w-12 h-12 bg-slate-600 rounded-2xl flex items-center justify-center text-white">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-black text-slate-800">اعتبار پاداش مشتری</p>
-                                        <p class="text-xs text-emerald-600 font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
+                                        <p class="text-xs text-slate-600 font-bold">موجودی: <span id="inv-credit-val">۰</span> تومان</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-bold text-slate-400">استفاده از اعتبار</span>
-                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-emerald-600 accent-emerald-600">
+                                    <input type="checkbox" id="use-credit" onchange="calculateInvoice()" class="w-8 h-8 rounded-xl text-slate-600 accent-slate-600">
                                 </div>
                             </div>
 
                             <!-- دکمه‌های عملیات -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <button onclick="saveInvoice()" class="bg-slate-900 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-800 transition-all custom-shadow">
+                                <button onclick="saveInvoice()" class="bg-slate-800 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-700 transition-all custom-shadow">
                                     ثبت فاکتور
                                 </button>
-                                <button id="print-btn" onclick="printInvoice()" class="bg-white border-2 border-slate-200 text-slate-700 py-6 rounded-2xl font-black text-xl hover:bg-slate-50 hover:border-emerald-300 transition-all custom-shadow">
+                                <button id="print-btn" onclick="printInvoice()" class="bg-white border-2 border-slate-200 text-slate-700 py-6 rounded-2xl font-black text-xl hover:bg-slate-50 hover:border-slate-300 transition-all custom-shadow">
                                     چاپ فاکتور
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ستون راست: خلاصه محاسبات جذاب -->
+                    <!-- ستون راست: خلاصه محاسبات -->
                     <div class="space-y-6">
                         <div class="bg-white p-8 rounded-[3rem] border border-slate-100 custom-shadow sticky top-8">
                             <div class="flex items-center gap-3 mb-6 pb-4 border-b">
-                                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
+                                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6m-6 4h6M4 7h.01M4 11h.01M4 15h.01M4 19h.01"></path></svg>
                                 </div>
                                 <h4 class="font-black text-xl text-slate-800">خلاصه محاسبات</h4>
@@ -385,7 +375,7 @@
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="p-6 border-b bg-slate-50 flex items-center justify-between">
                         <h3 class="font-black text-2xl text-slate-800">فاکتورهای صادر شده</h3>
-                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-emerald-500 outline-none w-72">
+                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-5 py-3 rounded-2xl text-sm focus:ring-2 ring-slate-500 outline-none w-72">
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-right">
@@ -411,7 +401,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1 bg-white p-8 rounded-[2.5rem] border border-slate-100 custom-shadow h-fit">
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white">
+                            <div class="w-10 h-10 bg-slate-500 rounded-xl flex items-center justify-center text-white">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             </div>
                             <h3 class="text-xl font-black text-slate-800">ثبت امانت جدید</h3>
@@ -419,26 +409,26 @@
                         <div class="space-y-6">
                             <div class="space-y-2 relative">
                                 <label class="text-xs font-black text-slate-500">جستجوی مشتری</label>
-                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <input type="text" id="gb-cust-search" oninput="liveSearch(this.value, 'gb')" placeholder="نام مشتری..." class="w-full bg-slate-50 border-0 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none">
                                 <div id="gb-search-results" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-2xl max-h-48 overflow-y-auto hidden"></div>
-                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-xl mt-2">
-                                    <span id="gb-selected-name" class="font-black text-amber-700 text-sm"></span>
+                                <div id="gb-selected-badge" class="hidden flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl mt-2">
+                                    <span id="gb-selected-name" class="font-black text-slate-700 text-sm"></span>
                                     <button onclick="clearSelection('gb')" class="text-red-500 text-xs font-bold">حذف</button>
                                 </div>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">وزن طلای آب‌شده (گرم)</label>
-                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-amber-500 outline-none">
+                                <input type="number" id="gb-weight" step="0.001" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold text-left focus:ring-2 ring-slate-500 outline-none">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">قیمت روز طلا (تومان/گرم)</label>
-                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none persian-number">
+                                <input type="text" id="gb-gold-price" oninput="formatNumberInput(this)" placeholder="قیمت روز" class="input-number w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none persian-number">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-xs font-black text-slate-500">یادداشت</label>
-                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-amber-500 outline-none">
+                                <input type="text" id="gb-note" placeholder="توضیحات..." class="w-full bg-slate-50 p-4 rounded-xl font-bold focus:ring-2 ring-slate-500 outline-none">
                             </div>
-                            <button onclick="saveToGoldBank()" class="w-full bg-amber-500 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-amber-600 transition-all">ثبت در بانک طلا</button>
+                            <button onclick="saveToGoldBank()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-slate-700 transition-all">ثبت در بانک طلا</button>
                         </div>
                     </div>
 
@@ -446,18 +436,18 @@
                         <div class="p-6 border-b bg-slate-50 flex justify-between items-center">
                             <h3 class="font-black text-slate-800 text-xl">امانات طلای آب‌شده</h3>
                             <div class="flex gap-3">
-                                <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-amber-500 outline-none w-56">
+                                <input type="text" id="gold-bank-search" oninput="filterGoldBank()" placeholder="جستجو در امانات..." class="bg-slate-100 border-0 px-4 py-2 rounded-2xl text-sm focus:ring-2 ring-slate-500 outline-none w-56">
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-right">
                                 <thead class="bg-slate-50 text-slate-500">
-    <tr>
-        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
-        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
-        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('count')">تعداد امانات ▾</th>
-    </tr>
-</thead>
+                                    <tr>
+                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('customerName')">نام مشتری ▾</th>
+                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('weight')">مجموع وزن (گرم) ▾</th>
+                                        <th class="p-5 font-black cursor-pointer" onclick="sortGoldBank('count')">تعداد امانات ▾</th>
+                                    </tr>
+                                </thead>
                                 <tbody id="gold-bank-tbody" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
@@ -469,7 +459,7 @@
             <div id="customers" class="tab-content space-y-8">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-black text-slate-800">مدیریت مشتریان</h2>
-                    <button onclick="openAddModal()" class="bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-sm transition-all hover:bg-slate-800">مشتری جدید +</button>
+                    <button onclick="openAddModal()" class="bg-slate-800 text-white px-8 py-3.5 rounded-2xl font-black text-sm transition-all hover:bg-slate-700">مشتری جدید +</button>
                 </div>
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 custom-shadow overflow-hidden">
                     <table class="w-full text-right text-sm">
@@ -489,7 +479,7 @@
 
             <!-- گزارشات -->
             <div id="reports" class="tab-content space-y-8">
-                <div class="bg-emerald-600 text-white p-10 rounded-[3rem] shadow-2xl">
+                <div class="bg-slate-800 text-white p-10 rounded-[3rem] shadow-2xl">
                     <h2 class="text-3xl font-black mb-2">مرکز گزارشات و خروجی</h2>
                     <p class="opacity-80 font-bold">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
                 </div>
@@ -511,7 +501,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-black" id="modal-customer-name"></h3>
                 <div class="flex gap-3">
-                    <button onclick="exportGoldDetail()" class="px-5 py-2 bg-emerald-600 text-white rounded-2xl text-sm font-bold hover:bg-emerald-700">خروجی اکسل</button>
+                    <button onclick="exportGoldDetail()" class="px-5 py-2 bg-slate-800 text-white rounded-2xl text-sm font-bold hover:bg-slate-700">خروجی اکسل</button>
                     <button onclick="closeGoldDetailModal()" class="text-slate-400 hover:text-slate-600">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6h12v12"></path></svg>
                     </button>
@@ -521,7 +511,7 @@
             <div class="grid grid-cols-3 gap-4 mb-8 bg-slate-50 p-6 rounded-3xl">
                 <div>
                     <p class="text-xs text-slate-500 font-bold">مجموع وزن امانت</p>
-                    <p id="modal-total-weight" class="text-2xl font-black text-amber-600 persian-number">۰٫۰۰۰ گرم</p>
+                    <p id="modal-total-weight" class="text-2xl font-black text-slate-700 persian-number">۰٫۰۰۰ گرم</p>
                 </div>
                 <div>
                     <p class="text-xs text-slate-500 font-bold">ارزش تقریبی طلا</p>
@@ -543,9 +533,9 @@
             </table>
 
             <div class="mt-8 flex gap-4">
-               <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all">
-    تسویه حساب
-    </button>
+                <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all">
+                    تسویه حساب
+                </button>
                 <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
             </div>
         </div>
@@ -556,11 +546,11 @@
         <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl">
             <h3 class="text-2xl font-black text-slate-800 mb-8">افزودن مشتری جدید</h3>
             <div class="space-y-4">
-                <input type="text" id="m-name" placeholder="نام و نام خانوادگی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-emerald-500">
-                <input type="text" id="m-national" placeholder="کد ملی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-emerald-500 text-left">
-                <input type="text" id="m-phone" placeholder="شماره تماس" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-emerald-500 text-left">
+                <input type="text" id="m-name" placeholder="نام و نام خانوادگی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500">
+                <input type="text" id="m-national" placeholder="کد ملی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
+                <input type="text" id="m-phone" placeholder="شماره تماس" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
                 <div class="flex gap-4 mt-8">
-                    <button onclick="saveCustomer()" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-black">ذخیره</button>
+                    <button onclick="saveCustomer()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black">ذخیره</button>
                     <button onclick="closeAddModal()" class="flex-1 bg-slate-100 text-slate-500 py-4 rounded-2xl font-black">انصراف</button>
                 </div>
             </div>
@@ -569,8 +559,6 @@
 
     <script>
         // ==================== State Management ====================
-        const APP_VERSION = "6.5";
-
         let customers = [];
         let invoices = [];
         let goldBank = [];
@@ -649,7 +637,7 @@
         // ==================== Toast Notification ====================
         function toast(msg, type = "success") {
             const t = document.createElement('div');
-            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`;
+            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-slate-800' : 'bg-red-500'}`;
             t.textContent = msg;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
@@ -670,7 +658,7 @@
                 id = 'dashboard';
             }
 
-            document.querySelectorAll('.nav-btn-minimal').forEach(btn => {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
                     btn.classList.add('active');
@@ -843,13 +831,13 @@
                 const status = i.total > 10000000 ? 'paid' : 'unpaid';
                 const statusText = i.total > 10000000 ? 'تسویه شده' : 'در انتظار';
                 return `
-                <tr class="invoice-row ${i.total > 10000000 ? 'invoice-row-highlight' : ''}" data-id="${i.id}">
+                <tr class="invoice-row" data-id="${i.id}">
                     <td class="p-4 text-slate-400 text-xs">${i.date}</td>
                     <td class="p-4 font-black">${i.customerName}</td>
-                    <td class="p-4 font-bold text-amber-600">${i.goldType}</td>
+                    <td class="p-4 font-bold text-slate-700">${i.goldType}</td>
                     <td class="p-4 font-mono persian-number">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</td>
                     <td class="p-4 font-mono persian-number">${formatNumber(i.goldPrice, 0)}</td>
-                    <td class="p-4 font-mono font-bold text-emerald-600 persian-number">${formatNumber(i.total, 0)}</td>
+                    <td class="p-4 font-mono font-bold text-slate-700 persian-number">${formatNumber(i.total, 0)}</td>
                     <td class="p-4 text-center">
                         <span class="invoice-status ${status === 'paid' ? 'status-paid' : 'status-unpaid'}">${statusText}</span>
                         <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-4 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
@@ -956,13 +944,12 @@
                 const items = grouped[cid];
                 const totalWeight = items.reduce((s, i) => s + i.weight, 0);
                 const cust = customers.find(c => c.id == cid);
+                const count = items.length;
                 return `
-                    <tr class="hover:bg-slate-50">
+                    <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${cid})">
                         <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-                        <td class="p-5 font-black text-amber-600 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
-                        <td class="p-5 text-center">
-                            <button onclick="showGoldDetails(${cid})" class="bg-emerald-100 text-emerald-700 px-5 py-2 rounded-2xl text-sm font-bold hover:bg-emerald-200">جزئیات امانات</button>
-                        </td>
+                        <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                        <td class="p-5 font-black text-slate-600">${count} عدد</td>
                     </tr>`;
             }).join('');
         }
@@ -990,18 +977,18 @@
             const tbody = document.getElementById('gold-bank-tbody');
             const keys = filteredIds || Object.keys(grouped);
             tbody.innerHTML = keys.map(cid => {
-    const items = grouped[cid];
-    const totalWeight = items.reduce((s, i) => s + i.weight, 0);
-    const cust = customers.find(c => c.id == cid);
-    const count = items.length;
-    return `
-        <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${cid})">
-            <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
-            <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
-            <td class="p-5 font-black text-slate-600">${count} عدد</td>
-        </tr>
-    `;
-}).join('');
+                const items = grouped[cid];
+                const totalWeight = items.reduce((s, i) => s + i.weight, 0);
+                const cust = customers.find(c => c.id == cid);
+                const count = items.length;
+                return `
+                    <tr class="hover:bg-slate-50 transition-all cursor-pointer" onclick="showGoldDetails(${cid})">
+                        <td class="p-5 font-black">${cust ? cust.name : 'نامشخص'}</td>
+                        <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
+                        <td class="p-5 font-black text-slate-600">${count} عدد</td>
+                    </tr>`;
+            }).join('');
+        }
 
         function sortGoldBank(field) {
             if (!goldSortDirection[field]) goldSortDirection[field] = 'asc';
@@ -1038,20 +1025,20 @@
             const customerGold = goldBank.filter(g => g.customerId == customerId);
             const customer = customers.find(c => c.id == customerId);
             if (!customer) return;
-           document.getElementById('modal-customer-name').innerText = customer.name;
-const isSettled = customer.credit === 0 || customer.credit === undefined || customer.credit === null;
-const settleButton = document.getElementById('settle-btn');
-if (settleButton) {
-    if (isSettled) {
-        settleButton.textContent = "✅ تسویه شده";
-        settleButton.className = "flex-1 bg-slate-300 text-slate-500 py-4 rounded-2xl font-black text-lg cursor-not-allowed";
-        settleButton.disabled = true;
-    } else {
-        settleButton.textContent = "تسویه حساب";
-        settleButton.className = "flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all";
-        settleButton.disabled = false;
-    }
-}
+            document.getElementById('modal-customer-name').innerText = customer.name;
+            const isSettled = customer.credit === 0 || customer.credit === undefined || customer.credit === null;
+            const settleButton = document.getElementById('settle-btn');
+            if (settleButton) {
+                if (isSettled) {
+                    settleButton.textContent = "✅ تسویه شده";
+                    settleButton.className = "flex-1 bg-slate-300 text-slate-500 py-4 rounded-2xl font-black text-lg cursor-not-allowed";
+                    settleButton.disabled = true;
+                } else {
+                    settleButton.textContent = "تسویه حساب";
+                    settleButton.className = "flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all";
+                    settleButton.disabled = false;
+                }
+            }
             const totalWeight = customerGold.reduce((sum, g) => sum + g.weight, 0);
             const totalValue = customerGold.reduce((sum, g) => sum + (g.weight * (g.goldPrice || 0)), 0);
             document.getElementById('modal-total-weight').innerText = formatNumber(totalWeight, 3) + " گرم";
@@ -1060,7 +1047,7 @@ if (settleButton) {
             tbody.innerHTML = customerGold.map(g => `
                 <tr>
                     <td class="p-4">${g.date}</td>
-                    <td class="p-4 font-black text-amber-600 persian-number">${formatNumber(g.weight, 3)}</td>
+                    <td class="p-4 font-black text-slate-700 persian-number">${formatNumber(g.weight, 3)}</td>
                     <td class="p-4 font-mono persian-number">${g.goldPrice ? formatNumber(g.goldPrice, 0) : '—'}</td>
                     <td class="p-4 text-slate-500">${g.note || '-'}</td>
                     <td class="p-4 text-center">
@@ -1125,7 +1112,7 @@ if (settleButton) {
         }
 
         function settleCustomerGold() {
-            const currentCustName = document.getElementById('modal-customer-name').innerText.replace(/[✅⏳]/g, '').trim();
+            const currentCustName = document.getElementById('modal-customer-name').innerText;
             const cust = customers.find(c => c.name === currentCustName);
             if (cust && confirm("آیا از تسویه حساب این مشتری اطمینان دارید؟")) {
                 cust.credit = 0;
@@ -1163,7 +1150,7 @@ if (settleButton) {
                     <td class="p-6 font-black text-slate-700">${c.name}</td>
                     <td class="p-6 font-mono text-slate-500">${c.national || ''}</td>
                     <td class="p-6 font-mono text-slate-500">${c.phone || ''}</td>
-                    <td class="p-6 font-black text-emerald-600 persian-number">${formatNumber(c.credit || 0, 0)}</td>
+                    <td class="p-6 font-black text-slate-700 persian-number">${formatNumber(c.credit || 0, 0)}</td>
                     <td class="p-6 text-center">
                         <button onclick="deleteCustomer(${c.id})" class="text-red-400 p-2 hover:bg-red-50 rounded-xl">حذف</button>
                     </td>
@@ -1257,9 +1244,9 @@ if (settleButton) {
                         * { margin: 0; padding: 0; box-sizing: border-box; }
                         body { font-family: 'Vazirmatn', sans-serif; background: white; padding: 40px; color: #1e293b; }
                         .invoice-container { max-width: 700px; margin: 0 auto; border: 2px solid #e2e8f0; border-radius: 20px; padding: 30px; }
-                        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #059669; padding-bottom: 20px; margin-bottom: 25px; }
+                        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #1e293b; padding-bottom: 20px; margin-bottom: 25px; }
                         .header h1 { font-size: 24px; font-weight: 900; color: #0f172a; }
-                        .header .gold { color: #059669; }
+                        .header .gold { color: #0f172a; }
                         .header .invoice-number { font-size: 14px; color: #94a3b8; font-weight: bold; }
                         .details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
                         .details div { background: #f8fafc; padding: 15px; border-radius: 12px; }
@@ -1268,10 +1255,10 @@ if (settleButton) {
                         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
                         th { background: #f1f5f9; padding: 12px 15px; text-align: right; font-size: 12px; font-weight: 800; color: #64748b; }
                         td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-                        .total-row { background: #f0fdf4; border-top: 3px solid #059669; }
+                        .total-row { background: #f0fdf4; border-top: 3px solid #1e293b; }
                         .total-row td { font-weight: 900; font-size: 18px; }
                         .footer { margin-top: 30px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 20px; }
-                        .footer span { color: #059669; font-weight: bold; }
+                        .footer span { color: #1e293b; font-weight: bold; }
                         @media print { body { padding: 0; } .invoice-container { border: none; border-radius: 0; padding: 20px; } }
                     </style>
                 </head>
