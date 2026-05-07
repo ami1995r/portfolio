@@ -171,59 +171,40 @@
                     </div>
                 </div>
 
-               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <!-- کارت اول: فروش -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">فروش کل دوره</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
-            </div>
-        </div>
-        <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
-            <div class="flex items-center gap-1">
-                <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">▲ +۱۲٪</span>
-                <span class="text-[10px] text-slate-400">ماهانه</span>
-            </div>
-            <p id="dash-today-sales" class="text-[11px] text-slate-600 font-bold">امروز: ۰ تومان</p>
-        </div>
-    </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- کارت اول: فروش -->
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
+                        <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <p class="text-xs font-black text-slate-400 mb-1">فروش کل دوره</p>
+                        <h3 class="text-3xl font-black text-slate-800 number persian-number" id="dash-sales-total">۰</h3>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-slate-600 font-bold bg-slate-50 px-2 py-1 rounded-xl">▲ +۱۲٪</span>
+                            <span class="text-xs text-slate-400">نسبت به ماه قبل</span>
+                        </div>
+                        <p id="dash-today-sales" class="text-slate-600 text-sm font-bold mt-1">فروش امروز: ۰ تومان</p>
+                    </div>
 
-    <!-- کارت دوم: بانک طلا -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">موجودی طلا</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-gold-total">۰٫۰۰۰</h3>
-            </div>
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100">
-            <p class="text-[10px] text-slate-500">گرم</p>
-        </div>
-    </div>
+                    <!-- کارت دوم: بانک طلا -->
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
+                        <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <p class="text-xs font-black text-slate-400 mb-1">موجودی بانک طلا (گرم)</p>
+                        <h3 class="text-3xl font-black text-slate-800 number persian-number" id="dash-gold-total">۰٫۰۰۰</h3>
+                    </div>
 
-    <!-- کارت سوم: مشتریان -->
-    <div class="dashboard-card bg-white p-4 rounded-[1.5rem] border-l-4 border-royal-green custom-shadow">
-        <div class="flex items-center gap-3">
-            <div class="icon-wrapper w-10 h-10 bg-royal-green/10 text-royal-green rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-slate-400">مشتریان فعال</p>
-                <h3 class="text-2xl font-black text-slate-800 number persian-number" id="dash-cust-total">۰</h3>
-            </div>
-        </div>
-        <div class="mt-2 pt-2 border-t border-slate-100">
-            <p class="text-[10px] text-slate-500">نفر</p>
-        </div>
-    </div>
-</div>
+                    <!-- کارت سوم: مشتریان -->
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
+                        <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <p class="text-xs font-black text-slate-400 mb-1">تعداد مشتریان فعال</p>
+                        <h3 class="text-3xl font-black text-slate-800 number persian-number" id="dash-cust-total">۰</h3>
+                    </div>
+                </div>
+
                 <!-- ماشین حساب طلای آب‌شده -->
                 <div class="bg-slate-900 text-white p-8 lg:p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-64 h-64 bg-slate-500/10 blur-[100px] rounded-full"></div>
