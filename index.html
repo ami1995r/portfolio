@@ -45,23 +45,29 @@
 
         /* نوار کناری مینیمال - ساده و شیک */
         .nav-btn {
-            transition: all 0.2s ease;
-            border-radius: 0;
-            position: relative;
-            padding: 12px 20px;
-            background: transparent;
-            color: #64748b;
-            font-weight: 600;
-            border-bottom: 1px solid transparent;
-        }
-        .nav-btn:hover {
-            background: #f1f5f9;
-            color: #0f172a;
-        }
+    transition: all 0.2s ease;
+    border-radius: 0;
+    position: relative;
+    padding: 12px 20px;
+    background: transparent;
+    color: #475569;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+}
+.nav-btn:hover {
+    background: #f1f5f9;
+    color: #003333;
+}
        .nav-btn.active {
-    background: #e2e8f0;
-    color: #0f172a;
-    border-bottom: 2px solid #0f172a;
+    background: #003333;
+    color: #ffffff;
+    border-bottom: 2px solid #003333;
+}
+.nav-btn.active span {
+    font-weight: 800;
+}
+.nav-btn.active svg {
+    color: #ffffff;
 }
         .nav-btn.active span {
             font-weight: 800;
