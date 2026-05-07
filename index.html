@@ -92,6 +92,26 @@
         .invoice-row-highlight {
             border-right: 4px solid #059669;
         }
+
+/* رنگ ثانویه - سبز پادشاهی */
+.bg-royal-green {
+    background-color: #003333;
+}
+.text-royal-green {
+    color: #003333;
+}
+.border-royal-green {
+    border-color: #003333;
+}
+.hover-bg-royal-green:hover {
+    background-color: #003333;
+}
+.hover-text-royal-green:hover {
+    color: #003333;
+}
+
+
+        
     </style>
 </head>
 <body class="antialiased">
@@ -112,7 +132,7 @@
                 <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Gold Management System v6.4</p>
             </div>
             <nav class="flex-1 p-2 space-y-1">
-                <button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-slate-500 text-sm">
+<button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center gap-3 transition-all text-royal-green text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="font-bold">پیشخوان</span>
                 </button>
@@ -153,7 +173,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- کارت اول: فروش -->
-                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
                         <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
@@ -167,7 +187,7 @@
                     </div>
 
                     <!-- کارت دوم: بانک طلا -->
-                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
                         <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
@@ -176,7 +196,7 @@
                     </div>
 
                     <!-- کارت سوم: مشتریان -->
-                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-slate-500 custom-shadow">
+                    <div class="dashboard-card bg-white p-6 rounded-[2rem] border-l-4 border-royal-green custom-shadow">
                         <div class="icon-wrapper w-12 h-12 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
@@ -312,7 +332,7 @@
 
                             <!-- دکمه‌های عملیات -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <button onclick="saveInvoice()" class="bg-slate-800 text-white py-6 rounded-2xl font-black text-xl hover:bg-slate-700 transition-all custom-shadow">
+                                <button onclick="saveInvoice()" class="bg-royal-green text-white py-6 rounded-2xl font-black text-xl hover:bg-royal-green/90 transition-all custom-shadow">
                                     ثبت فاکتور
                                 </button>
                                 <button id="print-btn" onclick="printInvoice()" class="bg-white border-2 border-slate-200 text-slate-700 py-6 rounded-2xl font-black text-xl hover:bg-slate-50 hover:border-slate-300 transition-all custom-shadow">
@@ -355,7 +375,7 @@
                                 </div>
                                 
                                 <div class="pt-6 border-t border-dashed border-slate-200">
-                                    <div class="flex justify-between items-center p-4 bg-slate-800 rounded-2xl text-white shadow-lg">
+                                    <div class="flex justify-between items-center p-4 bg-royal-green rounded-2xl text-white shadow-lg">
                                         <span class="font-bold text-lg">مبلغ نهایی:</span>
                                         <span id="sum-total" class="text-3xl font-black number persian-number">۰</span>
                                     </div>
@@ -479,7 +499,7 @@
 
             <!-- گزارشات -->
             <div id="reports" class="tab-content space-y-8">
-                <div class="bg-slate-800 text-white p-10 rounded-[3rem] shadow-2xl">
+                <div class="bg-royal-green text-white p-10 rounded-[3rem] shadow-2xl">
                     <h2 class="text-3xl font-black mb-2">مرکز گزارشات و خروجی</h2>
                     <p class="opacity-80 font-bold">تمام داده‌های سیستم را به صورت فایل اکسل دریافت کنید.</p>
                 </div>
@@ -533,7 +553,7 @@
             </table>
 
             <div class="mt-8 flex gap-4">
-                <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black text-lg hover:bg-slate-700 transition-all">
+                <button id="settle-btn" onclick="settleCustomerGold()" class="flex-1 bg-royal-green text-white py-4 rounded-2xl font-black text-lg hover:bg-royal-green/90 transition-all">
                     تسویه حساب
                 </button>
                 <button onclick="closeGoldDetailModal()" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black text-lg">بستن</button>
@@ -593,7 +613,7 @@
                 <input type="text" id="m-national" placeholder="کد ملی" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
                 <input type="text" id="m-phone" placeholder="شماره تماس" class="w-full bg-slate-50 p-5 rounded-2xl font-bold border-0 outline-none focus:ring-2 ring-slate-500 text-left">
                 <div class="flex gap-4 mt-8">
-                    <button onclick="saveCustomer()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black">ذخیره</button>
+                    <button onclick="saveCustomer()" class="flex-1 bg-royal-green text-white py-4 rounded-2xl font-black">ذخیره</button>
                     <button onclick="closeAddModal()" class="flex-1 bg-slate-100 text-slate-500 py-4 rounded-2xl font-black">انصراف</button>
                 </div>
             </div>
@@ -684,7 +704,7 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
         // ==================== Toast Notification ====================
         function toast(msg, type = "success") {
             const t = document.createElement('div');
-            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-slate-800' : 'bg-red-500'}`;
+            t.className = `fixed bottom-8 left-8 px-8 py-4 rounded-2xl text-white font-black z-[1000] ${type === 'success' ? 'bg-royal-green' : 'bg-red-500'}`;
             t.textContent = msg;
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 3000);
@@ -1022,8 +1042,8 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
                 </td>
                 <td class="p-5 font-black text-slate-700 persian-number">${formatNumber(totalWeight, 3)} گرم</td>
                 <td class="p-5 font-black text-slate-600">
-                    <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
-                            class="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition-all">
+                   <button onclick="event.stopPropagation(); showGoldDetails(${customerId})" 
+        class="bg-royal-green text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-royal-green/90 transition-all">
                         جزئیات امانات
                     </button>
                 </td>
