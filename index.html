@@ -734,27 +734,33 @@ credits = savedCredits ? JSON.parse(savedCredits) : [];
             document.getElementById('sidebar').classList.toggle('translate-x-full');
         }
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            const targetTab = document.getElementById(id);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            } else {
-                document.getElementById('dashboard').classList.add('active');
-                id = 'dashboard';
-            }
+      function switchTab(id) {
+    // مخفی کردن همه تب‌ها
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    const targetTab = document.getElementById(id);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    } else {
+        document.getElementById('dashboard').classList.add('active');
+        id = 'dashboard';
+    }
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
-                    btn.classList.add('active');
-                }
-            });
-
-            if (window.innerWidth < 1024) {
-                document.getElementById('sidebar').classList.add('translate-x-full');
-            }
+    // بروزرسانی دکمه‌های نوار کناری
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        // بررسی دقیق‌تر: اگر onclick شامل id باشد و id دقیقاً برابر با تب باشد
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        // استخراج id از onclick
+        const match = onclickAttr.match(/switchTab\('([^']+)'\)/);
+        if (match && match[1] === id) {
+            btn.classList.add('active');
         }
+    });
+
+    if (window.innerWidth < 1024) {
+        document.getElementById('sidebar').classList.add('translate-x-full');
+    }
+}
 
         // ==================== Live Search ====================
         function liveSearch(query, context) {
