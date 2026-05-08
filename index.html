@@ -1637,7 +1637,7 @@
         }
 
         // ==================== Print Invoice ====================
-      function printInvoice() {
+     function printInvoice() {
     if (invoices.length === 0) {
         toast("هیچ فاکتوری برای چاپ وجود ندارد", "error");
         return;
@@ -1647,12 +1647,15 @@
     const lastInvoice = invoices[invoices.length - 1];
     const customer = customers.find(c => c.id == lastInvoice.customerId);
     
-    // محاسبه مبالغ
-    const raw = lastInvoice.goldPrice * lastInvoice.weight;
+    // محاسبه مبالغ واقعی از خلاصه محاسبات
+    const raw = parsePersianNumber(document.getElementById('sum-raw').innerText);
     const wage = parsePersianNumber(document.getElementById('sum-wage').innerText);
     const profit = parsePersianNumber(document.getElementById('sum-profit').innerText);
     const tax = parsePersianNumber(document.getElementById('sum-tax').innerText);
     const total = lastInvoice.total;
+    
+    // دریافت درصد مالیات از فیلد
+    const taxPercent = document.getElementById('tax').value || '2';
     
     // ایجاد پنجره چاپ
     const printWindow = window.open('', '_blank', 'width=800,height=600');
@@ -1866,7 +1869,7 @@
                                     <th style="width: 8%;">عیار</th>
                                     <th style="width: 9%;">وزن طلا</th>
                                     <th style="width: 10%;">اجرت</th>
-                                    <th style="width: 10%;">سود</th>
+                                    <th style="width: 10%;">مالیات (${taxPercent}%)</th>
                                     <th style="width: 27%;">مبلغ کل</th>
                                 </tr>
                             </thead>
@@ -1874,10 +1877,10 @@
                                 <tr class="row">
                                     <td class="center">۱</td>
                                     <td>${lastInvoice.goldType}</td>
-                                    <td>۲۴</td>
+                                    <td class="center">۷۵۰</td>
                                     <td class="center">${formatNumber(lastInvoice.weight, 3)}</td>
                                     <td class="center">${formatNumber(wage, 0)}</td>
-                                    <td class="center">${formatNumber(profit, 0)}</td>
+                                    <td class="center">${formatNumber(tax, 0)}</td>
                                     <td class="center">${formatNumber(total, 0)}</td>
                                 </tr>
                                 <tr class="row"><td class="center">۲</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -1905,8 +1908,7 @@
                         </div>
 
                         <div class="address">
-                            
-                            <br>
+ 
                             <div style="margin-top: 2mm; text-align: center;">امضا: خریدار</div>
                         </div>
 
