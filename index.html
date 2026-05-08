@@ -663,15 +663,16 @@
                 <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="overflow-x-auto table-responsive">
                         <table class="w-full text-right text-sm">
-                            <thead class="bg-slate-50 text-slate-400">
-                                <tr>
-                                    <th class="p-4 font-black">نام و نام خانوادگی</th>
-                                    <th class="p-4 font-black">کد ملی</th>
-                                    <th class="p-4 font-black">تلفن</th>
-                                    <th class="p-4 font-black cursor-pointer">اعتبار (تومان)</th>
-                                    <th class="p-4 font-black text-center">عملیات</th>
-                                </tr>
-                            </thead>
+                           <thead class="bg-slate-50 text-slate-400">
+    <tr>
+        <th class="p-4 font-black">کد مشتری</th>
+        <th class="p-4 font-black">نام و نام خانوادگی</th>
+        <th class="p-4 font-black">کد ملی</th>
+        <th class="p-4 font-black">تلفن</th>
+        <th class="p-4 font-black cursor-pointer">اعتبار (تومان)</th>
+        <th class="p-4 font-black text-center">عملیات</th>
+    </tr>
+</thead>
                             <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
                         </table>
                     </div>
@@ -811,25 +812,40 @@
         let goldSortDirection = {};
 
         // ==================== Data Persistence ====================
-        function loadData() {
-            try {
-                const savedCustomers = localStorage.getItem('ghesseh_v64_customers');
-                const savedInvoices = localStorage.getItem('ghesseh_v64_invoices');
-                const savedGold = localStorage.getItem('ghesseh_v64_gold');
-                const savedCredits = localStorage.getItem('ghesseh_v64_credits');
+       function loadData() {
+    try {
+        const savedCustomers = localStorage.getItem('ghesseh_v64_customers');
+        const savedInvoices = localStorage.getItem('ghesseh_v64_invoices');
+        const savedGold = localStorage.getItem('ghesseh_v64_gold');
+        const savedCredits = localStorage.getItem('ghesseh_v64_credits');
 
-                customers = savedCustomers ? JSON.parse(savedCustomers) : [];
-                invoices = savedInvoices ? JSON.parse(savedInvoices) : [];
-                goldBank = savedGold ? JSON.parse(savedGold) : [];
-                credits = savedCredits ? JSON.parse(savedCredits) : [];
-            } catch (e) {
-                console.error("خطا در لود داده‌ها:", e);
-                customers = [];
-                invoices = [];
-                goldBank = [];
-                credits = [];
+        customers = savedCustomers ? JSON.parse(savedCustomers) : [];
+        invoices = savedInvoices ? JSON.parse(savedInvoices) : [];
+        goldBank = savedGold ? JSON.parse(savedGold) : [];
+        credits = savedCredits ? JSON.parse(savedCredits) : [];
+        
+        // برای مشتریان قدیمی که کد ندارند، کد تولید کن
+        customers.forEach(c => {
+            if (!c.code) {
+                let customerCode;
+                let isUnique = false;
+                while (!isUnique) {
+                    const randomNum = Math.floor(Math.random() * 9999) + 1;
+                    customerCode = randomNum.toString().padStart(4, '0');
+                    isUnique = !customers.some(c2 => c2.code === customerCode);
+                }
+                c.code = customerCode;
             }
-        }
+        });
+        
+    } catch (e) {
+        console.error("خطا در لود داده‌ها:", e);
+        customers = [];
+        invoices = [];
+        goldBank = [];
+        credits = [];
+    }
+}
 
         function saveData() {
             try {
@@ -1464,37 +1480,74 @@
         }
 
         // ==================== Customers ====================
-        function renderCustomers() {
-            const tbody = document.getElementById('customers-tbody');
-            tbody.innerHTML = customers.map(c => {
-                const customerCredits = credits.filter(cr => cr.customerId == c.id);
-                const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
-                return `
-                    <tr class="hover:bg-slate-50 transition-all">
-                        <td class="p-4 font-black text-slate-700">${c.name}</td>
-                        <td class="p-4 font-mono text-slate-500">${c.national || ''}</td>
-                        <td class="p-4 font-mono text-slate-500">${c.phone || ''}</td>
-                        <td class="p-4 font-black text-primary persian-number cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
-                            onclick="showCreditDetails(${c.id})">
-                            ${formatNumber(totalCredit, 0)}
-                        </td>
-                        <td class="p-4 text-center">
-                            <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
-                        </td>
-                    </tr>`;
-            }).join('');
-        }
+       function renderCustomers() {
+    const tbody = document.getElementById('customers-tbody');
+    tbody.innerHTML = customers.map(c => {
+        const customerCredits = credits.filter(cr => cr.customerId == c.id);
+        const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
+        return `
+            <tr class="hover:bg-slate-50 transition-all">
+                <td class="p-4 font-black text-slate-700">
+                    <span class="text-xs text-slate-400 font-mono ml-2">${c.code || '----'}</span>
+                    ${c.name}
+                </td>
+                <td class="p-4 font-mono text-slate-500">${c.national || ''}</td>
+                <td class="p-4 font-mono text-slate-500">${c.phone || ''}</td>
+                <td class="p-4 font-black text-primary persian-number cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
+                    onclick="showCreditDetails(${c.id})">
+                    ${formatNumber(totalCredit, 0)}
+                </td>
+                <td class="p-4 text-center">
+                    <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
+                </td>
+            </tr>`;
+    }).join('');
+}
 
         function saveCustomer() {
-            const n = document.getElementById('m-name').value.trim();
-            const m = document.getElementById('m-national').value.trim();
-            const p = document.getElementById('m-phone').value.trim();
-            if (!n || !m) return toast("نام و کد ملی الزامی است", "error");
-            customers.push({ id: Date.now(), name: n, national: m, phone: p, credit: 0 });
-            closeAddModal();
-            refreshAll();
-            toast("مشتری با موفقیت افزوده شد", "success");
-        }
+    const n = document.getElementById('m-name').value.trim();
+    const m = document.getElementById('m-national').value.trim();
+    const p = document.getElementById('m-phone').value.trim();
+    
+    if (!n || !m) return toast("نام و کد ملی الزامی است", "error");
+    
+    // بررسی تکراری بودن نام
+    const nameExists = customers.some(c => c.name === n);
+    if (nameExists) {
+        return toast("این نام قبلاً ثبت شده است!", "error");
+    }
+    
+    // بررسی تکراری بودن کد ملی
+    const nationalExists = customers.some(c => c.national === m);
+    if (nationalExists) {
+        return toast("این کد ملی قبلاً ثبت شده است!", "error");
+    }
+    
+    // تولید کد مشتری ۴ رقمی تصادفی (از 0001 تا 9999)
+    let customerCode;
+    let isUnique = false;
+    while (!isUnique) {
+        // تولید عدد تصادفی بین 1 تا 9999
+        const randomNum = Math.floor(Math.random() * 9999) + 1;
+        // تبدیل به ۴ رقم با صفرهای ابتدایی (مثلاً 0001)
+        customerCode = randomNum.toString().padStart(4, '0');
+        // بررسی یکتا بودن کد
+        isUnique = !customers.some(c => c.code === customerCode);
+    }
+    
+    customers.push({ 
+        id: Date.now(),
+        code: customerCode,
+        name: n, 
+        national: m, 
+        phone: p, 
+        credit: 0 
+    });
+    
+    closeAddModal();
+    refreshAll();
+    toast(`مشتری با کد ${customerCode} با موفقیت افزوده شد`, "success");
+}
 
         function deleteCustomer(id) {
             if (confirm("آیا از حذف این مشتری اطمینان دارید؟")) {
