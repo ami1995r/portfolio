@@ -295,7 +295,7 @@
     
     /* اصلاح فضای اصلی */
     .tab-content {
-        padding: 8px !important;
+        padding: 4px !important;
     }
     
     /* کوچک کردن فونت‌ها */
@@ -303,8 +303,6 @@
         font-size: 11px !important;
     }
 }
-
-
 
 
 
@@ -953,15 +951,9 @@
         // ==================== Sidebar & Tabs ====================
         function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    if (sidebar.classList.contains('translate-x-full')) {
-        sidebar.classList.remove('translate-x-full');
-        sidebar.classList.add('open');
-    } else {
-        sidebar.classList.add('translate-x-full');
-        sidebar.classList.remove('open');
-    }
+    sidebar.classList.toggle('translate-x-full');
+    sidebar.classList.toggle('open');
 }
-
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             const targetTab = document.getElementById(id);
@@ -979,11 +971,11 @@
                 }
             });
 
-            if (window.innerWidth < 1024) {
-                document.getElementById('sidebar').classList.add('translate-x-full');
-            }
-        }
-
+          if (window.innerWidth < 1024) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.add('translate-x-full');
+    sidebar.classList.remove('open');
+}
         // ==================== Night Mode ====================
         function toggleNightMode() {
             document.body.classList.toggle('night-mode');
@@ -1178,12 +1170,12 @@
         }
 
         // ==================== Render Invoices ====================
-      function renderInvoices(filtered = null) {
+    function renderInvoices(filtered = null) {
     const tbody = document.getElementById('invoices-tbody');
     const data = filtered || invoices;
     const sortedData = [...data].reverse();
     
-    // تشخیص موبایل با عرض صفحه
+    // تشخیص موبایل
     const isMobile = window.innerWidth < 640;
     
     if (isMobile) {
@@ -1199,11 +1191,11 @@
                                 <span class="font-bold text-sm text-slate-800">${i.customerName}</span>
                                 <span class="text-xs text-slate-400">${i.date}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2">
+                            <div class="flex justify-between items-center py-1">
                                 <span class="text-xs text-slate-600">${i.goldType}</span>
                                 <span class="text-xs font-mono text-slate-700">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2">
+                            <div class="flex justify-between items-center py-1">
                                 <span class="text-xs text-slate-600">قیمت طلا</span>
                                 <span class="text-xs font-mono text-slate-700">${formatNumber(i.goldPrice, 0)}</span>
                             </div>
@@ -1212,8 +1204,8 @@
                                 <span class="invoice-status ${status === 'paid' ? 'status-paid' : 'status-unpaid'}">${statusText}</span>
                             </div>
                             <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                                <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-lg text-xs font-bold">ویرایش</button>
-                                <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-lg text-xs font-bold">حذف</button>
+                                <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded-lg text-xs font-bold">ویرایش</button>
+                                <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg text-xs font-bold">حذف</button>
                             </div>
                         </div>
                     </td>
@@ -1572,7 +1564,7 @@
         }
 
         // ==================== Customers ====================
-    function renderCustomers() {
+   function renderCustomers() {
     const tbody = document.getElementById('customers-tbody');
     const isMobile = window.innerWidth < 640;
     
@@ -1639,7 +1631,6 @@
         }).join('');
     }
 }
-
         function saveCustomer() {
     const n = document.getElementById('m-name').value.trim();
     const m = document.getElementById('m-national').value.trim();
@@ -2086,34 +2077,32 @@
             });
         }
 
-        window.onload = () => {
-            loadData();
-            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-            refreshAll();
-            initInvoiceCalculations();
-            setTimeout(calculateInvoice, 500);
-            loadNightMode();
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const tabId = this.dataset.tab;
-                    switchTab(tabId);
-                });
-            });
-        };
-
-window.addEventListener('resize', function() {
-    renderInvoices();
-    renderCustomers();
-});
-let resizeTimer;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-        renderInvoices();
-        renderCustomers();
-    }, 300);
-});
-
+     window.onload = () => {
+    loadData();
+    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+    refreshAll();
+    initInvoiceCalculations();
+    setTimeout(calculateInvoice, 500);
+    loadNightMode();
+    
+    // اضافه کردن رویداد کلیک به دکمه‌های نوار کناری
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            switchTab(tabId);
+        });
+    });
+    
+    // ===== رویداد تغییر اندازه پنجره =====
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            renderInvoices();
+            renderCustomers();
+        }, 300);
+    });
+};
         
         
     </script>
