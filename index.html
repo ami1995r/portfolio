@@ -663,14 +663,14 @@
                 <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
                     <div class="overflow-x-auto table-responsive">
                         <table class="w-full text-right text-sm">
-                           <thead class="bg-slate-50 text-slate-400">
+                       <thead class="bg-slate-50 text-slate-400">
     <tr>
-        <th class="p-4 font-black">کد مشتری</th>
-        <th class="p-4 font-black">نام و نام خانوادگی</th>
-        <th class="p-4 font-black">کد ملی</th>
-        <th class="p-4 font-black">تلفن</th>
-        <th class="p-4 font-black cursor-pointer">اعتبار (تومان)</th>
-        <th class="p-4 font-black text-center">عملیات</th>
+        <th class="p-3 font-black text-sm text-center">کد مشتری</th>
+        <th class="p-3 font-black text-sm text-right">نام و نام خانوادگی</th>
+        <th class="p-3 font-black text-sm text-center">کد ملی</th>
+        <th class="p-3 font-black text-sm text-center">تلفن</th>
+        <th class="p-3 font-black text-sm text-center cursor-pointer">اعتبار (تومان)</th>
+        <th class="p-3 font-black text-sm text-center">عملیات</th>
     </tr>
 </thead>
                             <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
@@ -1480,24 +1480,22 @@
         }
 
         // ==================== Customers ====================
-       function renderCustomers() {
+     function renderCustomers() {
     const tbody = document.getElementById('customers-tbody');
     tbody.innerHTML = customers.map(c => {
         const customerCredits = credits.filter(cr => cr.customerId == c.id);
         const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
         return `
             <tr class="hover:bg-slate-50 transition-all">
-                <td class="p-4 font-black text-slate-700">
-                    <span class="text-xs text-slate-400 font-mono ml-2">${c.code || '----'}</span>
-                    ${c.name}
-                </td>
-                <td class="p-4 font-mono text-slate-500">${c.national || ''}</td>
-                <td class="p-4 font-mono text-slate-500">${c.phone || ''}</td>
-                <td class="p-4 font-black text-primary persian-number cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
+                <td class="p-3 font-mono text-slate-500 text-center">${c.code || '----'}</td>
+                <td class="p-3 font-black text-slate-700 text-right">${c.name}</td>
+                <td class="p-3 font-mono text-slate-500 text-center">${c.national || ''}</td>
+                <td class="p-3 font-mono text-slate-500 text-center">${c.phone || ''}</td>
+                <td class="p-3 font-black text-primary persian-number text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
                     onclick="showCreditDetails(${c.id})">
                     ${formatNumber(totalCredit, 0)}
                 </td>
-                <td class="p-4 text-center">
+                <td class="p-3 text-center">
                     <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
                 </td>
             </tr>`;
