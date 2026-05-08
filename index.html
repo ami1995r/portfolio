@@ -265,50 +265,6 @@
                 font-size: 11px !important;
             }
         }
-
-/* ===== بهبود نمایش در موبایل ===== */
-@media (max-width: 640px) {
-    /* اصلاح جدول‌ها */
-    .table-responsive {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-    }
-    .table-responsive table {
-        min-width: 600px;
-    }
-    
-    /* اصلاح کارت‌ها */
-    .mobile-card {
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    
-    /* اصلاح منوی همبرگر */
-    #sidebar {
-        width: 280px;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    }
-    #sidebar.open {
-        transform: translateX(0);
-    }
-    
-    /* اصلاح فضای اصلی */
-    .tab-content {
-        padding: 4px !important;
-    }
-    
-    /* کوچک کردن فونت‌ها */
-    .mobile-small {
-        font-size: 11px !important;
-    }
-}
-
-
-
-
-
-        
     </style>
 </head>
 <body class="antialiased">
@@ -616,28 +572,30 @@
             </div>
 
             <!-- ===== فاکتورهای صادر شده ===== -->
-           <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
-    <div class="p-4 border-b bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h3 class="font-black text-xl text-slate-800">فاکتورهای صادر شده</h3>
-        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-4 py-2 rounded-xl text-sm focus:ring-2 ring-primary outline-none w-full sm:w-64">
-    </div>
-    <div class="overflow-x-auto table-responsive">
-        <table class="w-full text-right">
-            <thead class="bg-slate-50 text-slate-500 sticky top-0">
-                <tr>
-                    <th class="p-4 font-black text-sm">تاریخ</th>
-                    <th class="p-4 font-black text-sm">مشتری</th>
-                    <th class="p-4 font-black text-sm">نوع طلا</th>
-                    <th class="p-4 font-black text-sm">وزن (گرم)</th>
-                    <th class="p-4 font-black text-sm">قیمت طلا</th>
-                    <th class="p-4 font-black text-sm">مبلغ کل</th>
-                    <th class="p-4 font-black text-sm text-center">عملیات</th>
-                </tr>
-            </thead>
-            <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
-        </table>
-    </div>
-</div>
+            <div id="invoices-list" class="tab-content">
+                <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
+                    <div class="p-4 border-b bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <h3 class="font-black text-xl text-slate-800">فاکتورهای صادر شده</h3>
+                        <input type="text" id="invoice-search" oninput="filterInvoices()" placeholder="جستجو در فاکتورها..." class="bg-slate-100 border-0 px-4 py-2 rounded-xl text-sm focus:ring-2 ring-primary outline-none w-full sm:w-64">
+                    </div>
+                    <div class="overflow-x-auto table-responsive">
+                        <table class="w-full text-right">
+                            <thead class="bg-slate-50 text-slate-500 sticky top-0">
+                                <tr>
+                                    <th class="p-4 font-black text-sm">تاریخ</th>
+                                    <th class="p-4 font-black text-sm">مشتری</th>
+                                    <th class="p-4 font-black text-sm">نوع طلا</th>
+                                    <th class="p-4 font-black text-sm">وزن (گرم)</th>
+                                    <th class="p-4 font-black text-sm">قیمت طلا</th>
+                                    <th class="p-4 font-black text-sm">مبلغ کل</th>
+                                    <th class="p-4 font-black text-sm text-center">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-tbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- ===== بانک طلا ===== -->
             <div id="gold-bank" class="tab-content space-y-6">
@@ -703,22 +661,23 @@
                     <button onclick="openAddModal()" class="bg-primary text-white px-6 py-2.5 rounded-xl font-black text-sm transition-all hover:bg-primary/90">مشتری جدید +</button>
                 </div>
                 <div class="bg-white rounded-[2rem] border border-slate-100 custom-shadow overflow-hidden">
-    <div class="overflow-x-auto table-responsive">
-        <table class="w-full text-right text-sm">
-            <thead class="bg-slate-50 text-slate-400">
-                <tr>
-                    <th class="p-4 font-black">کد مشتری</th>
-                    <th class="p-4 font-black">نام و نام خانوادگی</th>
-                    <th class="p-4 font-black">کد ملی</th>
-                    <th class="p-4 font-black">تلفن</th>
-                    <th class="p-4 font-black cursor-pointer">اعتبار (تومان)</th>
-                    <th class="p-4 font-black text-center">عملیات</th>
-                </tr>
-            </thead>
-            <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
-        </table>
-    </div>
-</div>
+                    <div class="overflow-x-auto table-responsive">
+                        <table class="w-full text-right text-sm">
+                       <thead class="bg-slate-50 text-slate-400">
+    <tr>
+        <th class="p-3 font-black text-sm text-center">کد مشتری</th>
+        <th class="p-3 font-black text-sm text-right">نام و نام خانوادگی</th>
+        <th class="p-3 font-black text-sm text-center">کد ملی</th>
+        <th class="p-3 font-black text-sm text-center">تلفن</th>
+        <th class="p-3 font-black text-sm text-center cursor-pointer">اعتبار (تومان)</th>
+        <th class="p-3 font-black text-sm text-center">عملیات</th>
+    </tr>
+</thead>
+                            <tbody id="customers-tbody" class="divide-y divide-slate-50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- ===== گزارشات ===== -->
             <div id="reports" class="tab-content space-y-6">
@@ -950,10 +909,9 @@
 
         // ==================== Sidebar & Tabs ====================
         function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('translate-x-full');
-    sidebar.classList.toggle('open');
-}
+            document.getElementById('sidebar').classList.toggle('translate-x-full');
+        }
+
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             const targetTab = document.getElementById(id);
@@ -971,11 +929,11 @@
                 }
             });
 
-          if (window.innerWidth < 1024) {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.add('translate-x-full');
-    sidebar.classList.remove('open');
-}
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebar').classList.add('translate-x-full');
+            }
+        }
+
         // ==================== Night Mode ====================
         function toggleNightMode() {
             document.body.classList.toggle('night-mode');
@@ -1170,54 +1128,13 @@
         }
 
         // ==================== Render Invoices ====================
-    function renderInvoices(filtered = null) {
-    const tbody = document.getElementById('invoices-tbody');
-    const data = filtered || invoices;
-    const sortedData = [...data].reverse();
-    
-    // تشخیص موبایل
-    const isMobile = window.innerWidth < 640;
-    
-    if (isMobile) {
-        // کارت‌ها در موبایل
-        tbody.innerHTML = sortedData.map(i => {
-            const status = i.total > 10000000 ? 'paid' : 'unpaid';
-            const statusText = i.total > 10000000 ? 'تسویه شده' : 'در انتظار';
-            return `
-                <tr>
-                    <td colspan="7">
-                        <div class="mobile-card bg-white p-3 border border-slate-100 mb-2">
-                            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                                <span class="font-bold text-sm text-slate-800">${i.customerName}</span>
-                                <span class="text-xs text-slate-400">${i.date}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-1">
-                                <span class="text-xs text-slate-600">${i.goldType}</span>
-                                <span class="text-xs font-mono text-slate-700">${i.weight ? formatNumber(i.weight, 3) + ' گرم' : '—'}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-1">
-                                <span class="text-xs text-slate-600">قیمت طلا</span>
-                                <span class="text-xs font-mono text-slate-700">${formatNumber(i.goldPrice, 0)}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-t border-slate-100">
-                                <span class="text-sm font-bold text-primary">${formatNumber(i.total, 0)}</span>
-                                <span class="invoice-status ${status === 'paid' ? 'status-paid' : 'status-unpaid'}">${statusText}</span>
-                            </div>
-                            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
-                                <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded-lg text-xs font-bold">ویرایش</button>
-                                <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg text-xs font-bold">حذف</button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    } else {
-        // جدول در دسکتاپ
-        tbody.innerHTML = sortedData.map(i => {
-            const status = i.total > 10000000 ? 'paid' : 'unpaid';
-            const statusText = i.total > 10000000 ? 'تسویه شده' : 'در انتظار';
-            return `
+        function renderInvoices(filtered = null) {
+            const tbody = document.getElementById('invoices-tbody');
+            const data = filtered || invoices;
+            tbody.innerHTML = data.map(i => {
+                const status = i.total > 10000000 ? 'paid' : 'unpaid';
+                const statusText = i.total > 10000000 ? 'تسویه شده' : 'در انتظار';
+                return `
                 <tr class="invoice-row" data-id="${i.id}">
                     <td class="p-4 text-slate-400 text-xs">${i.date}</td>
                     <td class="p-4 font-black">${i.customerName}</td>
@@ -1230,11 +1147,10 @@
                         <button onclick="editInvoice(${i.id})" class="text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-xl text-sm font-bold mx-1">ویرایش</button>
                         <button onclick="deleteInvoice(${i.id})" class="text-red-500 hover:bg-red-50 px-3 py-1 rounded-xl text-sm font-bold">حذف</button>
                     </td>
-                </tr>
-            `;
-        }).join('');
-    }
-}
+                </tr>`;
+            }).join('');
+        }
+
         function filterInvoices() {
             const q = document.getElementById('invoice-search').value.toLowerCase().trim();
             const filtered = invoices.filter(i => i.customerName.toLowerCase().includes(q) || (i.goldType && i.goldType.toLowerCase().includes(q)));
@@ -1564,73 +1480,28 @@
         }
 
         // ==================== Customers ====================
-   function renderCustomers() {
+     function renderCustomers() {
     const tbody = document.getElementById('customers-tbody');
-    const isMobile = window.innerWidth < 640;
-    
-    if (isMobile) {
-        // کارت‌ها در موبایل
-        tbody.innerHTML = customers.map(c => {
-            const customerCredits = credits.filter(cr => cr.customerId == c.id);
-            const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
-            return `
-                <tr>
-                    <td colspan="6">
-                        <div class="mobile-card bg-white p-3 border border-slate-100 mb-2">
-                            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs text-slate-400 font-mono">${c.code || '----'}</span>
-                                    <span class="font-bold text-sm text-slate-800">${c.name}</span>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2 mt-2">
-                                <div>
-                                    <span class="text-xs text-slate-400">کد ملی</span>
-                                    <div class="text-xs font-mono text-slate-600">${c.national || ''}</div>
-                                </div>
-                                <div>
-                                    <span class="text-xs text-slate-400">تلفن</span>
-                                    <div class="text-xs font-mono text-slate-600">${c.phone || ''}</div>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
-                                <span class="text-xs text-slate-400">اعتبار</span>
-                                <span class="text-sm font-black text-primary cursor-pointer hover:bg-primary/10 px-2 py-1 rounded-lg transition-all" 
-                                    onclick="showCreditDetails(${c.id})">
-                                    ${formatNumber(totalCredit, 0)}
-                                </span>
-                            </div>
-                            <div class="flex justify-end mt-2 pt-2 border-t border-slate-100">
-                                <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 px-2 py-1 rounded-lg text-xs transition-all">حذف</button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    } else {
-        // جدول در دسکتاپ
-        tbody.innerHTML = customers.map(c => {
-            const customerCredits = credits.filter(cr => cr.customerId == c.id);
-            const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
-            return `
-                <tr class="hover:bg-slate-50 transition-all">
-                    <td class="p-3 font-mono text-slate-500 text-center">${c.code || '----'}</td>
-                    <td class="p-3 font-black text-slate-700 text-right">${c.name}</td>
-                    <td class="p-3 font-mono text-slate-500 text-center">${c.national || ''}</td>
-                    <td class="p-3 font-mono text-slate-500 text-center">${c.phone || ''}</td>
-                    <td class="p-3 font-black text-primary persian-number text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
-                        onclick="showCreditDetails(${c.id})">
-                        ${formatNumber(totalCredit, 0)}
-                    </td>
-                    <td class="p-3 text-center">
-                        <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    }
+    tbody.innerHTML = customers.map(c => {
+        const customerCredits = credits.filter(cr => cr.customerId == c.id);
+        const totalCredit = customerCredits.reduce((sum, cr) => sum + (cr.remaining || 0), 0);
+        return `
+            <tr class="hover:bg-slate-50 transition-all">
+                <td class="p-3 font-mono text-slate-500 text-center">${c.code || '----'}</td>
+                <td class="p-3 font-black text-slate-700 text-right">${c.name}</td>
+                <td class="p-3 font-mono text-slate-500 text-center">${c.national || ''}</td>
+                <td class="p-3 font-mono text-slate-500 text-center">${c.phone || ''}</td>
+                <td class="p-3 font-black text-primary persian-number text-center cursor-pointer hover:bg-primary/10 p-2 rounded-lg transition-all" 
+                    onclick="showCreditDetails(${c.id})">
+                    ${formatNumber(totalCredit, 0)}
+                </td>
+                <td class="p-3 text-center">
+                    <button onclick="deleteCustomer(${c.id})" class="text-red-400 hover:bg-red-50 p-1.5 rounded-lg text-xs transition-all">حذف</button>
+                </td>
+            </tr>`;
+    }).join('');
 }
+
         function saveCustomer() {
     const n = document.getElementById('m-name').value.trim();
     const m = document.getElementById('m-national').value.trim();
@@ -2077,34 +1948,20 @@
             });
         }
 
-     window.onload = () => {
-    loadData();
-    document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
-    refreshAll();
-    initInvoiceCalculations();
-    setTimeout(calculateInvoice, 500);
-    loadNightMode();
-    
-    // اضافه کردن رویداد کلیک به دکمه‌های نوار کناری
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            switchTab(tabId);
-        });
-    });
-    
-    // ===== رویداد تغییر اندازه پنجره =====
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            renderInvoices();
-            renderCustomers();
-        }, 300);
-    });
-};
-        
-        
+        window.onload = () => {
+            loadData();
+            document.getElementById('today-date').innerText = new Intl.DateTimeFormat('fa-IR', { dateStyle: 'full' }).format(new Date());
+            refreshAll();
+            initInvoiceCalculations();
+            setTimeout(calculateInvoice, 500);
+            loadNightMode();
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+        };
     </script>
 
 </body>
