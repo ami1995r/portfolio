@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سامانه جامع مهندسی فروش و تحلیل بازرگانی - شرکت صنعتی سیسکوه</title>
+  <title>سامانه جامع مهندسی فروش و انبار - شرکت صنعتی سیسکوه</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css">
@@ -399,7 +399,7 @@
     .ai-alert-icon { font-size: 18px; margin-top: 2px; }
 
     .chart-container { position: relative; height: 340px; width: 100%; }
-    .chart-container-large { position: relative; height: 420px; width: 100%; }
+    .chart-container-large { position: relative; height: 440px; width: 100%; }
     
     .modal-overlay {
       display: none;
@@ -691,7 +691,7 @@
       <div style="text-align:center; margin-bottom:32px;">
         <div class="login-logo">🏭</div>
         <h1 style="font-size:20px; font-weight:900; margin-top:18px; color:#1e293b;">شرکت صنعتی سیسکوه</h1>
-        <p style="font-size:12.5px; color:#64748b; margin-top:6px;">سامانه جامع مهندسی فروش و تطبیق حواله شعب</p>
+        <p style="font-size:12.5px; color:#64748b; margin-top:6px;">سامانه جامع مهندسی فروش، انبار و تطبیق حواله شعب</p>
       </div>
 
       <div id="login-error" style="display:none; background:#fee2e2; color:#991b1b; padding:12px; border-radius:10px; margin-bottom:16px; font-size:13px; font-weight:700;"></div>
@@ -906,8 +906,8 @@
           <div class="kpi-icon" style="background:#ede9fe;color:#8b5cf6;"><i class="fas fa-truck"></i></div>
         </div>
         <div class="kpi-card kpi-blue">
-          <div class="kpi-label">مجموع فروش قطعی در شعب</div>
-          <div class="kpi-value" id="analysis-kpi-sold">۰</div>
+          <div class="kpi-label">رکوردهای فروش با جزئیات</div>
+          <div class="kpi-value" id="analysis-kpi-records-count">۰</div>
           <div class="kpi-icon" style="background:#eff6ff;color:#3b82f6;"><i class="fas fa-receipt"></i></div>
         </div>
         <div class="kpi-card kpi-red">
@@ -926,7 +926,7 @@
       <div class="tabs">
         <div class="tab active" data-analysis-tab="decision-engine" onclick="showAnalysisTab('decision-engine')">🎯 تصمیم‌گیری تولید و توزیع (با دلیل)</div>
         <div class="tab" data-analysis-tab="reconciliation" onclick="showAnalysisTab('reconciliation')">📋 جدول تطبیق حواله با فروش قطعی شعب</div>
-        <div class="tab" data-analysis-tab="products-ranking" onclick="showAnalysisTab('products-ranking')">🏆 رتبه‌بندی محصولات (پرفروش به کم‌فروش)</div>
+        <div class="tab" data-analysis-tab="products-ranking" onclick="showAnalysisTab('products-ranking')">🏆 رتبه‌بندی محصولات (پرفروش به کم‌‌فروش)</div>
         <div class="tab" data-analysis-tab="city-branch" onclick="showAnalysisTab('city-branch')">🏢 رفتار شهرها و شعب (تفکیک محصول)</div>
       </div>
 
@@ -1062,7 +1062,7 @@
               </select>
             </div>
             <div style="padding-top:24px;">
-              <span class="badge badge-purple" id="selected-product-total-sales-badge" style="padding:8px 14px; font-size:13px;">کل فروش این محصول: ۰ عدد</span>
+              <span class="badge badge-purple" id="selected-product-total-sales-badge" style="padding:8px 14px; font-size:13px;">تعداد کل فروش رفته: ۰ عدد</span>
             </div>
           </div>
         </div>
@@ -1083,7 +1083,7 @@
           <div class="card-header">
             <div class="card-title">
               <i class="fas fa-sitemap" style="color:#10b981;"></i>
-              <span id="selected-product-table-title">جدول رتبه‌بندی شهرها و شعب برای محصول انتخابی</span>
+              <span id="selected-product-table-title">جدول رتبه‌‌بندی شهرها و شعب برای محصول انتخابی</span>
             </div>
           </div>
           <div class="table-container">
@@ -2215,7 +2215,6 @@
     }
 
     // چیدمان اکسل حواله‌ها: ستون ۰: نام شعبه مقصد | ستون ۱: نام کالا | ستون ۲: تعداد ارسال شده
-    // ماه بر اساس اسم فایل اکسل (در صورت عدم وجود ماه در اسم، دیالوگ انتخاب ماه نمایش داده می‌شود)
     function handleShipmentFileUpload(event) {
       const files = Array.from(event.target.files);
       if (files.length === 0) return;
@@ -2225,7 +2224,6 @@
         let detectedMonth = extractMonthFromText(fileName);
         
         if (!detectedMonth) {
-          // Check if any sheet name contains a month
           for (const s of sheets) {
             const m = extractMonthFromText(s.sheetName);
             if (m) { detectedMonth = m; break; }
@@ -2233,7 +2231,6 @@
         }
         
         if (!detectedMonth) {
-          // Prompt user to pick month
           pendingShipmentSheets = { fileName, sheets };
           openModal('shipment-month-picker-modal');
           document.getElementById('btn-confirm-shipment-month').onclick = () => {
@@ -2307,7 +2304,6 @@
     }
 
     // چیدمان اکسل فروش قطعی: ستون ۰: نام فروشگاه مرکزی (شهر) | ستون ۱: نام شعبه | ستون ۲: بارکد کالا | ستون ۳: نام کالا | ستون ۴: تعداد فروش رفته
-    // ماه بر اساس نام فایل (مانند دی.xlsx) یا نام شیت
     function handleAnalysisFileUpload(event) {
       const files = Array.from(event.target.files);
       if (files.length === 0) return;
@@ -2379,7 +2375,7 @@
       Promise.all(promises).then(() => {
         saveToLocalStorage();
         renderAnalysisPage();
-        showToast(`${formatNumber(importedCount)} رکورد فروش قطعی با موفقیت وارد سامانه شد`);
+        showToast(`${formatNumber(importedCount)} رکورد فروش با جزئیات وارد سامانه شد`);
         event.target.value = '';
       }).catch(err => {
         console.error('Analysis Import Error:', err);
@@ -2418,7 +2414,7 @@
       return n1.includes(n2) || n2.includes(n1);
     }
 
-    // ساخت ماتریس تطبیق حواله با فروش قطعی شعب
+    // ساخت ماتریس تطبیق حواله با فروش قطعی شعب (فرمول ارسالی - فروش = مانده دپو)
     function buildReconciliationData(monthFilter = 'all') {
       let shipments = state.warehouseShipments;
       let sales = state.analysisData;
@@ -2548,7 +2544,7 @@
         }
       });
       
-      // تصمیمات تولید کارخانه همراه با استدلال فنی
+      // تصمیمات خط تولید کارخانه با استدلال فنی
       Object.keys(productSummary).forEach(prodName => {
         const stats = productSummary[prodName];
         const sellThrough = stats.shipped > 0 ? (stats.sold / stats.shipped) * 100 : 0;
@@ -2573,7 +2569,7 @@
         }
       });
       
-      // تصمیمات فروش و توزیع بار شعب همراه با دلیل
+      // تصمیمات فروش و توزیع بار شعب با دلیل
       reconData.forEach(item => {
         if (item.shipped >= 25 && item.sold <= 2) {
           distDecisions.push({
@@ -2596,7 +2592,7 @@
         }
       });
       
-      // پیشنهاد ترانسفر بین‌شعبی بار
+      // پیشنهاد ترانسفر بین‌شعبی بار دپوشده
       reconData.filter(i => i.remain >= 20).forEach(overstockItem => {
         const hungryBranch = reconData.find(i => i.productName === overstockItem.productName && i.sellThrough >= 90 && i.branch !== overstockItem.branch);
         if (hungryBranch) {
@@ -2649,7 +2645,7 @@
       const overallSellThrough = totalShipped > 0 ? Math.round((totalSold / totalShipped) * 100) : 0;
       
       document.getElementById('analysis-kpi-shipped').textContent = formatNumber(totalShipped);
-      document.getElementById('analysis-kpi-sold').textContent = formatNumber(totalSold);
+      document.getElementById('analysis-kpi-records-count').textContent = formatNumber(state.analysisData.length);
       document.getElementById('analysis-kpi-depo').textContent = formatNumber(totalDepo);
       document.getElementById('analysis-kpi-sellthrough').textContent = `${formatNumber(overallSellThrough)}٪`;
       
@@ -2792,7 +2788,7 @@
       const sortedProducts = Object.values(productMap).sort((a, b) => b.sold - a.sold);
       
       const titleMonth = selectedRankingMonth === 'all' ? 'کل ایران (تمام ماه‌ها)' : `ماه ${selectedRankingMonth}`;
-      document.getElementById('product-ranking-chart-title').textContent = `نمودار رتبه‌بندی فروش محصولات در ${titleMonth} (پرفروش به کم‌فروش بدون بریدگی نام)`;
+      document.getElementById('product-ranking-chart-title').textContent = `نمودار رتبه‌‌بندی فروش محصولات در ${titleMonth} (پرفروش به کم‌فروش بدون بریدگی نام)`;
       document.getElementById('product-ranking-table-title').textContent = `جدول رتبه‌بندی و مقایسه ارسال و فروش در ${titleMonth}`;
       
       const canvas = document.getElementById('analysis-product-ranking-chart');
@@ -2917,7 +2913,7 @@
       
       select.innerHTML = productNames.map(name => {
         const total = productsMap[name];
-        return `<option value="${name}">${name} (کل فروش رفته: ${formatNumber(total)} عدد)</option>`;
+        return `<option value="${name}">${name} (تعداد کل فروش رفته: ${formatNumber(total)} عدد)</option>`;
       }).join('');
       
       if (!selectedBreakdownProductKey || !productsMap[selectedBreakdownProductKey]) {
@@ -2956,7 +2952,7 @@
       
       const sortedStores = Object.values(storeMap).sort((a, b) => b.quantity - a.quantity);
       
-      document.getElementById('selected-product-total-sales-badge').textContent = `کل فروش «${productName}»: ${formatNumber(totalProductSales)} عدد`;
+      document.getElementById('selected-product-total-sales-badge').textContent = `تعداد کل فروش «${productName}»: ${formatNumber(totalProductSales)} عدد`;
       document.getElementById('selected-product-chart-title').textContent = `نمودار فروش «${productName}» به تفکیک فروشگاه مرکزی (شهر) و شعبه (از بیشترین به کمترین)`;
       document.getElementById('selected-product-table-title').textContent = `جدول عملکرد شهرها و شعب برای «${productName}»`;
       
