@@ -1923,21 +1923,26 @@
     let pendingShipmentSheets = null;
 
     function normalizePersianText(str) {
-      if (!str) return '';
+      if (str === null || str === undefined) return '';
       return String(str)
-        .replace(/ي/g, 'ی')
-        .replace(/ك/g, 'ک')
-        .replace(/[\u200B-\u200D\uFEFF]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+        .replace(/[يى]/g, 'ی').replace(/ك/g, 'ک')
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+        .replace(/[\u064B-\u065F\u0670]/g, '')
+        .replace(/[\u200B-\u200D\uFEFF\u0640]/g, '')
+        .replace(/[ـ_\-–—]/g, ' ')
+        .replace(/[،,:؛؛()\[\]{}]/g, ' ')
+        .replace(/\s+/g, ' ').trim().toLowerCase();
     }
 
     function parseNumericValue(val) {
       if (val === null || val === undefined || val === '') return 0;
-      let s = String(val).replace(/,/g, '').trim();
-      s = s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-      const num = parseFloat(s);
-      return isNaN(num) ? 0 : num;
+      let s = String(val).trim()
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+        .replace(/[٬،,\s]/g, '');
+      const num = Number(s);
+      return Number.isFinite(num) ? num : 0;
     }
 
     // Extract exact Persian month from file name, sheet name or text
@@ -2010,9 +2015,71 @@
 
     function closeConfirmModal(confirmed) { closeModal('confirm-modal'); if (!confirmed) confirmCallback = null; }
 
+    let __dataDbPromise = null;
+    let __persistTimer = null;
+    function openDataDB() {
+      if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB unavailable'));
+      if (!__dataDbPromise) __dataDbPromise = new Promise((resolve,reject) => {
+        const req = indexedDB.open('SiskoohDataDB', 1);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains('datasets')) db.createObjectStore('datasets', {keyPath:'key'});
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error || new Error('DB open failed'));
+      });
+      return __dataDbPromise;
+    }
+
+    function writeLargeDataToDB() {
+      return openDataDB().then(db => new Promise((resolve,reject) => {
+        const tx = db.transaction('datasets','readwrite');
+        const store = tx.objectStore('datasets');
+        store.put({key:'analysisData', value:state.analysisData || []});
+        store.put({key:'warehouseShipments', value:state.warehouseShipments || []});
+        tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error);
+      }));
+    }
+
     function saveToLocalStorage() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-      catch (e) { console.warn('Storage save failed:', e); }
+      try {
+        const compact = {...state, analysisData:[], warehouseShipments:[], largeDataInIDB:true};
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+        clearTimeout(__persistTimer);
+        __persistTimer = setTimeout(() => {
+          writeLargeDataToDB().catch(err => {
+            console.warn('IndexedDB save failed:',err);
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+            catch(storageErr) { console.error('Storage quota exceeded:',storageErr); showToast('حجم داده از ظرفیت ذخیره‌سازی مرورگر بیشتر است؛ از پشتیبان JSON خروجی بگیرید.', 'error'); }
+          });
+        }, 400);
+      } catch (e) {
+        console.warn('Storage save failed:', e);
+        showToast('ذخیره اطلاعات ناموفق بود؛ فضای مرورگر کافی نیست.', 'error');
+      }
+    }
+
+    async function loadLargeDataFromDB() {
+      try {
+        const db = await openDataDB();
+        const values = await new Promise((resolve,reject) => {
+          const tx = db.transaction('datasets','readonly');
+          const store = tx.objectStore('datasets');
+          const a = store.get('analysisData'), s = store.get('warehouseShipments');
+          tx.oncomplete = () => resolve({analysis:a.result, shipments:s.result});
+          tx.onerror = () => reject(tx.error);
+        });
+        if (values.analysis) state.analysisData = values.analysis.value || [];
+        if (values.shipments) state.warehouseShipments = values.shipments.value || [];
+        // انتقال داده‌های قدیمی localStorage به IndexedDB
+        if (!values.analysis && state.analysisData.length || !values.shipments && state.warehouseShipments.length) {
+          await writeLargeDataToDB();
+          const compact = {...state, analysisData:[], warehouseShipments:[], largeDataInIDB:true};
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+        }
+      } catch(err) {
+        console.warn('IndexedDB load unavailable; using localStorage data:',err);
+      }
     }
     
     function loadFromLocalStorage() {
@@ -2299,22 +2366,51 @@
     function parseExcelWorkbook(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onerror = () => reject(reader.error || new Error('خطا در خواندن فایل'));
+        reader.onload = async (e) => {
+          const buffer = e.target.result;
+          const parseInWorker = () => new Promise((res, rej) => {
+            if (!window.Worker || !window.Blob || !window.URL?.createObjectURL) return rej(new Error('Worker unavailable'));
+            const workerCode = `
+              self.onmessage = function(ev) {
+                try {
+                  importScripts('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
+                  const data = new Uint8Array(ev.data);
+                  const wb = XLSX.read(data, {type:'array', cellDates:false, dense:true});
+                  const sheets = wb.SheetNames.map(name => {
+                    const ws = wb.Sheets[name];
+                    const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:'', raw:false});
+                    return {sheetName:String(name).trim(), rows:rows};
+                  }).filter(s => s.rows && s.rows.length);
+                  self.postMessage({ok:true, sheets:sheets});
+                } catch(err) { self.postMessage({ok:false, error:err && err.message || String(err)}); }
+              };
+            `;
+            const url = URL.createObjectURL(new Blob([workerCode], {type:'text/javascript'}));
+            const worker = new Worker(url);
+            worker.onmessage = ev => {
+              worker.terminate(); URL.revokeObjectURL(url);
+              ev.data && ev.data.ok ? res(ev.data.sheets) : rej(new Error(ev.data?.error || 'خطا در پردازش اکسل'));
+            };
+            worker.onerror = err => {
+              worker.terminate(); URL.revokeObjectURL(url); rej(err);
+            };
+            const workerBuffer = buffer.slice(0); worker.postMessage(workerBuffer, [workerBuffer]);
+          });
           try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetsData = [];
-            
-            workbook.SheetNames.forEach(sheetName => {
-              const worksheet = workbook.Sheets[sheetName];
-              const json = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-              const rows = json.filter(row => row && row.some(cell => String(cell).trim() !== ''));
-              if (rows.length > 0) {
-                sheetsData.push({ sheetName: sheetName.trim(), rows });
-              }
-            });
-            resolve({ fileName: file.name, sheets: sheetsData });
-          } catch (err) { reject(err); }
+            let sheets;
+            try { sheets = await parseInWorker(); }
+            catch(workerErr) {
+              // Fallback for browsers that block workers/CDN worker imports.
+              const data = new Uint8Array(buffer);
+              const workbook = XLSX.read(data, {type:'array', cellDates:false, dense:true});
+              sheets = workbook.SheetNames.map(sheetName => ({
+                sheetName:String(sheetName).trim(),
+                rows:XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1, defval:'', raw:false})
+              })).filter(s => s.rows && s.rows.length);
+            }
+            resolve({fileName:file.name, sheets});
+          } catch(err) { reject(err); }
         };
         reader.readAsArrayBuffer(file);
       });
@@ -2376,11 +2472,13 @@
 
           // اگر ماه در نام فایل نبود ولی ستون تاریخ دارد، ماه هر ردیف از تاریخ خودش خوانده می‌شود
           if (detectedMonth || sheets.some(sheetHasDateColumn)) {
-            processShipmentSheets(sheets, detectedMonth);
-            return;
+            return processShipmentSheets(sheets, detectedMonth);
           }
           return new Promise(resolve => {
-            askMonth(fileName, 'shipment', (selectedM) => { processShipmentSheets(sheets, selectedM); resolve(); });
+            askMonth(fileName, 'shipment', async (selectedM) => {
+              await processShipmentSheets(sheets, selectedM);
+              resolve();
+            });
           });
         })).catch(err => {
           console.error('Shipment Import Error:', err);
@@ -2389,175 +2487,157 @@
       });
     }
 
-    function processShipmentSheets(sheets, targetMonth) {
-      let importedCount = 0;
-      let skippedNoMonth = 0;
+    async function processShipmentSheets(sheets, targetMonth) {
+      let importedCount = 0, skippedNoMonth = 0, skippedInvalid = 0;
       const touchedMonths = new Set();
+      const norm = v => normalizePersianText(v);
+      const yieldUI = () => new Promise(resolve => setTimeout(resolve, 0));
 
-      sheets.forEach(sheet => {
-        if (!sheet.rows || sheet.rows.length === 0) return;
-
-        const firstRow = sheet.rows[0];
-        const isHeader = firstRow.some(cell => {
-          const txt = normalizePersianText(String(cell || ''));
-          return txt.includes('شعبه') || txt.includes('کالا') || txt.includes('محصول') || txt.includes('تعداد') || txt.includes('مقدار') || txt.includes('حواله');
-        }) || isNaN(parseNumericValue(firstRow[2]));
-
-        let colBranch = 0;
-        let colProduct = 1;
-        let colQty = 2;
-        let colDate = -1;
-        let colCode = -1;
-
-        if (isHeader) {
-          firstRow.forEach((cell, idx) => {
-            const h = normalizePersianText(String(cell || ''));
-            if (h.includes('تاریخ')) { colDate = idx; return; }
-            if (h.includes('کد') || h.includes('بارکد')) { colCode = idx; return; }
-            if (h.includes('شعبه') || h.includes('مقصد') || h.includes('فروشگاه')) colBranch = idx;
-            else if (h.includes('کالا') || h.includes('محصول') || h.includes('شرح')) colProduct = idx;
-            else if (h.includes('تعداد') || h.includes('مقدار') || h.includes('ارسال')) colQty = idx;
-          });
+      for (const sheet of sheets) {
+        if (!sheet.rows || !sheet.rows.length) continue;
+        const headerRow = sheet.rows[0] || [];
+        const headers = headerRow.map(norm);
+        const headerLooksReal = headers.some(h => /تاریخ|کالا|محصول|بارکد|کد کالا|مقصد|مقدار|تعداد|واحد/.test(h));
+        const find = patterns => {
+          for (let i=0;i<headers.length;i++) if (patterns.some(p => p.test(headers[i]))) return i;
+          return -1;
+        };
+        let colDate = find([/تاریخ/]);
+        let colProduct = find([/نام کالا/,/شرح کالا/,/شرح محصول/,/^کالا$/,/^محصول$/]);
+        let colCode = find([/بارکد/,/کد کالا/,/^کد$/]);
+        let colBranch = find([/انبار مقصد/,/مقصد/,/نام شعبه/,/شعبه/,/فروشگاه/]);
+        let colQty = find([/مقدار/,/تعداد/,/ارسال/]);
+        let colUnit = find([/^واحد$/, /واحد اندازه/]);
+        if (!headerLooksReal) {
+          colDate = 0; colProduct = 1; colCode = 2; colBranch = 3; colQty = 4; colUnit = 5;
         }
-
-        const dataRows = isHeader ? sheet.rows.slice(1) : sheet.rows;
-
-        dataRows.forEach(row => {
-          if (!row || row.length < 2) return;
-
-          const branch = normalizePersianText(String(row[colBranch] || ''));
-          const productName = normalizePersianText(String(row[colProduct] || ''));
+        if (colProduct < 0) colProduct = 1;
+        if (colQty < 0) colQty = 4;
+        const start = headerLooksReal ? 1 : 0;
+        for (let i=start;i<sheet.rows.length;i++) {
+          const row = sheet.rows[i];
+          if (!row || !row.length) continue;
+          const productName = normalizePersianText(row[colProduct] || '');
           const quantity = parseNumericValue(row[colQty]);
-          const rowMonth = targetMonth || (colDate >= 0 ? monthFromDateCell(row[colDate]) : '');
-
-          if (branch && productName && quantity > 0) {
-            if (!rowMonth) { skippedNoMonth++; return; }
-            let barcode = colCode >= 0 ? toLatinDigits(String(row[colCode] || '')).trim() : '';
-            if (!barcode || barcode === '0') barcode = 'فله';
-            state.warehouseShipments.push({
-              id: generateUniqueId(),
-              month: rowMonth,
-              branch,
-              productName,
-              barcode,
-              quantity,
-              importedAt: new Date().toISOString()
-            });
-            touchedMonths.add(rowMonth);
-            importedCount++;
-          }
-        });
-      });
-
+          const branch = normalizePersianText(colBranch >= 0 ? row[colBranch] : 'انبار نامشخص');
+          const rowMonth = (colDate >= 0 ? monthFromDateCell(row[colDate]) : '') || targetMonth || extractMonthFromText(sheet.sheetName);
+          if (!productName || quantity <= 0) { skippedInvalid++; continue; }
+          if (!rowMonth) { skippedNoMonth++; continue; }
+          let barcode = colCode >= 0 ? toLatinDigits(String(row[colCode] || '')).replace(/\D/g,'') : '';
+          if (!barcode || /^0+$/.test(barcode)) barcode = 'فله';
+          state.warehouseShipments.push({
+            id:generateUniqueId(), month:rowMonth, branch:branch || 'انبار نامشخص',
+            productName, barcode, quantity,
+            unit:colUnit >= 0 ? String(row[colUnit] || '').trim() : '',
+            importedAt:new Date().toISOString()
+          });
+          touchedMonths.add(rowMonth); importedCount++;
+          if (importedCount % 1200 === 0) await yieldUI();
+        }
+      }
       saveToLocalStorage();
-      // بعد از ورود داده، تحلیل روی جدیدترین ماهِ واردشده باز می‌شود
-      if (touchedMonths.size > 0) {
-        const sorted = Array.from(touchedMonths).sort((a, b) => (MONTH_ORDER[a] || 99) - (MONTH_ORDER[b] || 99));
-        selectedAnalysisMonth = sorted[sorted.length - 1];
+      if (touchedMonths.size) {
+        const sorted = Array.from(touchedMonths).sort((a,b)=>(MONTH_ORDER[a]||99)-(MONTH_ORDER[b]||99));
+        selectedAnalysisMonth = sorted[sorted.length-1];
       }
       renderAnalysisPage();
       const monthsTxt = touchedMonths.size ? ` (${Array.from(touchedMonths).join('، ')})` : '';
-      showToast(`${formatNumber(importedCount)} ردیف حواله ارسالی${monthsTxt} با موفقیت افزوده شد` + (skippedNoMonth ? ` — ${formatNumber(skippedNoMonth)} ردیف بدون ماه نادیده گرفته شد` : ''), skippedNoMonth ? 'error' : 'success');
+      showToast(`${formatNumber(importedCount)} ردیف حواله${monthsTxt} وارد شد` +
+        (skippedNoMonth ? ` — ${formatNumber(skippedNoMonth)} ردیف بدون ماه` : '') +
+        (skippedInvalid ? ` — ${formatNumber(skippedInvalid)} ردیف نامعتبر/خالی` : ''),
+        skippedNoMonth ? 'error' : 'success');
     }
 
     // چیدمان اکسل فروش قطعی: ستون ۰: نام فروشگاه مرکزی (شهر) | ستون ۱: نام شعبه | ستون ۲: بارکد کالا | ستون ۳: نام کالا | ستون ۴: تعداد فروش رفته
     function handleAnalysisFileUpload(event) {
-      const files = Array.from(event.target.files);
-      if (files.length === 0) return;
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
       event.target.value = '';
-
-      let importedCount = 0;
+      let importedCount = 0, skippedCount = 0;
       const touchedMonths = new Set();
+      const yieldUI = () => new Promise(resolve => setTimeout(resolve, 0));
 
-      const importOneFile = (fileName, sheets, fileMonth) => {
-        sheets.forEach(sheet => {
-          const sheetMonth = fileMonth || extractMonthFromText(sheet.sheetName);
-          if (!sheet.rows || sheet.rows.length === 0) return;
+      const importOneFile = async (fileName, sheets, fileMonth, chosenMonth) => {
+        for (const sheet of sheets) {
+          if (!sheet.rows || !sheet.rows.length) continue;
+          const headerRow = sheet.rows[0] || [];
+          const headers = headerRow.map(h => normalizePersianText(h));
+          const headerLooksReal = headers.some(h => /شهر|استان|فروشگاه|بارکد|کد کالا|نام کالا|نام محصول|تعداد|وزن|قیمت/.test(h));
+          const find = patterns => {
+            for (let i=0;i<headers.length;i++) if (patterns.some(p => p.test(headers[i]))) return i;
+            return -1;
+          };
+          let colDate = find([/تاریخ/]);
+          let colCity = find([/^نام شهر$/, /^شهر$/, /شهرستان/, /^استان$/, /فروشگاه مرکزی/]);
+          let colBarcode = find([/بارکد/,/کد کالا/,/^کد$/]);
+          let colProduct = find([/نام کالا/,/نام محصول/,/شرح کالا/,/شرح محصول/,/^کالا$/, /^محصول$/]);
+          let colQty = find([/تعداد/,/فروش/,/مقدار/,/وزن شده/]);
+          let colWeight = find([/^وزن$/, /وزن خالص/, /وزن شده/]);
+          let colPrice = find([/قیمت هر عدد/,/قیمت واحد/,/فی فروش/,/^قیمت$/, /نرخ واحد/]);
+          let colBranch = find([/نام شعبه/,/^شعبه$/]);
 
-          const firstRow = sheet.rows[0];
-          const isHeader = firstRow.some(cell => {
-            const txt = normalizePersianText(String(cell || ''));
-            return txt.includes('فروشگاه') || txt.includes('شهر') || txt.includes('شعبه') || txt.includes('بارکد') || txt.includes('کالا') || txt.includes('تعداد');
-          }) || isNaN(parseNumericValue(firstRow[4]));
-
-          let colStore = 0;
-          let colBranch = 1;
-          let colBarcode = 2;
-          let colProduct = 3;
-          let colQty = 4;
-          let colDate = -1;
-
-          if (isHeader) {
-            firstRow.forEach((cell, idx) => {
-              const h = normalizePersianText(String(cell || ''));
-              if (h.includes('تاریخ')) { colDate = idx; return; }
-              if (h.includes('فروشگاه مرکزی') || h.includes('فروشگاه') || h.includes('شهر') || h.includes('استان')) colStore = idx;
-              else if (h.includes('شعبه')) colBranch = idx;
-              else if (h.includes('بارکد') || h.includes('کد')) colBarcode = idx;
-              else if (h.includes('کالا') || h.includes('محصول')) colProduct = idx;
-              else if (h.includes('تعداد') || h.includes('فروش') || h.includes('مقدار')) colQty = idx;
-            });
+          if (!headerLooksReal) {
+            // قالب اعلام‌شده کاربر: شهر، بارکد، نام کالا، تعداد و وزن‌شده، قیمت هر عدد
+            colCity=0; colBarcode=1; colProduct=2; colQty=3; colWeight=-1; colPrice=4; colBranch=-1; colDate=-1;
           }
-
-          const dataRows = isHeader ? sheet.rows.slice(1) : sheet.rows;
-
-          dataRows.forEach(row => {
-            if (!row || row.length < 2) return;
-
-            const centralStore = normalizePersianText(String(row[colStore] || ''));
-            const branch = normalizePersianText(String(row[colBranch] || ''));
-            let barcode = String(row[colBarcode] || '').trim();
-            const productName = normalizePersianText(String(row[colProduct] || ''));
+          if (colCity < 0) colCity = 0;
+          if (colBarcode < 0) colBarcode = 1;
+          if (colProduct < 0) colProduct = 2;
+          if (colQty < 0) colQty = 3;
+          const firstDataRow = headerLooksReal ? 1 : 0;
+          const defaultMonth = fileMonth || extractMonthFromText(sheet.sheetName) || chosenMonth;
+          for (let i=firstDataRow;i<sheet.rows.length;i++) {
+            const row = sheet.rows[i];
+            if (!row || !row.length) continue;
+            const city = normalizePersianText(row[colCity] || '');
+            const productName = normalizePersianText(row[colProduct] || '');
             const quantity = parseNumericValue(row[colQty]);
-            const currentMonth = sheetMonth || (colDate >= 0 ? monthFromDateCell(row[colDate]) : '');
-
-            if (!barcode || barcode === '0') barcode = 'فله';
-            const city = extractCityFromCentralStore(centralStore);
-
-            if ((centralStore || branch || productName) && quantity > 0 && currentMonth) {
-              state.analysisData.push({
-                id: generateUniqueId(),
-                month: currentMonth,
-                centralStore: centralStore || `مرکزی ${city}`,
-                city: city || 'تهران',
-                branch: branch || 'مرکزی',
-                barcode,
-                productName: productName || 'کالای نامشخص',
-                quantity,
-                importedAt: new Date().toISOString()
-              });
-              touchedMonths.add(currentMonth);
-              importedCount++;
-            }
-          });
-        });
+            const month = (colDate >= 0 ? monthFromDateCell(row[colDate]) : '') || defaultMonth;
+            if (!productName || quantity <= 0 || !month) { skippedCount++; continue; }
+            let barcode = toLatinDigits(String(row[colBarcode] || '')).replace(/\D/g,'');
+            if (!barcode || /^0+$/.test(barcode)) barcode = 'فله';
+            const weight = colWeight >= 0 ? parseNumericValue(row[colWeight]) : 0;
+            const unitPrice = colPrice >= 0 ? parseNumericValue(row[colPrice]) : 0;
+            const branch = colBranch >= 0 ? normalizePersianText(row[colBranch] || '') : 'مرکزی';
+            const cityName = city || 'نامشخص';
+            state.analysisData.push({
+              id:generateUniqueId(), month, centralStore:cityName, city:cityName,
+              branch:branch || 'مرکزی', barcode, productName, quantity,
+              weight, unitPrice, importedAt:new Date().toISOString()
+            });
+            touchedMonths.add(month); importedCount++;
+            if (importedCount % 1200 === 0) await yieldUI();
+          }
+        }
       };
 
-      let chain = Promise.resolve();
-      files.forEach(file => {
-        chain = chain.then(() => parseExcelWorkbook(file).then(({ fileName, sheets }) => {
-          const fileMonth = extractMonthFromText(fileName);
-          const needAsk = !fileMonth && sheets.some(s => !extractMonthFromText(s.sheetName) && !sheetHasDateColumn(s));
-          if (!needAsk) { importOneFile(fileName, sheets, fileMonth); return; }
-          return new Promise(resolve => {
-            askMonth(fileName, 'sales', (selectedM) => { importOneFile(fileName, sheets, selectedM); resolve(); });
-          });
-        })).catch(err => {
-          console.error('Analysis Import Error:', err);
-          showToast('خطا در خواندن فایل اکسل فروش', 'error');
-        });
-      });
-
-      chain.then(() => {
+      (async () => {
+        for (const file of files) {
+          try {
+            const {fileName, sheets} = await parseExcelWorkbook(file);
+            const fileMonth = extractMonthFromText(fileName);
+            const hasRowDates = sheets.some(s => sheetHasDateColumn(s));
+            let chosenMonth = '';
+            if (!fileMonth && !hasRowDates && sheets.every(s => !extractMonthFromText(s.sheetName))) {
+              chosenMonth = await new Promise(resolve => askMonth(fileName, 'sales', resolve));
+            }
+            await importOneFile(fileName, sheets, fileMonth, chosenMonth);
+          } catch(err) {
+            console.error('Analysis Import Error:', err);
+            showToast(`خطا در خواندن ${file.name}`, 'error');
+          }
+        }
         saveToLocalStorage();
-        if (touchedMonths.size > 0) {
-          const sorted = Array.from(touchedMonths).sort((a, b) => (MONTH_ORDER[a] || 99) - (MONTH_ORDER[b] || 99));
-          selectedAnalysisMonth = sorted[sorted.length - 1];
+        if (touchedMonths.size) {
+          const sorted = Array.from(touchedMonths).sort((a,b)=>(MONTH_ORDER[a]||99)-(MONTH_ORDER[b]||99));
+          selectedAnalysisMonth = sorted[sorted.length-1];
         }
         renderAnalysisPage();
-        const monthsTxt = touchedMonths.size ? ` (${Array.from(touchedMonths).join('، ')})` : '';
-        showToast(`${formatNumber(importedCount)} رکورد فروش${monthsTxt} با جزئیات وارد سامانه شد`);
-      });
+        showToast(`${formatNumber(importedCount)} ردیف فروش وارد شد` +
+          (touchedMonths.size ? ` (${Array.from(touchedMonths).join('، ')})` : '') +
+          (skippedCount ? ` — ${formatNumber(skippedCount)} ردیف به دلیل داده ناقص/نامعتبر رد شد` : ''),
+          skippedCount ? 'error' : 'success');
+      })();
     }
 
     function showAnalysisTab(tab) {
@@ -2582,118 +2662,70 @@
       return n1 === n2 || n1.includes(n2) || n2.includes(n1);
     }
 
+    function productIdentity(barcode, productName) {
+      const code = toLatinDigits(String(barcode || '')).replace(/\D/g,'');
+      if (code && !/^0+$/.test(code)) return 'BC:' + code;
+      return 'NM:' + normalizePersianText(productName).replace(/\s/g,'');
+    }
+
     function isProductMatch(p1, p2) {
-      const n1 = normalizePersianText(p1);
-      const n2 = normalizePersianText(p2);
-      if (!n1 || !n2) return false;
-      if (n1 === n2) return true;
-      return n1.includes(n2) || n2.includes(n1);
+      const n1 = normalizePersianText(p1).replace(/\s/g,'');
+      const n2 = normalizePersianText(p2).replace(/\s/g,'');
+      return !!n1 && n1 === n2;
     }
 
     // ساخت ماتریس تطبیق حواله با فروش قطعی شعب (فرمول ارسالی - فروش = مانده دپو)
     function buildReconciliationData(monthFilter = 'all') {
-      let shipments = state.warehouseShipments;
-      let sales = state.analysisData;
-      
-      if (monthFilter !== 'all') {
-        shipments = shipments.filter(s => s.month === monthFilter);
-        sales = sales.filter(s => s.month === monthFilter);
+      // حواله نمونه، مقصد انبار پخش را ثبت می‌کند نه شهر/شعبه فروش؛
+      // بنابراین تطبیق معتبر در سطح ماه + بارکد/کالا انجام می‌شود، نه تطبیق اشتباه نام انبار با شهر.
+      const shipmentMap = new Map();
+      const salesMap = new Map();
+      const keyFor = r => `${r.month}|||${productIdentity(r.barcode, r.productName)}`;
+
+      for (const s of state.warehouseShipments || []) {
+        if (monthFilter !== 'all' && s.month !== monthFilter) continue;
+        const key = keyFor(s);
+        let item = shipmentMap.get(key);
+        if (!item) {
+          item = {month:s.month, productName:s.productName || 'کالای نامشخص',
+            barcode:s.barcode || 'فله', shipped:0, sold:0};
+          shipmentMap.set(key,item);
+        }
+        item.shipped += Number(s.quantity || 0);
       }
-      
-      const matrix = {};
-      
-      // ۱. ثبت بارهای ارسالی در حواله‌ها
-      shipments.forEach(s => {
-        const key = `${s.month}|||${s.branch}|||${s.productName}`;
-        if (!matrix[key]) {
-          matrix[key] = {
-            month: s.month,
-            branch: s.branch,
-            centralStore: '',
-            city: '',
-            productName: s.productName,
-            barcode: s.barcode || 'فله',
-            shipped: 0,
-            sold: 0
-          };
+      for (const sl of state.analysisData || []) {
+        if (monthFilter !== 'all' && sl.month !== monthFilter) continue;
+        const key = keyFor(sl);
+        let item = salesMap.get(key);
+        if (!item) {
+          item = {month:sl.month, productName:sl.productName || 'کالای نامشخص',
+            barcode:sl.barcode || 'فله', shipped:0, sold:0};
+          salesMap.set(key,item);
         }
-        matrix[key].shipped += Number(s.quantity || 0);
-      });
-      
-      // ۲. تطبیق با فروش‌های قطعی
-      sales.forEach(sl => {
-        let matchedKey = null;
-        
-        for (const k in matrix) {
-          const m = matrix[k];
-          if ((monthFilter === 'all' || m.month === sl.month) &&
-              isBranchMatch(m.branch, sl.branch) &&
-              isProductMatch(m.productName, sl.productName)) {
-            matchedKey = k;
-            break;
-          }
-        }
-        
-        if (matchedKey) {
-          matrix[matchedKey].sold += Number(sl.quantity || 0);
-          if (!matrix[matchedKey].centralStore) matrix[matchedKey].centralStore = sl.centralStore;
-          if (!matrix[matchedKey].city) matrix[matchedKey].city = sl.city;
-          if (sl.barcode && sl.barcode !== 'فله') matrix[matchedKey].barcode = sl.barcode;
-        } else {
-          const key = `${sl.month}|||${sl.branch}|||${sl.productName}`;
-          if (!matrix[key]) {
-            matrix[key] = {
-              month: sl.month,
-              branch: sl.branch,
-              centralStore: sl.centralStore,
-              city: sl.city,
-              productName: sl.productName,
-              barcode: sl.barcode || 'فله',
-              shipped: 0,
-              sold: 0
-            };
-          }
-          matrix[key].sold += Number(sl.quantity || 0);
-        }
-      });
-      
-      const results = Object.values(matrix).map(item => {
-        if (!item.city && item.centralStore) item.city = extractCityFromCentralStore(item.centralStore);
-        if (!item.city) item.city = extractCityFromCentralStore(item.branch);
-        
-        const remain = Math.max(0, item.shipped - item.sold);
-        const sellThrough = item.shipped > 0 ? Math.round((item.sold / item.shipped) * 100) : (item.sold > 0 ? 100 : 0);
-        
-        let status = '';
-        let badgeClass = '';
-        
-        if (item.shipped > 0 && item.sold === 0) {
-          status = '🚨 دپوی کامل (فروش صفر - عدم فعالیت)';
-          badgeClass = 'badge-danger';
-        } else if (item.shipped > 0 && sellThrough < 30) {
-          status = '⚠️ رسوب کالا و کشش ضعیف شعبه';
-          badgeClass = 'badge-warning';
-        } else if (sellThrough >= 85) {
-          status = '🔥 فروش عالی (خطر کسری بار)';
-          badgeClass = 'badge-success';
-        } else if (item.shipped === 0 && item.sold > 0) {
-          status = '📦 فروش از دپوی قبلی شعبه';
-          badgeClass = 'badge-info';
-        } else {
-          status = '✅ تعادل مطلوب توزیع';
-          badgeClass = 'badge-secondary';
-        }
-        
-        return {
-          ...item,
-          remain,
-          sellThrough,
-          status,
-          badgeClass
+        item.sold += Number(sl.quantity || 0);
+      }
+
+      const keys = new Set([...shipmentMap.keys(), ...salesMap.keys()]);
+      const results = [];
+      for (const key of keys) {
+        const sh = shipmentMap.get(key), sa = salesMap.get(key);
+        const base = sh || sa;
+        const item = {
+          month:base.month, branch:'مجموع شهرها', centralStore:'کل کشور', city:'کل کشور',
+          productName:base.productName, barcode:(base.barcode && base.barcode !== 'فله') ? base.barcode : (sa?.barcode || sh?.barcode || 'فله'),
+          shipped:sh?.shipped || 0, sold:sa?.sold || 0
         };
-      });
-      
-      return results.sort((a, b) => (MONTH_ORDER[a.month] || 99) - (MONTH_ORDER[b.month] || 99) || b.sold - a.sold);
+        const remain = Math.max(0,item.shipped-item.sold);
+        const sellThrough = item.shipped > 0 ? Math.round(item.sold/item.shipped*100) : (item.sold > 0 ? 100 : 0);
+        let status='', badgeClass='';
+        if (item.shipped>0 && item.sold===0) { status='🚨 فروش ثبت نشده برای کالای ارسال‌شده'; badgeClass='badge-danger'; }
+        else if (item.shipped>0 && sellThrough<30) { status='⚠️ فروش پایین نسبت به بار ارسالی'; badgeClass='badge-warning'; }
+        else if (sellThrough>=85) { status='🔥 فروش بالا نسبت به بار ارسالی'; badgeClass='badge-success'; }
+        else if (item.shipped===0 && item.sold>0) { status='📦 فروش ثبت‌شده بدون حواله متناظر در همین ماه'; badgeClass='badge-info'; }
+        else { status='✅ وضعیت متعادل'; badgeClass='badge-secondary'; }
+        results.push({...item,remain,sellThrough,status,badgeClass});
+      }
+      return results.sort((a,b)=>(MONTH_ORDER[a.month]||99)-(MONTH_ORDER[b.month]||99)||b.sold-a.sold);
     }
 
     function runDecisionSupportEngine(reconData) {
@@ -4790,16 +4822,220 @@
     function openModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'flex'; }
     function closeModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'none'; }
     
-    function init() {
+    async function init() {
       loadFromLocalStorage();
-      
+      await loadLargeDataFromDB();
       document.querySelectorAll('.modal-overlay').forEach(modal => {
         modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
       });
-      
       document.getElementById('login-screen').style.display = 'flex';
       document.getElementById('app').style.display = 'none';
+      console.log('سامانه مهندسی فروش شرکت صنعتی سیسکوه با موفقیت بارگذاری شد.');
+    }
+    
+    document.addEventListener('DOMContentLoaded', init);
+  'وضعیت']];
+      reconData.forEach(r => {
+        reconExport.push([r.month, r.city, r.branch, r.productName, r.barcode, r.shipped, r.sold, r.remain, `${r.sellThrough}%`, r.status]);
+      });
       
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(reconExport), 'تطبیق حواله با فروش شعب');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(prodData), 'تولید');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(invData), 'موجودی');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ordData), 'سفارشات');
+      
+      XLSX.writeFile(wb, `siskooh_comprehensive_report_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('گزارش جامع اکسل دریافت شد');
+    }
+
+    function exportProductionExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['تاریخ تولید', 'نام محصول', 'بارکد کالا', 'تعداد تولید', 'توضیحات']];
+      const sorted = [...state.production].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      sorted.forEach(item => {
+        const p = getProductById(item.productId);
+        data.push([item.date, item.productName || (p ? p.name : '-'), item.barcode || (p ? p.barcode : 'فله'), item.quantity, item.note || '']);
+      });
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'تولید تفکیکی');
+      XLSX.writeFile(wb, `گزارش_تولید_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل تولید دانلود شد');
+    }
+
+    function exportOrdersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['کد', 'خریدار', 'موبایل', 'شهر', 'شعبه', 'محصول', 'تعداد', 'تاریخ', 'وضعیت']];
+      state.orders.forEach(o => {
+        const p = getProductById(o.productId);
+        data.push([o.id, o.customer, o.phone, o.city, o.branch, p ? p.name : '-', o.quantity, o.date, o.status]);
+      });
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'سفارشات');
+      XLSX.writeFile(wb, `سفارشات_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل سفارشات دانلود شد');
+    }
+
+    function exportCustomersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['نام خریدار', 'موبایل', 'فروشگاه مرکزی (شهر)', 'نام شعبه', 'کد اقتصادی']];
+      state.customers.forEach(c => data.push([c.name, c.phone, c.city, c.branch, c.taxId]));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'شعب و مشتریان');
+      XLSX.writeFile(wb, `مشتریان_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('خروجی شعب و مشتریان دانلود شد');
+    }
+
+    function exportUsersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['نام', 'نام کاربری', 'نقش', 'وضعیت']];
+      state.users.forEach(u => data.push([u.name, u.username, getRoleLabel(u.role), u.active !== false ? 'فعال' : 'غیرفعال']));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'کاربران');
+      XLSX.writeFile(wb, `کاربران_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل کاربران دانلود شد');
+    }
+
+    function handleGlobalFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.name.endsWith('.json')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (data.products) state.products = data.products;
+            if (data.production) state.production = data.production;
+            if (data.inventory) state.inventory = data.inventory;
+            if (data.orders) state.orders = data.orders;
+            if (data.customers) state.customers = data.customers;
+            if (data.analysisData) state.analysisData = data.analysisData;
+            if (data.warehouseShipments) state.warehouseShipments = data.warehouseShipments;
+            if (data.margins) state.margins = data.margins;
+            if (data.promoSettings) state.promoSettings = data.promoSettings;
+            if (data.users) state.users = data.users;
+            
+            saveToLocalStorage();
+            renderPage(currentPage);
+            showToast('نسخه پشتیبان سامانه بازیابی شد');
+          } catch (err) { showToast('فایل JSON معتبر نیست', 'error'); }
+          event.target.value = '';
+        };
+        reader.readAsText(file);
+      } else {
+        handleAnalysisFileUpload(event);
+      }
+    }
+
+    function openModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'flex'; }
+    function closeModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'none'; }
+    
+    async function init() {
+      loadFromLocalStorage();
+      await loadLargeDataFromDB();
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+      });
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+      console.log('سامانه مهندسی فروش شرکت صنعتی سیسکوه با موفقیت بارگذاری شد.');
+    }
+    
+    document.addEventListener('DOMContentLoaded', init);
+  ]];
+      reconData.forEach(r => {
+        reconExport.push([r.month, r.city, r.branch, r.productName, r.barcode, r.shipped, r.sold, r.remain, `${r.sellThrough}%`, r.status]);
+      });
+      
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(reconExport), 'تطبیق حواله با فروش شعب');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(prodData), 'تولید');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(invData), 'موجودی');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(ordData), 'سفارشات');
+      
+      XLSX.writeFile(wb, `siskooh_comprehensive_report_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('گزارش جامع اکسل دریافت شد');
+    }
+
+    function exportProductionExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['تاریخ تولید', 'نام محصول', 'بارکد کالا', 'تعداد تولید', 'توضیحات']];
+      const sorted = [...state.production].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+      sorted.forEach(item => {
+        const p = getProductById(item.productId);
+        data.push([item.date, item.productName || (p ? p.name : '-'), item.barcode || (p ? p.barcode : 'فله'), item.quantity, item.note || '']);
+      });
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'تولید تفکیکی');
+      XLSX.writeFile(wb, `گزارش_تولید_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل تولید دانلود شد');
+    }
+
+    function exportOrdersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['کد', 'خریدار', 'موبایل', 'شهر', 'شعبه', 'محصول', 'تعداد', 'تاریخ', 'وضعیت']];
+      state.orders.forEach(o => {
+        const p = getProductById(o.productId);
+        data.push([o.id, o.customer, o.phone, o.city, o.branch, p ? p.name : '-', o.quantity, o.date, o.status]);
+      });
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'سفارشات');
+      XLSX.writeFile(wb, `سفارشات_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل سفارشات دانلود شد');
+    }
+
+    function exportCustomersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['نام خریدار', 'موبایل', 'فروشگاه مرکزی (شهر)', 'نام شعبه', 'کد اقتصادی']];
+      state.customers.forEach(c => data.push([c.name, c.phone, c.city, c.branch, c.taxId]));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'شعب و مشتریان');
+      XLSX.writeFile(wb, `مشتریان_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('خروجی شعب و مشتریان دانلود شد');
+    }
+
+    function exportUsersExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = [['نام', 'نام کاربری', 'نقش', 'وضعیت']];
+      state.users.forEach(u => data.push([u.name, u.username, getRoleLabel(u.role), u.active !== false ? 'فعال' : 'غیرفعال']));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'کاربران');
+      XLSX.writeFile(wb, `کاربران_${getTodayShamsi().replace(/\//g, '-')}.xlsx`);
+      showToast('اکسل کاربران دانلود شد');
+    }
+
+    function handleGlobalFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.name.endsWith('.json')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (data.products) state.products = data.products;
+            if (data.production) state.production = data.production;
+            if (data.inventory) state.inventory = data.inventory;
+            if (data.orders) state.orders = data.orders;
+            if (data.customers) state.customers = data.customers;
+            if (data.analysisData) state.analysisData = data.analysisData;
+            if (data.warehouseShipments) state.warehouseShipments = data.warehouseShipments;
+            if (data.margins) state.margins = data.margins;
+            if (data.promoSettings) state.promoSettings = data.promoSettings;
+            if (data.users) state.users = data.users;
+            
+            saveToLocalStorage();
+            renderPage(currentPage);
+            showToast('نسخه پشتیبان سامانه بازیابی شد');
+          } catch (err) { showToast('فایل JSON معتبر نیست', 'error'); }
+          event.target.value = '';
+        };
+        reader.readAsText(file);
+      } else {
+        handleAnalysisFileUpload(event);
+      }
+    }
+
+    function openModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'flex'; }
+    function closeModal(modalId) { const el = document.getElementById(modalId); if (el) el.style.display = 'none'; }
+    
+    async function init() {
+      loadFromLocalStorage();
+      await loadLargeDataFromDB();
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+      });
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
       console.log('سامانه مهندسی فروش شرکت صنعتی سیسکوه با موفقیت بارگذاری شد.');
     }
     
