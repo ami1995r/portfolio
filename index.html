@@ -1825,38 +1825,6 @@
       avgMarginEl.style.color = avgMargin >= 5 ? '#10b981' : (avgMargin >= 0 ? '#f59e0b' : '#ef4444');
     }
 
-      // Stagnant recommendations
-      const stagnantProds = list.filter(p => p.remain >= state.promoSettings.minRemain);
-      const promoTbody = document.getElementById('promo-products-body');
-      if (promoTbody) {
-        promoTbody.innerHTML = stagnantProds.map(p => {
-          const margin = state.margins[p.name]?.margin || state.promoSettings.defaultMargin || 20;
-          const maxAllowedDiscount = Math.floor(margin * (state.promoSettings.maxShare / 100));
-          const recDiscount = Math.max(state.promoSettings.minDiscount, Math.min(15, maxAllowedDiscount));
-          return `
-            <tr>
-              <td><strong>${p.name}</strong></td>
-              <td>${formatNumber(margin)}٪</td>
-              <td><strong style="color:#ef4444;">${formatNumber(p.remain)}</strong></td>
-              <td>${formatNumber(p.branches)} شعبه</td>
-              <td><strong style="color:#10b981;">${formatNumber(recDiscount)}٪ تخفیف</strong></td>
-              <td><span class="badge badge-success">پیشنهاد پروموشن</span></td>
-            </tr>
-          `;
-        }).join('') || '<tr><td colspan="6" class="text-center text-muted" style="padding:15px;">محصول راکد با این شرایط یافت نشد</td></tr>';
-      }
-
-      const summary = document.getElementById('promo-summary-container');
-      if (summary) {
-        summary.innerHTML = `
-          <div class="ai-alert info">
-            <span class="ai-alert-icon">💡</span>
-            <div>تعداد <strong>${formatNumber(stagnantProds.length)}</strong> محصول دارای مانده بیش از ${formatNumber(state.promoSettings.minRemain)} عدد در شعب هستند که با اعمال تخفیف تا سقف حاشیه سود مجاز بدون زیان قابل آزادسازی سرمایه‌اند.</div>
-          </div>
-        `;
-      }
-    }
-
     // Export to Excel for direct reporting
     function exportReconciliationToExcel() {
       if (!cachedReconciliationList || cachedReconciliationList.length === 0) {
