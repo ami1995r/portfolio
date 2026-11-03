@@ -12,10 +12,23 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   
   <style>
+    @font-face {
+      font-family: 'Vazirmatn';
+      src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Vazirmatn';
+      src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif !important;
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
       background: #f1f5f9;
       color: #1e293b;
       min-height: 100vh;
@@ -473,9 +486,16 @@
     </div>
 
     <div class="card" style="padding: 14px 18px; margin-bottom: 18px;">
-      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <span style="font-weight:800; font-size:13px;"><i class="fas fa-calendar-alt" style="color:#3b82f6;"></i> ماه تحلیل پایه:</span>
-        <div class="month-tabs" id="analysis-month-tabs"></div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:800; font-size:13px;"><i class="fas fa-calendar-check" style="color:#10b981;"></i> سال شمسی:</span>
+          <div class="month-tabs" id="analysis-year-tabs"></div>
+        </div>
+        <div style="height:24px; width:1px; background:#cbd5e1;" class="hidden md:block"></div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:800; font-size:13px;"><i class="fas fa-calendar-alt" style="color:#3b82f6;"></i> ماه تحلیل:</span>
+          <div class="month-tabs" id="analysis-month-tabs"></div>
+        </div>
       </div>
     </div>
 
@@ -560,6 +580,7 @@
           <table>
             <thead>
               <tr>
+                <th>سال</th>
                 <th>ماه</th>
                 <th>فروشگاه مرکزی (شهر)</th>
                 <th>نام شعبه</th>
@@ -885,6 +906,7 @@
       barcodeMap: {} // نگاشت بارکد به نام واقعی کالا
     };
 
+    let selectedAnalysisYear = 'all';
     let selectedAnalysisMonth = null;
     let selectedReconciliationMonth = 'all';
     let selectedRankingMonth = 'all';
@@ -917,6 +939,123 @@
       if (normCache.size > 20000) normCache.clear();
       normCache.set(s, res);
       return res;
+    }
+
+    function parseNumericValue(val) {
+      if (val === null || val === undefined || val === '') return 0;
+      if (typeof val === 'number') return val;
+      let s = String(val).replace(/,/g, '').trim();
+      s = s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      const num = parseFloat(s);
+      return isNaN(num) ? 0 : num;
+    }
+
+    // استخراج سال و ماه شمسی از هر نوع تاریخ شمسی
+    function extractYearAndMonthFromDate(dateVal) {
+      if (dateVal === null || dateVal === undefined || dateVal === '') return { year: '', month: '' };
+      let str = normalizePersianText(String(dateVal)).trim();
+      str = str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+
+      let detectedYear = '';
+      let detectedMonth = '';
+
+      // ۱. اگر عدد سریال اکسل باشد
+      if (/^\d{5}$/.test(str)) {
+        try {
+          const jsDate = new Date(Math.round((Number(str) - 25569) * 86400 * 1000));
+          const parts = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric', month: 'numeric' }).formatToParts(jsDate);
+          for (let p of parts) {
+            if (p.type === 'year') detectedYear = p.value;
+            if (p.type === 'month') {
+              const mNum = parseInt(p.value, 10);
+              if (mNum >= 1 && mNum <= 12) detectedMonth = MONTHS[mNum - 1];
+            }
+          }
+          if (detectedMonth) return { year: detectedYear, month: detectedMonth };
+        } catch (e) {}
+      }
+
+      // ۲. فرمت استاندارد شمسی: سال/ماه/روز (مثال: 1402/11/25 یا 1403.04.12 یا 1404-01-05)
+      const standardMatch = str.match(/(1[34]\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
+      if (standardMatch) {
+        detectedYear = standardMatch[1];
+        const m = parseInt(standardMatch[2], 10);
+        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
+        return { year: detectedYear, month: detectedMonth };
+      }
+
+      // ۳. فرمت معکوس: روز/ماه/سال (مثال: 25/11/1402)
+      const reverseMatch = str.match(/(\d{1,2})[\.\/\-_](\d{1,2})[\.\/\-_](1[34]\d{2})/);
+      if (reverseMatch) {
+        detectedYear = reverseMatch[3];
+        const m = parseInt(reverseMatch[2], 10);
+        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
+        return { year: detectedYear, month: detectedMonth };
+      }
+
+      // ۴. سال‌های دورقمی (مثال: 02/11/20 یا 03.05.10)
+      const shortYearMatch = str.match(/(?:^|[\s])(\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
+      if (shortYearMatch) {
+        const yNum = parseInt(shortYearMatch[1], 10);
+        detectedYear = String(yNum < 50 ? 1400 + yNum : 1300 + yNum);
+        const m = parseInt(shortYearMatch[2], 10);
+        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
+        return { year: detectedYear, month: detectedMonth };
+      }
+
+      // ۵. اگر فقط سال در متن موجود باشد
+      const yearOnlyMatch = str.match(/(1[34]\d{2})/);
+      if (yearOnlyMatch) detectedYear = yearOnlyMatch[1];
+
+      // ۶. بررسی نام ماه در متن
+      for (let i = 0; i < MONTHS.length; i++) {
+        const m = MONTHS[i];
+        if (str === m || str.includes(m)) {
+          detectedMonth = m;
+          break;
+        }
+      }
+
+      return { year: detectedYear, month: detectedMonth };
+    }
+
+    function extractMonthFromShamsiDate(dateVal) {
+      return extractYearAndMonthFromDate(dateVal).month;
+    }
+
+    function extractYearFromText(text) {
+      if (!text) return '';
+      const norm = normalizePersianText(text).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      const match = norm.match(/(1[34]\d{2})/);
+      return match ? match[1] : '';
+    }
+
+    function extractMonthFromText(text) {
+      if (!text) return '';
+      let clean = text.replace(/\.(xlsx|xls|csv|json)$/i, '');
+      const norm = normalizePersianText(clean);
+      const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
+
+      for (const t of tokens) {
+        const matched = MONTHS.find(m => normalizePersianText(m) === t);
+        if (matched) return matched;
+      }
+      for (const m of MONTHS) {
+        if (norm.includes(normalizePersianText(m))) return m;
+      }
+      return '';
+    }
+
+    // فرمت دهی زنده سه‌رقمی مبالغ
+    function formatPriceInput(input) {
+      let val = input.value.replace(/[^0-9۰-۹]/g, '');
+      val = val.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      if (!val) {
+        input.value = '';
+        return;
+      }
+      const num = parseInt(val, 10);
+      input.value = num.toLocaleString('en-US');
     }
 
     function parseNumericValue(val) {
@@ -1129,23 +1268,26 @@
     }
 
     // High performance reconciliation calculation
-    function buildReconciliationData(monthFilter) {
-      const shipments = (monthFilter === 'all') 
-        ? state.warehouseShipments 
-        : state.warehouseShipments.filter(s => s.month === monthFilter);
+    function buildReconciliationData(monthFilter, yearFilter = selectedAnalysisYear) {
+      const filterRecord = (r) => {
+        const matchYear = (yearFilter === 'all' || !yearFilter || !r.year) ? true : (r.year === yearFilter);
+        const matchMonth = (monthFilter === 'all' || !monthFilter) ? true : (r.month === monthFilter);
+        return matchYear && matchMonth;
+      };
 
-      const sales = (monthFilter === 'all') 
-        ? state.analysisData 
-        : state.analysisData.filter(s => s.month === monthFilter);
+      const shipments = state.warehouseShipments.filter(filterRecord);
+      const sales = state.analysisData.filter(filterRecord);
 
       const map = new Map();
 
       for (let i = 0; i < shipments.length; i++) {
         const s = shipments[i];
-        const key = `${s.month}|||${normalizePersianText(s.centralStore || s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
+        const year = s.year || 'نامشخص';
+        const key = `${year}|||${s.month}|||${normalizePersianText(s.centralStore || s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
         let row = map.get(key);
         if (!row) {
           row = {
+            year: year,
             month: s.month,
             city: s.city || extractCityFromCentralStore(s.centralStore),
             centralStore: s.centralStore || s.city || '',
@@ -1163,10 +1305,12 @@
 
       for (let i = 0; i < sales.length; i++) {
         const r = sales[i];
-        const key = `${r.month}|||${normalizePersianText(r.centralStore || r.city)}|||${normalizePersianText(r.branch)}|||${normalizePersianText(r.productName)}`;
+        const year = r.year || 'نامشخص';
+        const key = `${year}|||${r.month}|||${normalizePersianText(r.centralStore || r.city)}|||${normalizePersianText(r.branch)}|||${normalizePersianText(r.productName)}`;
         let row = map.get(key);
         if (!row) {
           row = {
+            year: year,
             month: r.month,
             city: r.city || extractCityFromCentralStore(r.centralStore),
             centralStore: r.centralStore || r.city || '',
@@ -1216,6 +1360,7 @@
       });
 
       list.sort((a, b) => {
+        if (a.year !== b.year) return (b.year || '').localeCompare(a.year || '');
         const diff = (MONTH_ORDER[a.month] || 99) - (MONTH_ORDER[b.month] || 99);
         return diff !== 0 ? diff : b.remain - a.remain;
       });
@@ -1224,18 +1369,23 @@
     }
 
     function renderAnalysisPage() {
-      // قبل از رندر، تمام نام‌های کالا از روی دیکشنری بارکد تطبیق و یکسان‌سازی می‌شوند
       reconcileProductNamesFromBarcodes();
 
       const activeMonth = selectedAnalysisMonth || 'all';
-      const reconData = buildReconciliationData(activeMonth);
+      const reconData = buildReconciliationData(activeMonth, selectedAnalysisYear);
 
       let totalShipped = 0;
       let totalSold = 0;
       let recordsCount = 0;
 
-      const sales = (activeMonth === 'all') ? state.analysisData : state.analysisData.filter(s => s.month === activeMonth);
-      const shipments = (activeMonth === 'all') ? state.warehouseShipments : state.warehouseShipments.filter(s => s.month === activeMonth);
+      const filterByYearAndMonth = (r) => {
+        const matchYear = (selectedAnalysisYear === 'all' || !selectedAnalysisYear || !r.year) ? true : (r.year === selectedAnalysisYear);
+        const matchMonth = (activeMonth === 'all') ? true : (r.month === activeMonth);
+        return matchYear && matchMonth;
+      };
+
+      const sales = state.analysisData.filter(filterByYearAndMonth);
+      const shipments = state.warehouseShipments.filter(filterByYearAndMonth);
 
       for (let i = 0; i < shipments.length; i++) totalShipped += shipments[i].quantity || 0;
       for (let i = 0; i < sales.length; i++) {
@@ -1251,7 +1401,7 @@
       document.getElementById('analysis-kpi-depo').textContent = formatNumber(totalDepo);
       document.getElementById('analysis-kpi-sellthrough').textContent = `${formatNumber(overallST)}٪`;
 
-      buildMonthTabs();
+      buildYearAndMonthTabs();
       populateProductSelector();
       filterReconciliationData();
       renderProductRankingAnalysis();
@@ -1260,10 +1410,28 @@
       renderPromotionTab(reconData, activeMonth);
     }
 
-    function buildMonthTabs() {
+    function buildYearAndMonthTabs() {
+      // تفکیک سال‌ها
+      const yearSet = new Set();
+      state.warehouseShipments.forEach(s => s.year && s.year !== 'نامشخص' && yearSet.add(s.year));
+      state.analysisData.forEach(a => a.year && a.year !== 'نامشخص' && yearSet.add(a.year));
+      const yearList = Array.from(yearSet).sort((a,b) => b.localeCompare(a));
+
+      const yContainer = document.getElementById('analysis-year-tabs');
+      if (yContainer) {
+        let yHtml = `<button class="month-tab ${selectedAnalysisYear === 'all' ? 'active' : ''}" onclick="selectAnalysisYear('all', this)">همه سال‌ها</button>`;
+        yearList.forEach(y => {
+          yHtml += `<button class="month-tab ${selectedAnalysisYear === y ? 'active' : ''}" onclick="selectAnalysisYear('${y}', this)">سال ${y}</button>`;
+        });
+        yContainer.innerHTML = yHtml;
+      }
+
+      // تفکیک ماه‌ها
       const monthSet = new Set();
-      state.warehouseShipments.forEach(s => s.month && monthSet.add(s.month));
-      state.analysisData.forEach(a => a.month && monthSet.add(a.month));
+      const filterYear = (r) => (selectedAnalysisYear === 'all' || !selectedAnalysisYear || !r.year) ? true : (r.year === selectedAnalysisYear);
+
+      state.warehouseShipments.filter(filterYear).forEach(s => s.month && monthSet.add(s.month));
+      state.analysisData.filter(filterYear).forEach(a => a.month && monthSet.add(a.month));
       const list = Array.from(monthSet).sort((a,b) => (MONTH_ORDER[a]||99) - (MONTH_ORDER[b]||99));
 
       const renderTabGroup = (containerId, selected, clickFn) => {
@@ -1281,6 +1449,11 @@
       renderTabGroup('ranking-month-tabs', selectedRankingMonth, 'selectRankingMonth');
     }
 
+    function selectAnalysisYear(year) {
+      selectedAnalysisYear = year;
+      renderAnalysisPage();
+    }
+
     function selectAnalysisMonth(month) {
       selectedAnalysisMonth = month === 'all' ? null : month;
       renderAnalysisPage();
@@ -1289,20 +1462,12 @@
     function filterReconciliationMonth(month) {
       selectedReconciliationMonth = month;
       reconCurrentPage = 1;
-      buildMonthTabs();
+      buildYearAndMonthTabs();
       filterReconciliationData();
     }
 
-    function debouncedSearchReconciliation() {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        reconCurrentPage = 1;
-        filterReconciliationData();
-      }, 250);
-    }
-
     function filterReconciliationData() {
-      let list = buildReconciliationData(selectedReconciliationMonth);
+      let list = buildReconciliationData(selectedReconciliationMonth, selectedAnalysisYear);
       const query = normalizePersianText(document.getElementById('reconciliation-search')?.value || '').toLowerCase();
 
       if (query) {
@@ -1310,6 +1475,7 @@
           normalizePersianText(item.branch).toLowerCase().includes(query) ||
           normalizePersianText(item.centralStore).toLowerCase().includes(query) ||
           normalizePersianText(item.productName).toLowerCase().includes(query) ||
+          (item.year && item.year.includes(query)) ||
           (item.barcode && String(item.barcode).includes(query))
         );
       }
@@ -1327,7 +1493,7 @@
       badge.textContent = `${formatNumber(totalItems)} ردیف`;
 
       if (totalItems === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted" style="padding:24px;">داده‌ای یافت نشد</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted" style="padding:24px;">داده‌ای یافت نشد</td></tr>';
         pagination.innerHTML = '';
         return;
       }
@@ -1344,6 +1510,7 @@
         const bc = (item.barcode && item.barcode !== 'فله') ? `<code>${item.barcode}</code>` : `<span class="badge badge-purple">فله</span>`;
         rowsHtml += `
           <tr>
+            <td><span class="badge badge-secondary">${item.year || '—'}</span></td>
             <td><strong>${item.month}</strong></td>
             <td><strong>${item.city}</strong> <small style="color:#64748b;">(${item.centralStore})</small></td>
             <td><strong>${item.branch}</strong></td>
@@ -1683,12 +1850,12 @@
       if (marginTbody) {
         marginTbody.innerHTML = list.slice(0, 100).map(p => {
           const m = state.margins[p.name]?.margin ?? '';
-          const pr = state.margins[p.name]?.price ?? '';
+          const pr = state.margins[p.name]?.price ? Number(state.margins[p.name].price).toLocaleString('en-US') : '';
           return `
             <tr>
               <td><strong>${p.name}</strong></td>
               <td><code>${p.barcode || 'فله'}</code></td>
-              <td><input type="number" class="form-control" style="width:140px;" placeholder="مثلاً ۱۵۰,۰۰۰" value="${pr}" onchange="setProductPrice('${p.name}', this.value)"></td>
+              <td><input type="text" class="form-control" style="width:140px;" placeholder="مثلاً ۱۵۰,۰۰۰" value="${pr}" oninput="formatPriceInput(this)" onchange="setProductPrice('${p.name}', this.value)"></td>
               <td><input type="number" class="form-control" style="width:90px;" placeholder="${state.promoSettings.defaultMargin}٪" value="${m}" onchange="setProductMargin('${p.name}', this.value)"></td>
             </tr>
           `;
@@ -1891,6 +2058,7 @@
         return;
       }
       const data = cachedReconciliationList.map(r => ({
+        'سال': r.year || '',
         'ماه': r.month,
         'فروشگاه مرکزی (شهر)': r.city,
         'نام شعبه': r.branch,
@@ -1973,26 +2141,30 @@
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
             const monthFromFile = extractMonthFromText(file.name);
+            const yearFromFile = extractYearFromText(file.name);
 
             const newRecords = [];
             for (let s = 0; s < workbook.SheetNames.length; s++) {
               const sheetName = workbook.SheetNames[s];
               const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
               const sheetDefaultMonth = extractMonthFromText(sheetName) || monthFromFile;
+              const sheetDefaultYear = extractYearFromText(sheetName) || yearFromFile;
 
               for (let i = 0; i < rows.length; i++) {
                 const row = rows[i];
                 let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
                 let rowExtractedMonth = '';
+                let rowExtractedYear = '';
 
                 for (const k in row) {
                   const nk = normalizePersianText(k).toLowerCase();
                   const val = row[k];
 
-                  // استخراج ماه از ستون تاریخ یا نام ماه در سطح سطر (تفکیک ردیف‌های ترکیبی)
-                  if (nk.includes('تاریخ') || nk.includes('ماه') || nk === 'date' || nk === 'month') {
-                    const detected = extractMonthFromShamsiDate(val);
-                    if (detected) rowExtractedMonth = detected;
+                  // استخراج سال و ماه از ستون تاریخ یا متن
+                  if (nk.includes('تاریخ') || nk.includes('ماه') || nk.includes('سال') || nk === 'date' || nk === 'year' || nk === 'month') {
+                    const ym = extractYearAndMonthFromDate(val);
+                    if (ym.month) rowExtractedMonth = ym.month;
+                    if (ym.year) rowExtractedYear = ym.year;
                   }
 
                   if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') {
@@ -2014,7 +2186,6 @@
                 // اصلاح هوشمند جابجایی بارکد و نام کالا
                 if (isBarcodeString(productName)) {
                   if (barcode === 'فله' || !barcode) barcode = productName;
-                  // در صورت وجود نام قبلی برای این بارکد از دیکشنری بارکدها استفاده کن
                   if (state.barcodeMap && state.barcodeMap[barcode]) {
                     productName = state.barcodeMap[barcode];
                   }
@@ -2023,12 +2194,13 @@
                   state.barcodeMap[barcode] = productName;
                 }
 
-                // اولویت تفکیک: ۱. ماه موجود در تاریخ همان سطر، ۲. ماه شیت اکسل، ۳. ماه نام فایل
                 const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
+                const finalYear = rowExtractedYear || sheetDefaultYear || '';
 
                 if (productName || qty > 0) {
                   if (!city && centralStore) city = extractCityFromCentralStore(centralStore);
                   newRecords.push({
+                    year: finalYear,
                     month: finalMonth,
                     productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
                     barcode: barcode || 'فله',
@@ -2047,7 +2219,7 @@
             renderAnalysisPage();
 
             const distinctMonths = [...new Set(newRecords.map(r => r.month))].filter(m => m !== 'نامشخص');
-            showToast(`فایل فروش با ${formatNumber(newRecords.length)} ردیف بارگذاری شد (تفکیک در ماه‌های: ${distinctMonths.join('، ')})`);
+            showToast(`فایل فروش بارگذاری شد (${formatNumber(newRecords.length)} ردیف در ماه‌های: ${distinctMonths.join('، ')})`);
           } catch (err) {
             console.error(err);
             showToast('خطا در پردازش فایل اکسل فروش', 'error');
@@ -2069,7 +2241,8 @@
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
             let fallbackMonth = extractMonthFromText(file.name);
-            processShipmentData(workbook, fallbackMonth);
+            let fallbackYear = extractYearFromText(file.name);
+            processShipmentData(workbook, fallbackMonth, fallbackYear);
           } catch (err) {
             console.error(err);
             showToast('خطا در پردازش فایل حواله', 'error');
@@ -2080,27 +2253,30 @@
       event.target.value = '';
     }
 
-    function processShipmentData(workbook, fallbackMonth) {
+    function processShipmentData(workbook, fallbackMonth, fallbackYear = '') {
       const newShipments = [];
 
       for (let s = 0; s < workbook.SheetNames.length; s++) {
         const sheetName = workbook.SheetNames[s];
         const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
         const sheetDefaultMonth = extractMonthFromText(sheetName) || fallbackMonth;
+        const sheetDefaultYear = extractYearFromText(sheetName) || fallbackYear;
 
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
           let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
           let rowExtractedMonth = '';
+          let rowExtractedYear = '';
 
           for (const k in row) {
             const nk = normalizePersianText(k).toLowerCase();
             const val = row[k];
 
-            // انطباق ستون تاریخ یا ماه حواله به صورت سطر به سطر
-            if (nk.includes('تاریخ حواله') || nk.includes('تاریخ') || nk.includes('ماه') || nk === 'date' || nk === 'month') {
-              const detected = extractMonthFromShamsiDate(val);
-              if (detected) rowExtractedMonth = detected;
+            // انطباق تاریخ یا ماه/سال حواله
+            if (nk.includes('تاریخ حواله') || nk.includes('تاریخ') || nk.includes('ماه') || nk.includes('سال') || nk === 'date') {
+              const ym = extractYearAndMonthFromDate(val);
+              if (ym.month) rowExtractedMonth = ym.month;
+              if (ym.year) rowExtractedYear = ym.year;
             }
             // نام کالا مبدا
             else if (nk.includes('نام کالا مبدا') || nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا')) {
@@ -2125,7 +2301,6 @@
             }
           }
 
-          // اصلاح هوشمند جابجایی بارکد و نام کالا
           if (isBarcodeString(productName)) {
             if (barcode === 'فله' || !barcode) barcode = productName;
             if (state.barcodeMap && state.barcodeMap[barcode]) {
@@ -2136,14 +2311,15 @@
             state.barcodeMap[barcode] = productName;
           }
 
-          // اولویت قطعی با ماه تاریخی است که در همان سطر قید شده (تفکیک کامل فایل‌های چندماهه)
           const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
+          const finalYear = rowExtractedYear || sheetDefaultYear || '';
 
           if (productName || qty > 0) {
             if (!city && (centralStore || branch)) {
               city = extractCityFromCentralStore(centralStore || branch);
             }
             newShipments.push({
+              year: finalYear,
               month: finalMonth,
               productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
               barcode: barcode || 'فله',
@@ -2162,7 +2338,7 @@
       renderAnalysisPage();
       
       const distinctMonths = [...new Set(newShipments.map(item => item.month))].filter(m => m !== 'نامشخص');
-      showToast(`فایل حواله بارگذاری شد؛ ردیف‌ها تفکیک و در ماه‌های (${distinctMonths.join('، ')}) قرار گرفتند`);
+      showToast(`فایل حواله بارگذاری شد و در ماه‌های (${distinctMonths.join('، ')}) تفکیک گردید`);
     }
 
     function init() {
