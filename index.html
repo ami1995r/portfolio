@@ -686,15 +686,96 @@
 
     <!-- TAB 5: PROMOTION & MARGIN -->
     <div id="analysis-tab-promotion" style="display:none;">
+      
+      <!-- شبیه‌ساز پروموشن قراردادی و فروشگاه‌های زنجیره‌ای (اتکا، رفاه و...) -->
+      <div class="card" style="margin-bottom: 20px; border-right: 5px solid #2563eb; background: linear-gradient(180deg, #ffffff, #f8fafc);">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-calculator" style="color:#2563eb;"></i>
+            <span>شبیه‌ساز مالی پروموشن قراردادی و فروشگاه‌ها (مانند اتکا، رفاه و شعب هدف)</span>
+          </div>
+          <span class="badge badge-purple" style="font-size:12px; padding:5px 12px;">تحلیل زنده مانده حاشیه سود ریالی و درصدی</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:18px;">
+          <div class="form-group">
+            <label class="form-label">🏢 فروشگاه / شعبه هدف</label>
+            <select class="form-control" id="sim-target-branch" onchange="runPromotionFinancialSimulator()">
+              <option value="all">همه شعب و کل کشور</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🎁 درصد تخفیف توافقی فروشگاه (٪)</label>
+            <input type="number" step="0.5" class="form-control" id="sim-discount-rate" value="20" placeholder="مثلاً ۲۰" oninput="runPromotionFinancialSimulator()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">📦 مبنای محاسبه تعداد کالا</label>
+            <select class="form-control" id="sim-quantity-basis" onchange="runPromotionFinancialSimulator()">
+              <option value="remain">بر اساس موجودی راکد و دپوی شعب</option>
+              <option value="sold">بر اساس میانگین فروش قطعی ماه</option>
+              <option value="shipped">بر اساس کل بار حواله ارسالی</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- کارت‌های تحلیل خلاصه مالی سناریو -->
+        <div class="grid-4" style="margin-bottom: 18px;" id="sim-kpi-container">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-label">مبلغ کل فروش با تخفیف</div>
+            <div class="kpi-value" id="sim-total-revenue" style="font-size:20px;">۰ تومان</div>
+            <div class="kpi-icon" style="background:#eff6ff;color:#3b82f6;"><i class="fas fa-cash-register"></i></div>
+          </div>
+          <div class="kpi-card kpi-purple">
+            <div class="kpi-label">مبلغ کل تخفیف داده‌شده</div>
+            <div class="kpi-value" id="sim-total-discount-given" style="font-size:20px;">۰ تومان</div>
+            <div class="kpi-icon" style="background:#ede9fe;color:#8b5cf6;"><i class="fas fa-percentage"></i></div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-label">سود خالص باقی‌مانده برای کارخانه</div>
+            <div class="kpi-value" id="sim-total-net-profit" style="font-size:20px;">۰ تومان</div>
+            <div class="kpi-icon" style="background:#d1fae5;color:#10b981;"><i class="fas fa-coins"></i></div>
+          </div>
+          <div class="kpi-card kpi-red">
+            <div class="kpi-label">حاشیه سود میانگین پس از تخفیف</div>
+            <div class="kpi-value" id="sim-avg-rem-margin" style="font-size:20px;">۰٪</div>
+            <div class="kpi-icon" style="background:#fee2e2;color:#ef4444;"><i class="fas fa-chart-pie"></i></div>
+          </div>
+        </div>
+
+        <!-- جدول نتایج دقیق شبیه‌سازی مالی -->
+        <div class="table-container" style="max-height:360px; overflow-y:auto; margin-bottom:14px;">
+          <table>
+            <thead>
+              <tr>
+                <th>نام کالا</th>
+                <th>قیمت پایه (تومان)</th>
+                <th>حاشیه اولیه</th>
+                <th>قیمت پس از تخفیف</th>
+                <th>حاشیه سود جدید (٪)</th>
+                <th>سود باقی‌مانده در هر عدد</th>
+                <th>تعداد مشمول</th>
+                <th>سود کل سناریو</th>
+                <th>وضعیت منطقی بودن</th>
+              </tr>
+            </thead>
+            <tbody id="sim-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- تنظیمات پایه حاشیه و قیمت‌ها -->
       <div class="card" style="margin-bottom: 18px;">
         <div class="card-header">
-          <div class="card-title"><i class="fas fa-coins" style="color:#f59e0b;"></i> حاشیه سود محصولات و پارامترهای پروموشن</div>
+          <div class="card-title"><i class="fas fa-coins" style="color:#f59e0b;"></i> جدول قیمت‌های پایه و حاشیه سود اولیه اقلام</div>
           <span class="badge badge-info" id="promo-month-label">—</span>
+        </div>
+        <div style="font-size:12.5px; color:#64748b; margin-bottom:12px;">
+          <i class="fas fa-info-circle" style="color:#3b82f6;"></i> قیمت پایه و درصد حاشیه سود اولیه را در جدول زیر وارد کنید؛ ارقام فوراً در شبیه‌ساز بالا محاسبه و ذخیره می‌شوند.
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:14px;">
           <div class="form-group">
             <label class="form-label">حاشیه سود پیش‌فرض کالاهای ثبت‌نشده (٪)</label>
-            <input type="number" class="form-control" id="promo-set-default" placeholder="مثلاً ۲۰" onchange="setPromoSetting('defaultMargin', this.value)">
+            <input type="number" class="form-control" id="promo-set-default" placeholder="مثلاً ۲۵" onchange="setPromoSetting('defaultMargin', this.value)">
           </div>
           <div class="form-group">
             <label class="form-label">حداکثر سهم تخفیف از سود (٪)</label>
@@ -715,8 +796,8 @@
               <tr>
                 <th>نام کالا</th>
                 <th>بارکد</th>
-                <th>قیمت واحد (تومان)</th>
-                <th>حاشیه سود</th>
+                <th>قیمت پایه فروش (تومان)</th>
+                <th>حاشیه سود اولیه (٪)</th>
               </tr>
             </thead>
             <tbody id="margin-table-body"></tbody>
@@ -725,18 +806,18 @@
       </div>
 
       <div class="ai-panel" style="margin-bottom: 18px;">
-        <div class="ai-title"><i class="fas fa-gift"></i> ارزیابی هوشمند تخفیف و پروموشن</div>
+        <div class="ai-title"><i class="fas fa-gift"></i> تحلیل هوشمند تصمیم‌گیری پروموشن سیسکوه</div>
         <div id="promo-summary-container"></div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i class="fas fa-tags" style="color:#10b981;"></i> پیشنهاد تخفیف برای محصولات راکد</div>
+          <div class="card-title"><i class="fas fa-tags" style="color:#10b981;"></i> پیشنهاد سیستم برای تخلیه اقلام راکد شعب</div>
         </div>
         <div class="table-container">
           <table>
             <thead>
-              <tr><th>محصول</th><th>حاشیه سود</th><th>مانده راکد</th><th>تعداد شعب راکد</th><th>تخفیف پیشنهادی</th><th>تصمیم</th></tr>
+              <tr><th>محصول</th><th>حاشیه سود اولیه</th><th>مانده راکد</th><th>تعداد شعب راکد</th><th>تخفیف پیشنهادی</th><th>تصمیم</th></tr>
             </thead>
             <tbody id="promo-products-body"></tbody>
           </table>
@@ -1548,12 +1629,201 @@
             <tr>
               <td><strong>${p.name}</strong></td>
               <td><code>${p.barcode || 'فله'}</code></td>
-              <td><input type="number" class="form-control" style="width:120px;" placeholder="قیمت (تومان)" value="${pr}" onchange="setProductPrice('${p.name}', this.value)"></td>
+              <td><input type="number" class="form-control" style="width:140px;" placeholder="مثلاً ۱۵۰,۰۰۰" value="${pr}" onchange="setProductPrice('${p.name}', this.value)"></td>
               <td><input type="number" class="form-control" style="width:90px;" placeholder="${state.promoSettings.defaultMargin}٪" value="${m}" onchange="setProductMargin('${p.name}', this.value)"></td>
             </tr>
           `;
         }).join('');
       }
+
+      // به روزرسانی لیست فروشگاه‌ها/شعب در شبیه‌ساز پروموشن
+      populateSimulatorBranches(reconData);
+      runPromotionFinancialSimulator();
+
+      // Stagnant recommendations
+      const stagnantProds = list.filter(p => p.remain >= state.promoSettings.minRemain);
+      const promoTbody = document.getElementById('promo-products-body');
+      if (promoTbody) {
+        promoTbody.innerHTML = stagnantProds.map(p => {
+          const margin = state.margins[p.name]?.margin || state.promoSettings.defaultMargin || 20;
+          const maxAllowedDiscount = Math.floor(margin * (state.promoSettings.maxShare / 100));
+          const recDiscount = Math.max(state.promoSettings.minDiscount, Math.min(15, maxAllowedDiscount));
+          return `
+            <tr>
+              <td><strong>${p.name}</strong></td>
+              <td>${formatNumber(margin)}٪</td>
+              <td><strong style="color:#ef4444;">${formatNumber(p.remain)}</strong></td>
+              <td>${formatNumber(p.branches)} شعبه</td>
+              <td><strong style="color:#10b981;">${formatNumber(recDiscount)}٪ تخفیف</strong></td>
+              <td><span class="badge badge-success">پیشنهاد پروموشن</span></td>
+            </tr>
+          `;
+        }).join('') || '<tr><td colspan="6" class="text-center text-muted" style="padding:15px;">محصول راکد با این شرایط یافت نشد</td></tr>';
+      }
+
+      const summary = document.getElementById('promo-summary-container');
+      if (summary) {
+        summary.innerHTML = `
+          <div class="ai-alert info">
+            <span class="ai-alert-icon">💡</span>
+            <div>تعداد <strong>${formatNumber(stagnantProds.length)}</strong> محصول دارای مانده بیش از ${formatNumber(state.promoSettings.minRemain)} عدد در شعب هستند که با اعمال تخفیف تا سقف حاشیه سود مجاز بدون زیان قابل آزادسازی سرمایه‌اند.</div>
+          </div>
+        `;
+      }
+    }
+
+    // شبیه‌ساز مالی پروموشن قراردادی (اتکا، رفاه و...)
+    function populateSimulatorBranches(reconData) {
+      const select = document.getElementById('sim-target-branch');
+      if (!select) return;
+      const currentVal = select.value || 'all';
+
+      const branchSet = new Set();
+      reconData.forEach(r => {
+        const title = r.branch ? `${r.branch} (${r.city})` : r.city;
+        if (title) branchSet.add(title);
+      });
+
+      const list = Array.from(branchSet).sort();
+      let html = '<option value="all">همه شعب و کل کشور</option>';
+      list.forEach(b => {
+        html += `<option value="${b}">${b}</option>`;
+      });
+      select.innerHTML = html;
+      if (branchSet.has(currentVal)) select.value = currentVal;
+    }
+
+    function runPromotionFinancialSimulator() {
+      const discInput = document.getElementById('sim-discount-rate');
+      const branchSelect = document.getElementById('sim-target-branch');
+      const qtyBasisSelect = document.getElementById('sim-quantity-basis');
+      const tbody = document.getElementById('sim-table-body');
+      if (!discInput || !tbody) return;
+
+      const discountRate = parseFloat(discInput.value) || 0;
+      const targetBranch = branchSelect?.value || 'all';
+      const qtyBasis = qtyBasisSelect?.value || 'remain';
+
+      const activeMonth = selectedAnalysisMonth || 'all';
+      let recon = buildReconciliationData(activeMonth);
+
+      if (targetBranch !== 'all') {
+        recon = recon.filter(r => {
+          const title = r.branch ? `${r.branch} (${r.city})` : r.city;
+          return title === targetBranch;
+        });
+      }
+
+      // تجمیع اقلام
+      const productMap = new Map();
+      recon.forEach(r => {
+        let p = productMap.get(r.productName);
+        if (!p) {
+          p = { name: r.productName, remain: 0, sold: 0, shipped: 0 };
+          productMap.set(r.productName, p);
+        }
+        p.remain += r.remain;
+        p.sold += r.sold;
+        p.shipped += r.shipped;
+      });
+
+      const items = Array.from(productMap.values());
+      let totalRevenue = 0;
+      let totalDiscountGiven = 0;
+      let totalNetProfit = 0;
+      let weightedRemainingMarginSum = 0;
+      let totalCountEvaluated = 0;
+
+      let rowsHtml = '';
+      items.forEach(p => {
+        const userMargin = state.margins[p.name]?.margin;
+        const initialMargin = (userMargin !== undefined && userMargin !== null && userMargin !== '')
+          ? parseFloat(userMargin)
+          : (state.promoSettings.defaultMargin || 20);
+
+        const basePrice = parseFloat(state.margins[p.name]?.price) || 0;
+
+        // تعداد مبنا
+        let count = 0;
+        if (qtyBasis === 'remain') count = p.remain;
+        else if (qtyBasis === 'sold') count = p.sold;
+        else if (qtyBasis === 'shipped') count = p.shipped;
+
+        // محاسبات بهای تمام‌شده و تخفیف
+        const discountedPrice = basePrice * (1 - (discountRate / 100));
+        const costPrice = basePrice * (1 - (initialMargin / 100)); // بهای تمام‌شده برای کارخانه
+        const profitPerUnit = discountedPrice - costPrice; // سود ریالی بعد از تخفیف
+
+        // حاشیه سود جدید نسبت به قیمت فروش جدید
+        let newMarginPercent = 0;
+        if (discountedPrice > 0) {
+          newMarginPercent = (profitPerUnit / discountedPrice) * 100;
+        } else {
+          newMarginPercent = initialMargin - discountRate;
+        }
+
+        const lineDiscount = (basePrice * (discountRate / 100)) * count;
+        const lineRevenue = discountedPrice * count;
+        const lineProfit = profitPerUnit * count;
+
+        if (basePrice > 0 && count > 0) {
+          totalRevenue += lineRevenue;
+          totalDiscountGiven += lineDiscount;
+          totalNetProfit += lineProfit;
+          weightedRemainingMarginSum += newMarginPercent * lineRevenue;
+          totalCountEvaluated += lineRevenue;
+        }
+
+        // ارزیابی منطقی بودن تخفیف
+        let statusBadge = '';
+        if (basePrice === 0) {
+          statusBadge = '<span class="badge badge-secondary">قیمت ثبت نشده</span>';
+        } else if (newMarginPercent < 0) {
+          statusBadge = `<span class="badge badge-danger">🚨 زیان‌ده (${formatNumber(Math.round(newMarginPercent))}٪)</span>`;
+        } else if (newMarginPercent < 5) {
+          statusBadge = '<span class="badge badge-warning">⚠️ لب مرز سر‌به‌سر</span>';
+        } else {
+          statusBadge = '<span class="badge badge-success">✅ کاملاً سودآور</span>';
+        }
+
+        const priceDisplay = basePrice > 0 ? formatNumber(basePrice) : '<span style="color:#94a3b8;">تعیین نشده</span>';
+        const discPriceDisplay = basePrice > 0 ? formatNumber(Math.round(discountedPrice)) : '—';
+        const profitPerUnitDisplay = basePrice > 0 
+          ? `<strong style="color:${profitPerUnit >= 0 ? '#10b981' : '#ef4444'};">${formatNumber(Math.round(profitPerUnit))} تومان</strong>`
+          : '—';
+        const totalProfitDisplay = basePrice > 0 && count > 0
+          ? `<strong style="color:${lineProfit >= 0 ? '#10b981' : '#ef4444'};">${formatNumber(Math.round(lineProfit))} تومان</strong>`
+          : '—';
+
+        rowsHtml += `
+          <tr>
+            <td><strong>${p.name}</strong></td>
+            <td>${priceDisplay}</td>
+            <td>${formatNumber(initialMargin)}٪</td>
+            <td><strong>${discPriceDisplay}</strong></td>
+            <td><strong style="color:${newMarginPercent >= 5 ? '#10b981' : (newMarginPercent >= 0 ? '#f59e0b' : '#ef4444')};">${formatNumber(Math.round(newMarginPercent * 10) / 10)}٪</strong></td>
+            <td>${profitPerUnitDisplay}</td>
+            <td><strong>${formatNumber(count)}</strong> عدد</td>
+            <td>${totalProfitDisplay}</td>
+            <td>${statusBadge}</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = rowsHtml || '<tr><td colspan="9" class="text-center text-muted" style="padding:18px;">داده‌ای برای شبیه‌سازی یافت نشد</td></tr>';
+
+      // نمایش KPIها
+      document.getElementById('sim-total-revenue').textContent = `${formatNumber(Math.round(totalRevenue))} تومان`;
+      document.getElementById('sim-total-discount-given').textContent = `${formatNumber(Math.round(totalDiscountGiven))} تومان`;
+      const netProfitEl = document.getElementById('sim-total-net-profit');
+      netProfitEl.textContent = `${formatNumber(Math.round(totalNetProfit))} تومان`;
+      netProfitEl.style.color = totalNetProfit >= 0 ? '#10b981' : '#ef4444';
+
+      const avgMargin = totalCountEvaluated > 0 ? (weightedRemainingMarginSum / totalCountEvaluated) : 0;
+      const avgMarginEl = document.getElementById('sim-avg-rem-margin');
+      avgMarginEl.textContent = `${formatNumber(Math.round(avgMargin * 10) / 10)}٪`;
+      avgMarginEl.style.color = avgMargin >= 5 ? '#10b981' : (avgMargin >= 0 ? '#f59e0b' : '#ef4444');
+    }
 
       // Stagnant recommendations
       const stagnantProds = list.filter(p => p.remain >= state.promoSettings.minRemain);
