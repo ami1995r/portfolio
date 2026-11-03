@@ -28,12 +28,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+      font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif !important;
       background: #f1f5f9;
       color: #1e293b;
       min-height: 100vh;
       font-size: 13.5px;
-      line-height: 1.7;
+      line-height: 1.8;
     }
     
     :root {
@@ -46,9 +46,8 @@
       --danger: #ef4444;
       --danger-dark: #dc2626;
       --purple: #8b5cf6;
-      --purple-dark: #7c3aed;
       --cyan: #06b6d4;
-      --gray-100: #f8fafc;
+      --gray-100: #f1f5f9;
       --gray-200: #e2e8f0;
       --gray-300: #cbd5e1;
       --gray-400: #94a3b8;
@@ -63,74 +62,91 @@
       max-width: 1680px;
       margin: 0 auto;
     }
+
+    .app-header-bar {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .app-logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-box {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(16,185,129,0.4);
+    }
+    .app-title { font-size: 16px; font-weight: 800; line-height: 1.35; }
+    .app-subtitle { font-size: 11.5px; color: #94a3b8; margin-top: 2px; }
     
     .page-header {
       background: white;
       border-radius: 16px;
-      padding: 18px 24px;
+      padding: 18px 22px;
       margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.03);
       display: flex; justify-content: space-between; align-items: center;
       flex-wrap: wrap; gap: 16px;
       border: 1px solid rgba(226,232,240,0.8);
     }
     
     .page-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px; color: #0f172a; }
-    .page-subtitle { font-size: 12px; color: #64748b; margin-top: 4px; font-weight: 400; }
+    .page-subtitle { font-size: 12.5px; color: #64748b; margin-top: 4px; font-weight: 400; }
     .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
       padding: 8px 15px;
       border-radius: 10px;
       border: none;
-      font-family: inherit;
+      font-family: 'Vazirmatn', sans-serif;
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
       white-space: nowrap;
     }
-    
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
     .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
     .btn-success { background: var(--success); color: white; }
-    .btn-success:hover:not(:disabled) { background: var(--success-dark); }
+    .btn-success:hover { background: var(--success-dark); }
     .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover:not(:disabled) { background: var(--danger-dark); }
-    .btn-warning { background: var(--warning); color: white; }
-    .btn-purple { background: var(--purple); color: white; }
+    .btn-danger:hover { background: var(--danger-dark); }
     .btn-cyan { background: var(--cyan); color: white; }
+    .btn-cyan:hover { background: #0891b2; }
     .btn-secondary { background: var(--gray-100); color: var(--gray-600); border: 1px solid var(--gray-200); }
-    .btn-secondary:hover:not(:disabled) { background: var(--gray-200); }
-    .btn-outline { background: transparent; border: 1px solid var(--gray-300); color: var(--gray-600); }
-    .btn-outline:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); background: rgba(37,99,235,0.05); }
-    .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
+    .btn-secondary:hover { background: var(--gray-200); }
     
     .card {
       background: white;
       border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.02);
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.03);
       border: 1px solid rgba(226,232,240,0.8);
     }
     
     .card-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       padding-bottom: 12px;
-      border-bottom: 1px solid #f1f5f9;
-      flex-wrap: wrap; gap: 12px;
+      border-bottom: 1px solid var(--gray-100);
+      flex-wrap: wrap; gap: 10px;
     }
     
     .card-title {
-      font-size: 14.5px; font-weight: 800;
+      font-size: 15px; font-weight: 800;
       display: flex; align-items: center; gap: 8px;
-      color: #1e293b;
+      color: var(--gray-700);
     }
     
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
@@ -138,91 +154,81 @@
     
     .kpi-card {
       background: white;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 18px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
       position: relative;
       overflow: hidden;
-      border: 1px solid #e2e8f0;
-      transition: transform 0.2s;
+      border: 1px solid rgba(226,232,240,0.8);
     }
-    
-    .kpi-card:hover { transform: translateY(-2px); }
     .kpi-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
-    
     .kpi-blue::before { background: #3b82f6; }
     .kpi-green::before { background: #10b981; }
-    .kpi-red::before { background: #ef4444; }
     .kpi-purple::before { background: #8b5cf6; }
+    .kpi-red::before { background: #ef4444; }
     
-    .kpi-label { font-size: 11.5px; color: #64748b; font-weight: 700; }
-    .kpi-value { font-size: 24px; font-weight: 900; margin-top: 6px; color: #0f172a; }
-    
+    .kpi-label { font-size: 12px; color: #64748b; font-weight: 700; }
+    .kpi-value { font-size: 24px; font-weight: 900; margin-top: 6px; color: var(--gray-700); line-height: 1.3; }
     .kpi-icon {
       position: absolute; top: 16px; left: 16px;
       width: 44px; height: 44px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 5px; }
+    .form-label { display: block; font-size: 12.5px; font-weight: 700; color: #475569; margin-bottom: 5px; }
     
     .form-control {
       width: 100%;
-      padding: 8px 12px;
+      padding: 9px 12px;
       border: 1.5px solid #e2e8f0;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12.5px;
+      border-radius: 10px;
+      font-family: 'Vazirmatn', sans-serif;
+      font-size: 13px;
       background: #f8fafc;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
       color: #334155;
     }
-    
     .form-control:focus {
       outline: none;
       border-color: var(--primary);
       background: white;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
     }
     
     .table-container {
       overflow-x: auto;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
       background: white;
     }
-    
     table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
     thead { background: #f8fafc; }
-    
     th {
-      padding: 11px 13px;
+      padding: 12px 14px;
       text-align: right;
       font-weight: 800;
       color: #475569;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 2px solid #e2e8f0;
       white-space: nowrap;
     }
-    
     td {
-      padding: 10px 13px;
+      padding: 10px 14px;
       border-bottom: 1px solid #f1f5f9;
       color: #334155;
       vertical-align: middle;
     }
-    
     tbody tr:hover td { background: #f8fafc; }
-    tbody tr:last-child td { border-bottom: none; }
     
     .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 11px;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11.5px;
       font-weight: 700;
+      white-space: nowrap;
     }
-    
     .badge-success { background: #d1fae5; color: #065f46; }
     .badge-warning { background: #fef3c7; color: #92400e; }
     .badge-danger { background: #fee2e2; color: #991b1b; }
@@ -232,108 +238,99 @@
     
     .tabs {
       display: flex; gap: 4px;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 2px solid #f1f5f9;
       margin-bottom: 18px;
       overflow-x: auto;
     }
-    
     .tab {
       padding: 10px 16px;
       cursor: pointer;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 700;
       color: #64748b;
       border-bottom: 2.5px solid transparent;
+      transition: all 0.2s;
       white-space: nowrap;
       background: none;
       border-top: none; border-left: none; border-right: none;
-      font-family: inherit;
+      font-family: 'Vazirmatn', sans-serif;
     }
-    
     .tab:hover { color: var(--primary); }
-    .tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 800; }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    .month-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .month-tab {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #64748b;
+      font-family: 'Vazirmatn', sans-serif;
+      transition: all 0.2s;
+    }
+    .month-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .month-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
 
     .ai-panel {
       background: linear-gradient(135deg, #1e293b, #0f172a);
       color: white;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 4px 20px rgba(15,23,42,0.12);
+      box-shadow: 0 8px 24px rgba(15,23,42,0.15);
     }
-
     .ai-title {
       font-size: 15px; font-weight: 800; color: #60a5fa;
       margin-bottom: 14px;
       display: flex; align-items: center; gap: 8px;
     }
-
     .ai-alert {
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px 14px;
       margin-bottom: 10px;
       font-size: 12.5px;
       display: flex; align-items: flex-start; gap: 10px;
-      line-height: 1.7;
+      line-height: 1.8;
     }
-
-    .ai-alert.critical { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.12); color: #fca5a5; }
-    .ai-alert.warning { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.12); color: #fcd34d; }
-    .ai-alert.good { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.12); color: #6ee7b7; }
-    .ai-alert.info { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.12); color: #93c5fd; }
-    .ai-alert-icon { font-size: 16px; margin-top: 2px; }
+    .ai-alert.critical { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.15); color: #fca5a5; }
+    .ai-alert.warning { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.15); color: #fcd34d; }
+    .ai-alert.good { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.15); color: #6ee7b7; }
+    .ai-alert.info { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.15); color: #93c5fd; }
 
     .chart-container-large { position: relative; height: 380px; width: 100%; }
-    
+
     .modal-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15,23,42,0.65);
+      background: rgba(15,23,42,0.7);
       z-index: 1000;
       align-items: center; justify-content: center;
-      backdrop-filter: blur(3px);
-      padding: 16px;
+      backdrop-filter: blur(4px);
+      padding: 20px;
     }
-    
     .modal {
       background: white;
-      border-radius: 16px;
-      max-width: 580px;
+      border-radius: 18px;
+      max-width: 480px;
       width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
       padding: 24px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
     }
-    
     .modal-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 18px;
       padding-bottom: 12px;
       border-bottom: 1px solid #f1f5f9;
     }
-    
-    .modal-title { font-size: 15px; font-weight: 800; color: #1e293b; }
-    
+    .modal-title { font-size: 16px; font-weight: 800; color: var(--gray-700); }
     .modal-close {
-      background: #f1f5f9;
-      border: none;
-      width: 32px; height: 32px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      color: #64748b;
-      display: flex; align-items: center; justify-content: center;
-    }
-    
-    .modal-close:hover { background: #fee2e2; color: #dc2626; }
-    
-    .modal-footer {
-      display: flex; justify-content: flex-end; gap: 8px;
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid #f1f5f9;
+      background: #f1f5f9; border: none; width: 32px; height: 32px;
+      border-radius: 8px; cursor: pointer; color: #64748b;
     }
 
     .toast {
@@ -345,113 +342,29 @@
       padding: 12px 24px;
       border-radius: 12px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       z-index: 2000;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       opacity: 0;
       transition: opacity 0.3s, transform 0.3s;
       pointer-events: none;
-      font-family: inherit;
+      font-family: 'Vazirmatn', sans-serif;
     }
-    
     .toast.show { opacity: 1; transform: translateX(50%) translateY(-10px); }
     .toast.error { background: #dc2626; }
     .toast.success { background: #059669; }
 
-    .month-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-    .month-tab {
-      padding: 5px 12px;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      color: #64748b;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .month-tab:hover { border-color: var(--primary); color: var(--primary); }
-    .month-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-    .decision-card {
-      background: white;
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      border-right: 4px solid #cbd5e1;
-      border-top: 1px solid #e2e8f0;
-      border-left: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .decision-card.production-up { border-right-color: #10b981; }
-    .decision-card.production-down { border-right-color: #ef4444; }
-    .decision-card.sales-stop { border-right-color: #f59e0b; }
-    .decision-card.sales-boost { border-right-color: #3b82f6; }
-    .decision-title { font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-    .decision-desc { font-size: 12px; color: #475569; }
-    .decision-reason {
-      margin-top: 6px;
-      padding: 6px 10px;
-      background: #f8fafc;
-      border-radius: 6px;
-      font-size: 11.5px;
-      color: #334155;
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    .app-header-bar {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: white;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .app-logo-area { display: flex; align-items: center; gap: 12px; }
-    .logo-box {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
-    .app-title { font-size: 14.5px; font-weight: 800; }
-    .app-subtitle { font-size: 11px; color: #94a3b8; }
-    
-    .pagination-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 12px;
-    }
-
-    .loading-spinner {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 0.8s ease-in-out infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) {
-      .main-wrapper { padding: 12px; }
-      .grid-2, .grid-4 { grid-template-columns: 1fr; }
-    }
     .hidden { display: none !important; }
     .text-center { text-align: center; }
     .text-muted { color: #94a3b8; }
+
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .grid-4 { grid-template-columns: 1fr; }
+      .main-wrapper { padding: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -461,12 +374,11 @@
       <div class="logo-box">🏭</div>
       <div>
         <div class="app-title">شرکت صنعتی سیسکوه</div>
-        <div class="app-subtitle">سامانه مهندسی فروش و تطبیق حواله شعب — نسخه پرسرعت (Big Data)</div>
+        <div class="app-subtitle">سامانه مهندسی فروش، تطبیق حواله شعب و شبیه‌ساز پروموشن</div>
       </div>
     </div>
-    <div style="display:flex; gap:8px;">
-      <button class="btn btn-sm btn-outline" style="color:white; border-color:#475569;" onclick="exportStateBackup()"><i class="fas fa-download"></i> پشتیبان‌گیری داده‌ها</button>
-      <button class="btn btn-sm btn-outline" style="color:white; border-color:#475569;" onclick="importStateBackup()"><i class="fas fa-upload"></i> بازیابی پشتیبان</button>
+    <div style="font-size:12px; color:#cbd5e1;">
+      نسخه جامع — تحلیل خودکار سال و ماه‌های شمسی
     </div>
   </div>
 
@@ -474,107 +386,102 @@
     
     <div class="page-header">
       <div>
-        <div class="page-title">🤖 مهندسی فروش و تطبیق هوشمند توزیع و تولید</div>
-        <div class="page-subtitle">تطبیق بارهای ارسالی در حواله‌ها با فروش قطعی شعب، کشف کانون‌های دپو و تحلیل رفتار بازار</div>
+        <div class="page-title">📊 مهندسی فروش و تطبیق حواله شعب</div>
+        <div class="page-subtitle">تطبیق بارهای ارسالی حواله با فروش واقعی، پایش کانون‌های دپو و تحلیل استراتژیک پروموشن</div>
       </div>
       <div class="header-actions">
-        <button class="btn btn-cyan" onclick="importShipmentFile()"><i class="fas fa-truck-loading"></i> ورود اکسل حواله ارسالی</button>
-        <button class="btn btn-primary" onclick="importAnalysisFile()"><i class="fas fa-file-excel"></i> ورود اکسل فروش‌های قطعی</button>
-        <button class="btn btn-success" onclick="exportReconciliationToExcel()"><i class="fas fa-file-export"></i> خروجی اکسل تطبیق</button>
-        <button class="btn btn-danger" onclick="clearAllAnalysisData()"><i class="fas fa-trash"></i> پاکسازی</button>
+        <button class="btn btn-cyan" onclick="document.getElementById('shipment-file-input').click()"><i class="fas fa-truck-loading"></i> ورود اکسل حواله ارسالی</button>
+        <button class="btn btn-primary" onclick="document.getElementById('analysis-file-input').click()"><i class="fas fa-file-excel"></i> ورود اکسل فروش شعب</button>
+        <button class="btn btn-secondary" onclick="exportReconciliationExcel()"><i class="fas fa-download"></i> خروجی اکسل تطبیق</button>
+        <button class="btn btn-danger" onclick="clearAllData()"><i class="fas fa-trash"></i> پاکسازی داده‌ها</button>
       </div>
     </div>
 
+    <!-- فیلتر سال و ماه -->
     <div class="card" style="padding: 14px 18px; margin-bottom: 18px;">
-      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-weight:800; font-size:13px;"><i class="fas fa-calendar-check" style="color:#10b981;"></i> سال شمسی:</span>
-          <div class="month-tabs" id="analysis-year-tabs"></div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-weight:800; font-size:13px; color:#1e293b;"><i class="fas fa-calendar" style="color:#2563eb;"></i> سال مالی:</span>
+          <div class="month-tabs" id="year-tabs">
+            <button class="month-tab active" onclick="selectYear('all', this)">همه سال‌ها</button>
+          </div>
         </div>
-        <div style="height:24px; width:1px; background:#cbd5e1;" class="hidden md:block"></div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-weight:800; font-size:13px;"><i class="fas fa-calendar-alt" style="color:#3b82f6;"></i> ماه تحلیل:</span>
-          <div class="month-tabs" id="analysis-month-tabs"></div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-weight:800; font-size:13px; color:#1e293b;"><i class="fas fa-calendar-alt" style="color:#10b981;"></i> ماه تحلیل:</span>
+          <div class="month-tabs" id="month-tabs">
+            <button class="month-tab active" onclick="selectMonth('all', this)">همه ماه‌ها</button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- کارت‌های کلیدی KPI -->
     <div class="grid-4" style="margin-bottom: 20px;">
       <div class="kpi-card kpi-purple">
         <div class="kpi-label">مجموع بار ارسالی در حواله‌ها</div>
-        <div class="kpi-value" id="analysis-kpi-shipped">۰</div>
+        <div class="kpi-value" id="kpi-shipped">۰</div>
         <div class="kpi-icon" style="background:#ede9fe;color:#8b5cf6;"><i class="fas fa-truck"></i></div>
       </div>
       <div class="kpi-card kpi-blue">
-        <div class="kpi-label">تعداد سطرهای فروش قطعی</div>
-        <div class="kpi-value" id="analysis-kpi-records-count">۰</div>
+        <div class="kpi-label">مجموع فروش قطعی ثبت‌شده</div>
+        <div class="kpi-value" id="kpi-sold">۰</div>
         <div class="kpi-icon" style="background:#eff6ff;color:#3b82f6;"><i class="fas fa-receipt"></i></div>
       </div>
       <div class="kpi-card kpi-red">
-        <div class="kpi-label">مانده دپوشده و راکد در شعب</div>
-        <div class="kpi-value" id="analysis-kpi-depo">۰</div>
+        <div class="kpi-label">مانده دپو و راکد در شعب</div>
+        <div class="kpi-value" id="kpi-depo">۰</div>
         <div class="kpi-icon" style="background:#fee2e2;color:#ef4444;"><i class="fas fa-warehouse"></i></div>
       </div>
       <div class="kpi-card kpi-green">
-        <div class="kpi-label">نرخ تحقق کل فروش قطعی</div>
-        <div class="kpi-value" id="analysis-kpi-sellthrough">۰٪</div>
+        <div class="kpi-label">نرخ تحقق فروش در بازه انتخابی</div>
+        <div class="kpi-value" id="kpi-sellthrough">۰٪</div>
         <div class="kpi-icon" style="background:#d1fae5;color:#10b981;"><i class="fas fa-percent"></i></div>
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
+    <!-- منوی تب‌ها -->
     <div class="tabs">
-      <button class="tab active" data-analysis-tab="decision-engine" onclick="showAnalysisTab('decision-engine')">🎯 تصمیم‌گیری تولید و توزیع</button>
-      <button class="tab" data-analysis-tab="reconciliation" onclick="showAnalysisTab('reconciliation')">📋 جدول تطبیق حواله با فروش شعب</button>
-      <button class="tab" data-analysis-tab="products-ranking" onclick="showAnalysisTab('products-ranking')">🏆 رتبه‌بندی محصولات</button>
-      <button class="tab" data-analysis-tab="city-branch" onclick="showAnalysisTab('city-branch')">🏢 رفتار شهرها و شعب</button>
-      <button class="tab" data-analysis-tab="promotion" onclick="showAnalysisTab('promotion')">🎁 پروموشن و حاشیه سود</button>
+      <button class="tab active" data-tab="decision-engine" onclick="switchTab('decision-engine')">🎯 تصمیم‌گیری تولید و توزیع</button>
+      <button class="tab" data-tab="reconciliation" onclick="switchTab('reconciliation')">📋 جدول تطبیق حواله با فروش قطعی</button>
+      <button class="tab" data-tab="products-ranking" onclick="switchTab('products-ranking')">🏆 رتبه‌بندی عملکرد کالاها</button>
+      <button class="tab" data-tab="city-branch" onclick="switchTab('city-branch')">🏢 رفتار شهرها و شعب</button>
+      <button class="tab" data-tab="promotion" onclick="switchTab('promotion')">🎁 پروموشن و شبیه‌ساز سود اتکا</button>
     </div>
 
-    <!-- TAB 1: DECISION ENGINE -->
-    <div id="analysis-tab-decision-engine">
+    <!-- تب ۱: تصمیم‌گیری تولید و توزیع -->
+    <div id="tab-decision-engine">
       <div class="ai-panel" style="margin-bottom: 20px;">
-        <div class="ai-title"><i class="fas fa-brain"></i> هشدارهای استراتژیک سیستم سیسکوه</div>
+        <div class="ai-title"><i class="fas fa-brain"></i> بینش‌ها و توصیه‌های استراتژیک سیستم مهندسی سیسکوه</div>
         <div id="ai-insights-container">
-          <div class="ai-alert">برای فعال‌سازی سیستم هوشمند مهندسی فروش، اکسل‌های حواله و فروش قطعی را بارگذاری نمایید.</div>
+          <div class="ai-alert info">لطفاً فایل‌های اکسل حواله و فروش را از دکمه‌های بالا بارگذاری کنید تا موتور تحلیلی فعال شود.</div>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-industry" style="color:#10b981;"></i> توصیه‌ها برای «خط تولید کارخانه»</div>
+            <div class="card-title"><i class="fas fa-industry" style="color:#10b981;"></i> دستورات مهندسی خط تولید کارخانه</div>
           </div>
           <div id="production-decisions-container"></div>
         </div>
-        
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i class="fas fa-shipping-fast" style="color:#3b82f6;"></i> دستورات توزیع و ترانسفر بار شعب</div>
+            <div class="card-title"><i class="fas fa-shipping-fast" style="color:#3b82f6;"></i> دستورات توزیع و ترانسفر بین شعب</div>
           </div>
           <div id="distribution-decisions-container"></div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: RECONCILIATION TABLE -->
-    <div id="analysis-tab-reconciliation" style="display:none;">
-      <div class="card" style="padding: 14px 18px; margin-bottom: 16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-weight:800; font-size:12.5px;"><i class="fas fa-filter" style="color:#3b82f6;"></i> فیلتر ماه:</span>
-            <div class="month-tabs" id="reconciliation-month-tabs">
-              <button class="month-tab active" onclick="filterReconciliationMonth('all', this)">همه ماه‌ها</button>
-            </div>
-          </div>
-          <input type="text" id="reconciliation-search" class="form-control" style="width:280px;" placeholder="جستجو در شهر، شعبه، کالا، بارکد..." oninput="debouncedSearchReconciliation()">
-        </div>
-      </div>
-
+    <!-- تب ۲: جدول تطبیق حواله با فروش -->
+    <div id="tab-reconciliation" style="display:none;">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i class="fas fa-balance-scale" style="color:#8b5cf6;"></i> جدول تطبیق حواله با فروش واقعی شعب</div>
-          <span class="badge badge-info" id="reconciliation-count-badge">۰ ردیف</span>
+          <div class="card-title"><i class="fas fa-balance-scale" style="color:#8b5cf6;"></i> جدول ماتریسی تطبیق بار ارسالی با فروش قطعی</div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="text" id="reconciliation-search" class="form-control" style="width:240px;" placeholder="جستجوی شهر، شعبه یا کالا..." oninput="renderReconciliationTable()">
+            <span class="badge badge-info" id="reconciliation-count-badge">۰ ردیف</span>
+          </div>
         </div>
         <div class="table-container">
           <table>
@@ -585,65 +492,47 @@
                 <th>فروشگاه مرکزی (شهر)</th>
                 <th>نام شعبه</th>
                 <th>نام کالا</th>
-                <th>بارکد</th>
-                <th>ارسالی (حواله)</th>
-                <th>فروش قطعی</th>
+                <th>بارکد / کد کالا</th>
+                <th>تعداد ارسال شده</th>
+                <th>تعداد فروش رفته</th>
                 <th>مانده دپو</th>
-                <th>تحقق</th>
-                <th>ارزیابی</th>
+                <th>تحقق فروش</th>
+                <th>وضعیت و تحلیل</th>
               </tr>
             </thead>
             <tbody id="reconciliation-table-body"></tbody>
           </table>
         </div>
-        <div class="pagination-bar" id="reconciliation-pagination"></div>
       </div>
     </div>
 
-    <!-- TAB 3: PRODUCT RANKING -->
-    <div id="analysis-tab-products-ranking" style="display:none;">
-      <div class="card" style="padding: 14px 18px; margin-bottom: 16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-          <div style="font-weight:800; font-size:12.5px;">
-            <i class="fas fa-calendar-alt" style="color:#3b82f6;"></i> بازه زمانی رتبه‌بندی:
-          </div>
-          <div class="month-tabs" id="ranking-month-tabs">
-            <button class="month-tab active" onclick="selectRankingMonth('all', this)">کل ایران (تمام ماه‌ها)</button>
-          </div>
-        </div>
-      </div>
-
+    <!-- تب ۳: رتبه‌بندی محصولات -->
+    <div id="tab-products-ranking" style="display:none;">
       <div class="card" style="margin-bottom: 20px;">
         <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-chart-bar" style="color:#10b981;"></i>
-            <span id="product-ranking-chart-title">نمودار اقلام پرفروش</span>
-          </div>
+          <div class="card-title"><i class="fas fa-chart-bar" style="color:#10b981;"></i> مقایسه ارسال و فروش محصولات برتر</div>
         </div>
         <div class="chart-container-large">
-          <canvas id="analysis-product-ranking-chart"></canvas>
+          <canvas id="product-ranking-chart"></canvas>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-list-ol" style="color:#3b82f6;"></i>
-            <span id="product-ranking-table-title">جدول رتبه‌بندی کالاها</span>
-          </div>
+          <div class="card-title"><i class="fas fa-list-ol" style="color:#3b82f6;"></i> رتبه‌بندی عملکرد فروش کالاها</div>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th style="width:50px;">رتبه</th>
-                <th>بارکد کالا</th>
+                <th style="width:60px;">رتبه</th>
                 <th>نام محصول</th>
-                <th>ارسالی کل</th>
-                <th>فروش قطعی</th>
-                <th>مانده در شعب</th>
-                <th>تحقق فروش</th>
-                <th>ارزیابی</th>
+                <th>بارکد</th>
+                <th>مجموع ارسال در حواله‌ها</th>
+                <th>مجموع فروش قطعی</th>
+                <th>مانده دپو در کل کشور</th>
+                <th>درصد تحقق</th>
+                <th>ارزیابی عملکرد</th>
               </tr>
             </thead>
             <tbody id="product-ranking-table-body"></tbody>
@@ -652,131 +541,127 @@
       </div>
     </div>
 
-    <!-- TAB 4: CITY & BRANCH BEHAVIOR -->
-    <div id="analysis-tab-city-branch" style="display:none;">
-      <div class="card" style="margin-bottom: 16px; background:#f8fafc;">
-        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+    <!-- تب ۴: رفتار شهرها و شعب -->
+    <div id="tab-city-branch" style="display:none;">
+      <div class="card" style="margin-bottom: 18px; background:#f8fafc;">
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
           <div style="flex:1; min-width:260px;">
-            <label class="form-label" style="font-weight:800;">🎯 انتخاب کالا برای بررسی شعب و شهرها:</label>
-            <select id="analysis-product-selector" class="form-control" onchange="renderSpecificProductBreakdown(this.value)">
-              <option value="">در حال بارگذاری کالاها...</option>
+            <label class="form-label">🎯 انتخاب کالا برای بررسی توزیع در شهرها و شعب:</label>
+            <select id="branch-product-selector" class="form-control" onchange="renderSpecificProductBreakdown(this.value)">
+              <option value="">لطفاً فایلی بارگذاری کنید...</option>
             </select>
           </div>
-          <div style="padding-top:20px;">
-            <span class="badge badge-purple" id="selected-product-total-sales-badge" style="padding:7px 12px; font-size:12px;">تعداد کل فروش: ۰</span>
+          <div style="padding-top:22px;">
+            <span class="badge badge-purple" id="selected-product-sales-badge" style="padding:8px 14px; font-size:13px;">فروش کل: ۰</span>
           </div>
         </div>
       </div>
 
       <div class="card" style="margin-bottom: 20px;">
         <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-store" style="color:#3b82f6;"></i>
-            <span id="selected-product-chart-title">نمودار فروش کالا به تفکیک شعب برتر</span>
-          </div>
+          <div class="card-title"><i class="fas fa-store" style="color:#3b82f6;"></i> نمودار فروش کالا به تفکیک شعب برتر</div>
         </div>
         <div class="chart-container-large">
-          <canvas id="selected-product-stores-chart"></canvas>
+          <canvas id="branch-sales-chart"></canvas>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-sitemap" style="color:#10b981;"></i>
-            <span id="selected-product-table-title">جدول عملکرد شعب برای کالا</span>
-          </div>
+          <div class="card-title"><i class="fas fa-sitemap" style="color:#10b981;"></i> عملکرد شهرها و شعب برای محصول انتخابی</div>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th style="width:50px;">رتبه</th>
+                <th style="width:60px;">رتبه</th>
                 <th>شهر / فروشگاه مرکزی</th>
-                <th>شعبه</th>
-                <th>بارکد</th>
-                <th>فروش قطعی</th>
-                <th>عملکرد</th>
+                <th>نام شعبه</th>
+                <th>تعداد فروش قطعی</th>
+                <th>کشش بازار</th>
               </tr>
             </thead>
-            <tbody id="selected-product-stores-table"></tbody>
+            <tbody id="branch-sales-table-body"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- TAB 5: PROMOTION & MARGIN -->
-    <div id="analysis-tab-promotion" style="display:none;">
+    <!-- تب ۵: پروموشن و حاشیه سود -->
+    <div id="tab-promotion" style="display:none;">
       
-      <!-- شبیه‌ساز پروموشن قراردادی و فروشگاه‌های زنجیره‌ای (اتکا، رفاه و...) -->
-      <div class="card" style="margin-bottom: 20px; border-right: 5px solid #2563eb; background: linear-gradient(180deg, #ffffff, #f8fafc);">
+      <!-- پنل تصمیم‌گیری و ارزیابی استراتژیک پروموشن -->
+      <div class="card" style="margin-bottom: 20px; border-right: 5px solid #2563eb;">
         <div class="card-header">
           <div class="card-title">
-            <i class="fas fa-calculator" style="color:#2563eb;"></i>
-            <span>شبیه‌ساز مالی پروموشن قراردادی و فروشگاه‌ها (مانند اتکا، رفاه و شعب هدف)</span>
+            <i class="fas fa-brain" style="color:#2563eb;"></i>
+            <span>موتور تصمیم‌گیری پروموشن: «آیا تخفیف بدهیم؟ و در کدام شهرها؟»</span>
           </div>
-          <span class="badge badge-purple" style="font-size:12px; padding:5px 12px;">تحلیل زنده مانده حاشیه سود ریالی و درصدی</span>
+          <span class="badge badge-purple">پایش هوشمند افت سود و ممانعت از تخفیف بی‌مورد</span>
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:18px;">
           <div class="form-group">
-            <label class="form-label">🏢 فروشگاه / شعبه هدف</label>
-            <select class="form-control" id="sim-target-branch" onchange="runPromotionFinancialSimulator()">
-              <option value="all">همه شعب و کل کشور</option>
+            <label class="form-label">🎯 انتخاب کالا جهت تحلیل پروموشن</label>
+            <select class="form-control" id="sim-product-select" onchange="runPromotionSimulator()">
+              <option value="">در حال بارگذاری کالاها...</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">🎁 درصد تخفیف توافقی فروشگاه (٪)</label>
-            <input type="number" step="0.5" class="form-control" id="sim-discount-rate" value="20" placeholder="مثلاً ۲۰" oninput="runPromotionFinancialSimulator()">
+            <label class="form-label">🎁 درصد تخفیف پیشنهادی به اتکا / فروشگاه (٪)</label>
+            <input type="number" step="0.5" class="form-control" id="sim-discount-rate" value="15" placeholder="مثلاً ۱۵" oninput="runPromotionSimulator()">
           </div>
           <div class="form-group">
-            <label class="form-label">📦 مبنای محاسبه تعداد کالا</label>
-            <select class="form-control" id="sim-quantity-basis" onchange="runPromotionFinancialSimulator()">
-              <option value="remain">بر اساس موجودی راکد و دپوی شعب</option>
-              <option value="sold">بر اساس میانگین فروش قطعی ماه</option>
-              <option value="shipped">بر اساس کل بار حواله ارسالی</option>
+            <label class="form-label">🏢 فیلتر شهر / فروشگاه هدف</label>
+            <select class="form-control" id="sim-target-city" onchange="runPromotionSimulator()">
+              <option value="all">همه شهرها و شعب کشور</option>
             </select>
           </div>
         </div>
 
-        <!-- کارت‌های تحلیل خلاصه مالی سناریو -->
-        <div class="grid-4" style="margin-bottom: 18px;" id="sim-kpi-container">
+        <!-- کارت‌های KPI پروموشن -->
+        <div class="grid-4" style="margin-bottom: 18px;">
           <div class="kpi-card kpi-blue">
-            <div class="kpi-label">مبلغ کل فروش با تخفیف</div>
-            <div class="kpi-value" id="sim-total-revenue" style="font-size:20px;">۰ تومان</div>
-            <div class="kpi-icon" style="background:#eff6ff;color:#3b82f6;"><i class="fas fa-cash-register"></i></div>
-          </div>
-          <div class="kpi-card kpi-purple">
-            <div class="kpi-label">مبلغ کل تخفیف داده‌شده</div>
-            <div class="kpi-value" id="sim-total-discount-given" style="font-size:20px;">۰ تومان</div>
-            <div class="kpi-icon" style="background:#ede9fe;color:#8b5cf6;"><i class="fas fa-percentage"></i></div>
-          </div>
-          <div class="kpi-card kpi-green">
-            <div class="kpi-label">سود خالص باقی‌مانده برای کارخانه</div>
-            <div class="kpi-value" id="sim-total-net-profit" style="font-size:20px;">۰ تومان</div>
-            <div class="kpi-icon" style="background:#d1fae5;color:#10b981;"><i class="fas fa-coins"></i></div>
+            <div class="kpi-label">حاشیه سود اولیه کالا</div>
+            <div class="kpi-value" id="sim-initial-margin-val" style="font-size:22px;">۰٪</div>
+            <div class="kpi-icon" style="background:#eff6ff;color:#3b82f6;"><i class="fas fa-percentage"></i></div>
           </div>
           <div class="kpi-card kpi-red">
-            <div class="kpi-label">حاشیه سود میانگین پس از تخفیف</div>
-            <div class="kpi-value" id="sim-avg-rem-margin" style="font-size:20px;">۰٪</div>
-            <div class="kpi-icon" style="background:#fee2e2;color:#ef4444;"><i class="fas fa-chart-pie"></i></div>
+            <div class="kpi-label">حاشیه سود جدید بعد از تخفیف</div>
+            <div class="kpi-value" id="sim-new-margin-val" style="font-size:22px;">۰٪</div>
+            <div class="kpi-icon" style="background:#fee2e2;color:#ef4444;"><i class="fas fa-chart-line-down"></i></div>
+          </div>
+          <div class="kpi-card kpi-purple">
+            <div class="kpi-label">افت حاشیه سود کارخانه</div>
+            <div class="kpi-value" id="sim-margin-drop-val" style="font-size:22px;">۰ درصد</div>
+            <div class="kpi-icon" style="background:#ede9fe;color:#8b5cf6;"><i class="fas fa-arrow-trend-down"></i></div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-label">نتیجه کلی کارشناسی</div>
+            <div class="kpi-value" id="sim-overall-verdict" style="font-size:14px; font-weight:800; margin-top:8px;">—</div>
+            <div class="kpi-icon" style="background:#d1fae5;color:#10b981;"><i class="fas fa-shield-halved"></i></div>
           </div>
         </div>
 
-        <!-- جدول نتایج دقیق شبیه‌سازی مالی -->
-        <div class="table-container" style="max-height:360px; overflow-y:auto; margin-bottom:14px;">
+        <div id="sim-strategic-advice" style="margin-bottom: 16px;"></div>
+
+        <!-- جدول تفکیک شهرها -->
+        <div class="card-title" style="margin: 12px 0; font-size:13.5px;">
+          <i class="fas fa-map-location-dot" style="color:#10b981;"></i> تحلیل شهر به شهر: در کدام شهرها تخفیف بدهیم و در کدام شهرها تخفیف اشتباه است؟
+        </div>
+        <div class="table-container" style="max-height:360px; overflow-y:auto;">
           <table>
             <thead>
               <tr>
-                <th>نام کالا</th>
-                <th>قیمت پایه (تومان)</th>
-                <th>حاشیه اولیه</th>
-                <th>قیمت پس از تخفیف</th>
-                <th>حاشیه سود جدید (٪)</th>
-                <th>سود باقی‌مانده در هر عدد</th>
-                <th>تعداد مشمول</th>
-                <th>سود کل سناریو</th>
-                <th>وضعیت منطقی بودن</th>
+                <th>شهر / فروشگاه مرکزی</th>
+                <th>نام شعبه</th>
+                <th>تعداد ارسالی</th>
+                <th>فروش قطعی</th>
+                <th>مانده راکد</th>
+                <th>درصد تحقق</th>
+                <th>آیا بدون تخفیف می‌فروشد؟</th>
+                <th>تصمیم نهایی پروموشن</th>
+                <th>استدلال اقتصادی سیستم</th>
               </tr>
             </thead>
             <tbody id="sim-table-body"></tbody>
@@ -784,108 +669,45 @@
         </div>
       </div>
 
-      <!-- تنظیمات پایه حاشیه و قیمت‌ها -->
-      <div class="card" style="margin-bottom: 18px;">
+      <!-- جدول تعیین دستی حاشیه سود اولیه کالاها -->
+      <div class="card">
         <div class="card-header">
-          <div class="card-title"><i class="fas fa-coins" style="color:#f59e0b;"></i> جدول قیمت‌های پایه و حاشیه سود اولیه اقلام</div>
-          <span class="badge badge-info" id="promo-month-label">—</span>
+          <div class="card-title"><i class="fas fa-coins" style="color:#f59e0b;"></i> تعیین دستی حاشیه سود اولیه و قیمت پایه اقلام</div>
         </div>
-        <div style="font-size:12.5px; color:#64748b; margin-bottom:12px;">
-          <i class="fas fa-info-circle" style="color:#3b82f6;"></i> قیمت پایه و درصد حاشیه سود اولیه را در جدول زیر وارد کنید؛ ارقام فوراً در شبیه‌ساز بالا محاسبه و ذخیره می‌شوند.
+        <div style="font-size:12.5px; color:#64748b; margin-bottom:14px;">
+          <i class="fas fa-info-circle" style="color:#3b82f6;"></i> حاشیه سود اولیه کارخانه (مثلاً چای شکسته ۳۲٪) را وارد کنید. مبالغ قیمت پایه به طور خودکار سه رقم سه رقم جدا می‌شوند.
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:14px;">
-          <div class="form-group">
-            <label class="form-label">حاشیه سود پیش‌فرض کالاهای ثبت‌نشده (٪)</label>
-            <input type="number" class="form-control" id="promo-set-default" placeholder="مثلاً ۲۵" onchange="setPromoSetting('defaultMargin', this.value)">
-          </div>
-          <div class="form-group">
-            <label class="form-label">حداکثر سهم تخفیف از سود (٪)</label>
-            <input type="number" class="form-control" id="promo-set-share" onchange="setPromoSetting('maxShare', this.value)">
-          </div>
-          <div class="form-group">
-            <label class="form-label">حداقل مانده دپو برای پروموشن (عدد)</label>
-            <input type="number" class="form-control" id="promo-set-remain" onchange="setPromoSetting('minRemain', this.value)">
-          </div>
-          <div class="form-group">
-            <label class="form-label">حداقل تخفیف مؤثر (٪)</label>
-            <input type="number" class="form-control" id="promo-set-min" onchange="setPromoSetting('minDiscount', this.value)">
-          </div>
-        </div>
-        <div class="table-container" style="max-height:280px; overflow-y:auto;">
+        <div class="table-container" style="max-height:300px; overflow-y:auto;">
           <table>
             <thead>
               <tr>
                 <th>نام کالا</th>
                 <th>بارکد</th>
-                <th>قیمت پایه فروش (تومان)</th>
-                <th>حاشیه سود اولیه (٪)</th>
+                <th>قیمت پایه اعلامی (تومان) - اختیاری</th>
+                <th>حاشیه سود اولیه شما (٪)</th>
               </tr>
             </thead>
             <tbody id="margin-table-body"></tbody>
           </table>
         </div>
       </div>
-
-      <div class="ai-panel" style="margin-bottom: 18px;">
-        <div class="ai-title"><i class="fas fa-gift"></i> تحلیل هوشمند تصمیم‌گیری پروموشن سیسکوه</div>
-        <div id="promo-summary-container"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title"><i class="fas fa-tags" style="color:#10b981;"></i> پیشنهاد سیستم برای تخلیه اقلام راکد شعب</div>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr><th>محصول</th><th>حاشیه سود اولیه</th><th>مانده راکد</th><th>تعداد شعب راکد</th><th>تخفیف پیشنهادی</th><th>تصمیم</th></tr>
-            </thead>
-            <tbody id="promo-products-body"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
   </div>
 
-  <!-- Hidden Inputs -->
+  <!-- اینپوت‌های مخفی فایل -->
   <input type="file" id="analysis-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleAnalysisFileUpload(event)" multiple>
   <input type="file" id="shipment-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleShipmentFileUpload(event)" multiple>
-  <input type="file" id="backup-file-input" accept=".json" class="hidden" onchange="handleBackupRestore(event)">
 
-  <!-- Month Picker Modal -->
-  <div class="modal-overlay" id="shipment-month-picker-modal">
-    <div class="modal" style="max-width: 400px;">
-      <div class="modal-header">
-        <div class="modal-title">📦 انتخاب ماه حواله</div>
-        <button class="modal-close" onclick="closeModal('shipment-month-picker-modal')">✕</button>
-      </div>
-      <div style="font-size:12.5px; color:#475569; margin-bottom:12px;">نام ماه در اسم فایل حواله شناسایی نشد. لطفاً ماه را تعیین کنید:</div>
-      <div class="form-group">
-        <select class="form-control" id="picker-shipment-month">
-          <option value="" selected>-- انتخاب ماه --</option>
-          <option value="فروردین">فروردین</option><option value="اردیبهشت">اردیبهشت</option><option value="خرداد">خرداد</option>
-          <option value="تیر">تیر</option><option value="مرداد">مرداد</option><option value="شهریور">شهریور</option>
-          <option value="مهر">مهر</option><option value="آبان">آبان</option><option value="آذر">آذر</option>
-          <option value="دی">دی</option><option value="بهمن">بهمن</option><option value="اسفند">اسفند</option>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" id="btn-confirm-shipment-month">تایید و ثبت</button>
-        <button class="btn btn-secondary" onclick="closeModal('shipment-month-picker-modal')">انصراف</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Confirm Modal -->
+  <!-- مودال تایید -->
   <div class="modal-overlay" id="confirm-modal">
-    <div class="modal" style="max-width:420px;">
+    <div class="modal">
       <div class="modal-header">
-        <div class="modal-title" id="confirm-modal-title">تایید</div>
+        <div class="modal-title" id="confirm-modal-title">تایید عملیات</div>
         <button class="modal-close" onclick="closeConfirmModal(false)">✕</button>
       </div>
-      <div id="confirm-modal-body" style="font-size:13px; color:#475569; margin-bottom:14px;"></div>
-      <div class="modal-footer">
+      <div id="confirm-modal-body" style="font-size:13px; color:#475569; margin-bottom:16px; line-height:1.7;"></div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
         <button class="btn btn-danger" id="confirm-modal-ok-btn">تایید</button>
         <button class="btn btn-secondary" onclick="closeConfirmModal(false)">انصراف</button>
       </div>
@@ -895,259 +717,50 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    // ============ ساختار داده و متغیرهای اصلی ============
     const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
     const MONTH_ORDER = { 'فروردین': 1, 'اردیبهشت': 2, 'خرداد': 3, 'تیر': 4, 'مرداد': 5, 'شهریور': 6, 'مهر': 7, 'آبان': 8, 'آذر': 9, 'دی': 10, 'بهمن': 11, 'اسفند': 12 };
-    
+    const STORAGE_KEY = 'siskooh_sales_engine_v2';
+
     let state = {
-      analysisData: [],
-      warehouseShipments: [],
-      margins: {},
-      promoSettings: { maxShare: 50, minRemain: 20, minDiscount: 3, defaultMargin: 20 },
-      barcodeMap: {} // نگاشت بارکد به نام واقعی کالا
+      analysisData: [],          // فروش‌های قطعی شعب
+      warehouseShipments: [],    // حواله‌های ارسال بار
+      margins: {},               // حاشیه سود و قیمت هر محصول
+      promoSettings: { defaultMargin: 25, minRemain: 20, highSellThreshold: 65 }
     };
 
-    let selectedAnalysisYear = 'all';
-    let selectedAnalysisMonth = null;
-    let selectedReconciliationMonth = 'all';
-    let selectedRankingMonth = 'all';
-    let selectedBreakdownProductKey = '';
-    
-    // Pagination State
-    let reconCurrentPage = 1;
-    const RECON_PAGE_SIZE = 50;
-    let cachedReconciliationList = [];
-    
-    let productRankingChart = null;
-    let selectedProductStoresChart = null;
-    let debounceTimer = null;
+    let selectedYear = 'all';
+    let selectedMonth = 'all';
+    let selectedProductKey = '';
     let confirmCallback = null;
-    let pendingShipmentSheets = null;
-    
-    const STORAGE_KEY = 'siskooh_fast_analysis_v2';
+    let productRankingChart = null;
+    let branchSalesChart = null;
 
-    // Normalize cache for fast matching
-    const normCache = new Map();
+    // نگاشت معکوس بارکد به نام کالا جهت پیشگیری از خطای ثبت بارکد محض
+    const barcodeToNameMap = new Map();
+
+    // ============ توابع کمکی ============
     function normalizePersianText(str) {
       if (!str) return '';
-      const s = String(str);
-      if (normCache.has(s)) return normCache.get(s);
-      const res = s.replace(/ي/g, 'ی')
-                   .replace(/ك/g, 'ک')
-                   .replace(/[\u200B-\u200D\uFEFF]/g, '')
-                   .replace(/\s+/g, ' ')
-                   .trim();
-      if (normCache.size > 20000) normCache.clear();
-      normCache.set(s, res);
-      return res;
+      return String(str)
+        .replace(/ي/g, 'ی')
+        .replace(/ك/g, 'ک')
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function toLatinDigits(str) {
+      if (!str) return '';
+      return String(str).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
     }
 
     function parseNumericValue(val) {
       if (val === null || val === undefined || val === '') return 0;
-      if (typeof val === 'number') return val;
       let s = String(val).replace(/,/g, '').trim();
-      s = s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      s = toLatinDigits(s);
       const num = parseFloat(s);
       return isNaN(num) ? 0 : num;
-    }
-
-    // استخراج سال و ماه شمسی از هر نوع تاریخ شمسی
-    function extractYearAndMonthFromDate(dateVal) {
-      if (dateVal === null || dateVal === undefined || dateVal === '') return { year: '', month: '' };
-      let str = normalizePersianText(String(dateVal)).trim();
-      str = str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-
-      let detectedYear = '';
-      let detectedMonth = '';
-
-      // ۱. اگر عدد سریال اکسل باشد
-      if (/^\d{5}$/.test(str)) {
-        try {
-          const jsDate = new Date(Math.round((Number(str) - 25569) * 86400 * 1000));
-          const parts = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric', month: 'numeric' }).formatToParts(jsDate);
-          for (let p of parts) {
-            if (p.type === 'year') detectedYear = p.value;
-            if (p.type === 'month') {
-              const mNum = parseInt(p.value, 10);
-              if (mNum >= 1 && mNum <= 12) detectedMonth = MONTHS[mNum - 1];
-            }
-          }
-          if (detectedMonth) return { year: detectedYear, month: detectedMonth };
-        } catch (e) {}
-      }
-
-      // ۲. فرمت استاندارد شمسی: سال/ماه/روز (مثال: 1402/11/25 یا 1403.04.12 یا 1404-01-05)
-      const standardMatch = str.match(/(1[34]\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
-      if (standardMatch) {
-        detectedYear = standardMatch[1];
-        const m = parseInt(standardMatch[2], 10);
-        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
-        return { year: detectedYear, month: detectedMonth };
-      }
-
-      // ۳. فرمت معکوس: روز/ماه/سال (مثال: 25/11/1402)
-      const reverseMatch = str.match(/(\d{1,2})[\.\/\-_](\d{1,2})[\.\/\-_](1[34]\d{2})/);
-      if (reverseMatch) {
-        detectedYear = reverseMatch[3];
-        const m = parseInt(reverseMatch[2], 10);
-        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
-        return { year: detectedYear, month: detectedMonth };
-      }
-
-      // ۴. سال‌های دورقمی (مثال: 02/11/20 یا 03.05.10)
-      const shortYearMatch = str.match(/(?:^|[\s])(\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
-      if (shortYearMatch) {
-        const yNum = parseInt(shortYearMatch[1], 10);
-        detectedYear = String(yNum < 50 ? 1400 + yNum : 1300 + yNum);
-        const m = parseInt(shortYearMatch[2], 10);
-        if (m >= 1 && m <= 12) detectedMonth = MONTHS[m - 1];
-        return { year: detectedYear, month: detectedMonth };
-      }
-
-      // ۵. اگر فقط سال در متن موجود باشد
-      const yearOnlyMatch = str.match(/(1[34]\d{2})/);
-      if (yearOnlyMatch) detectedYear = yearOnlyMatch[1];
-
-      // ۶. بررسی نام ماه در متن
-      for (let i = 0; i < MONTHS.length; i++) {
-        const m = MONTHS[i];
-        if (str === m || str.includes(m)) {
-          detectedMonth = m;
-          break;
-        }
-      }
-
-      return { year: detectedYear, month: detectedMonth };
-    }
-
-    function extractMonthFromShamsiDate(dateVal) {
-      return extractYearAndMonthFromDate(dateVal).month;
-    }
-
-    function extractYearFromText(text) {
-      if (!text) return '';
-      const norm = normalizePersianText(text).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-      const match = norm.match(/(1[34]\d{2})/);
-      return match ? match[1] : '';
-    }
-
-    function extractMonthFromText(text) {
-      if (!text) return '';
-      let clean = text.replace(/\.(xlsx|xls|csv|json)$/i, '');
-      const norm = normalizePersianText(clean);
-      const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
-
-      for (const t of tokens) {
-        const matched = MONTHS.find(m => normalizePersianText(m) === t);
-        if (matched) return matched;
-      }
-      for (const m of MONTHS) {
-        if (norm.includes(normalizePersianText(m))) return m;
-      }
-      return '';
-    }
-
-    // فرمت دهی زنده سه‌رقمی مبالغ
-    function formatPriceInput(input) {
-      let val = input.value.replace(/[^0-9۰-۹]/g, '');
-      val = val.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-      if (!val) {
-        input.value = '';
-        return;
-      }
-      const num = parseInt(val, 10);
-      input.value = num.toLocaleString('en-US');
-    }
-
-    function parseNumericValue(val) {
-      if (val === null || val === undefined || val === '') return 0;
-      if (typeof val === 'number') return val;
-      let s = String(val).replace(/,/g, '').trim();
-      s = s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-      const num = parseFloat(s);
-      return isNaN(num) ? 0 : num;
-    }
-
-    // تشخیص قوی ماه شمسی از هر نوع فیلد (تاریخ، متن، ستون اختصاصی ماه یا سریال اکسل)
-    function extractMonthFromShamsiDate(dateVal) {
-      if (dateVal === null || dateVal === undefined || dateVal === '') return '';
-      let str = normalizePersianText(String(dateVal)).trim();
-      str = str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-
-      // 1. بررسی تطابق مستقیم یا قرار داشتن نام ماه در متن
-      for (let i = 0; i < MONTHS.length; i++) {
-        const m = MONTHS[i];
-        if (str === m || str.includes(m)) {
-          return m;
-        }
-      }
-
-      // 2. اگر عدد ترتیبی/سریال تاریخ اکسل باشد
-      if (/^\d{5}$/.test(str)) {
-        try {
-          const jsDate = new Date(Math.round((Number(str) - 25569) * 86400 * 1000));
-          const parts = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { month: 'numeric' }).format(jsDate);
-          const mNum = parseInt(parts, 10);
-          if (mNum >= 1 && mNum <= 12) return MONTHS[mNum - 1];
-        } catch (e) {}
-      }
-
-      // 3. فرمت‌های استاندارد سال/ماه/روز شمسی: 1404.01.20 یا 1404/03/15 یا 1404-06-25 یا 04/06/12
-      const dateMatch = str.match(/(?:1[34]\d{2}|\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
-      if (dateMatch) {
-        const m = parseInt(dateMatch[1], 10);
-        if (m >= 1 && m <= 12) {
-          return MONTHS[m - 1];
-        }
-      }
-
-      // 4. فرمت برعکس روز/ماه/سال: 20.03.1404 یا 15/06/1404
-      const revMatch = str.match(/(\d{1,2})[\.\/\-_](\d{1,2})[\.\/\-_](?:1[34]\d{2})/);
-      if (revMatch) {
-        const m = parseInt(revMatch[2], 10);
-        if (m >= 1 && m <= 12) {
-          return MONTHS[m - 1];
-        }
-      }
-
-      // 5. اگر صرفاً عدد ماه ۱ تا ۱۲ باشد (مثلاً ستونی به اسم ماه که عدد ۱ تا ۱۲ نوشته)
-      if (/^(0?[1-9]|1[0-2])$/.test(str)) {
-        const mNum = parseInt(str, 10);
-        if (mNum >= 1 && mNum <= 12) return MONTHS[mNum - 1];
-      }
-
-      return '';
-    }
-
-    function extractMonthFromText(text) {
-      if (!text) return '';
-      let clean = text.replace(/\.(xlsx|xls|csv|json)$/i, '');
-      const norm = normalizePersianText(clean);
-      const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
-
-      for (const t of tokens) {
-        const matched = MONTHS.find(m => normalizePersianText(m) === t);
-        if (matched) return matched;
-      }
-      for (const m of MONTHS) {
-        if (norm.includes(normalizePersianText(m))) return m;
-      }
-      return '';
-    }
-
-    const MAJOR_CITIES = [
-      'تهران', 'اصفهان', 'مشهد', 'شیراز', 'تبریز', 'کرج', 'اهواز', 'قم', 'کرمانشاه', 'ارومیه',
-      'رشت', 'زاهدان', 'همدان', 'کرمان', 'یزد', 'اردبیل', 'بندرعباس', 'اراک', 'زنجان', 'سنندج',
-      'قزوین', 'خرم‌آباد', 'گرگان', 'ساری', 'بجنورد', 'بوشهر', 'بیرجند', 'ایلام', 'شهرکرد', 'سمنان',
-      'یاسوج', 'کیش', 'قشم', 'کاشان', 'نیشابور', 'بابل', 'آمل', 'لاهیجان', 'انزلی', 'چالوس'
-    ];
-
-    function extractCityFromCentralStore(storeName) {
-      if (!storeName) return 'نامشخص';
-      const clean = normalizePersianText(storeName);
-      for (let i = 0; i < MAJOR_CITIES.length; i++) {
-        if (clean.includes(MAJOR_CITIES[i])) return MAJOR_CITIES[i];
-      }
-      return clean.replace(/^(فروشگاه\s*مرکزی|فروشگاه|شعبه\s*مرکزی|انبار)\s*/i, '').trim() || storeName;
     }
 
     function formatNumber(num) {
@@ -1159,976 +772,188 @@
       toast.textContent = message;
       toast.className = `toast ${type === 'error' ? 'error' : 'success'}`;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+      setTimeout(() => toast.classList.remove('show'), 3500);
     }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function customConfirm(title, message, callback) {
       document.getElementById('confirm-modal-title').textContent = title;
       document.getElementById('confirm-modal-body').textContent = message;
       confirmCallback = callback;
       document.getElementById('confirm-modal-ok-btn').onclick = () => {
-        closeModal('confirm-modal');
+        closeConfirmModal(true);
         if (confirmCallback) confirmCallback();
       };
-      openModal('confirm-modal');
+      document.getElementById('confirm-modal').style.display = 'flex';
     }
 
-    function closeConfirmModal() { closeModal('confirm-modal'); confirmCallback = null; }
+    function closeConfirmModal(confirmed) {
+      document.getElementById('confirm-modal').style.display = 'none';
+      if (!confirmed) confirmCallback = null;
+    }
 
     function saveToLocalStorage() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } catch (e) {
-        console.warn('Storage limit reached, keeping in runtime memory:', e);
-        showToast('حجم داده بالا است؛ در حافظه موقت نگهداری می‌شود (از خروجی پشتیبان استفاده کنید)', 'error');
+        console.warn('Storage quota exceeded:', e);
       }
     }
 
     function loadFromLocalStorage() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          state.analysisData = parsed.analysisData || [];
-          state.warehouseShipments = parsed.warehouseShipments || [];
-          state.margins = parsed.margins || {};
-          state.promoSettings = Object.assign(state.promoSettings, parsed.promoSettings || {});
-          state.barcodeMap = parsed.barcodeMap || {};
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          state.analysisData = Array.isArray(parsed.analysisData) ? parsed.analysisData : [];
+          state.warehouseShipments = Array.isArray(parsed.warehouseShipments) ? parsed.warehouseShipments : [];
+          state.margins = parsed.margins && typeof parsed.margins === 'object' ? parsed.margins : {};
+          state.promoSettings = { ...state.promoSettings, ...(parsed.promoSettings || {}) };
+
+          // بازسازی دیکشنری بارکدها
+          state.analysisData.forEach(r => {
+            if (r.barcode && r.barcode !== 'فله' && r.productName && !r.productName.startsWith('کالا با بارکد')) {
+              barcodeToNameMap.set(r.barcode, r.productName);
+            }
+          });
+          state.warehouseShipments.forEach(s => {
+            if (s.barcode && s.barcode !== 'فله' && s.productName && !s.productName.startsWith('کالا با بارکد')) {
+              barcodeToNameMap.set(s.barcode, s.productName);
+            }
+          });
         }
       } catch (e) {
-        console.error('Failed to load storage:', e);
+        console.warn('Load failed:', e);
       }
     }
 
-    // بررسی آیا متن ورودی صرفاً یک بارکد یا کد عددی است
-    function isBarcodeString(val) {
-      if (!val) return false;
-      const clean = String(val).replace(/[\s\-\_\.]/g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-      // بارکدهای استاندارد معمولاً ۸، ۱۲، ۱۳، ۱۴ رقمی یا کدهای کالای بزرگ هستند
-      return /^\d{7,18}$/.test(clean);
-    }
+    // ============ استخراج هوشمند سال و ماه از تاریخ ============
+    function extractYearAndMonth(inputStr) {
+      if (!inputStr) return { year: 'نامشخص', month: 'نامشخص' };
+      const str = toLatinDigits(String(inputStr)).trim();
 
-    // بازسازی و یکسان‌سازی خودکار نام کالاها از روی بارکد
-    function reconcileProductNamesFromBarcodes() {
-      if (!state.barcodeMap) state.barcodeMap = {};
+      let detectedYear = 'نامشخص';
+      let detectedMonth = 'نامشخص';
 
-      // مرحله ۱: استخراج نام‌های معتبر برای هر بارکد
-      const collectNames = (list) => {
-        for (let i = 0; i < list.length; i++) {
-          const item = list[i];
-          const bc = String(item.barcode || '').trim();
-          const name = String(item.productName || '').trim();
-          if (bc && bc !== 'فله' && name && !isBarcodeString(name) && name !== 'نامشخص') {
-            state.barcodeMap[bc] = name;
-          }
-        }
-      };
-
-      collectNames(state.analysisData);
-      collectNames(state.warehouseShipments);
-
-      // مرحله ۲: جایگزینی در ردیف‌هایی که به جای نام کالا، بارکد یا کد عددی ثبت شده است
-      const applyNames = (list) => {
-        for (let i = 0; i < list.length; i++) {
-          const item = list[i];
-          const bc = String(item.barcode || '').trim();
-          const name = String(item.productName || '').trim();
-
-          if (isBarcodeString(name)) {
-            // اگر فیلد نام کالا بارکد بود و بارکد خالی بود، آن را به بارکد منتقل کن
-            if (!item.barcode || item.barcode === 'فله') {
-              item.barcode = name;
-            }
-            if (state.barcodeMap[name]) {
-              item.productName = state.barcodeMap[name];
-            } else if (bc && state.barcodeMap[bc]) {
-              item.productName = state.barcodeMap[bc];
-            }
-          } else if (bc && state.barcodeMap[bc] && (name === 'نامشخص' || !name)) {
-            item.productName = state.barcodeMap[bc];
-          }
-        }
-      };
-
-      applyNames(state.analysisData);
-      applyNames(state.warehouseShipments);
-    }
-
-    function showAnalysisTab(tab) {
-      document.querySelectorAll('[id^="analysis-tab-"]').forEach(el => el.style.display = 'none');
-      const target = document.getElementById(`analysis-tab-${tab}`);
-      if (target) target.style.display = 'block';
-
-      document.querySelectorAll('[data-analysis-tab]').forEach(el => el.classList.remove('active'));
-      const activeBtn = document.querySelector(`[data-analysis-tab="${tab}"]`);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
-
-    // High performance reconciliation calculation
-    function buildReconciliationData(monthFilter, yearFilter = selectedAnalysisYear) {
-      const filterRecord = (r) => {
-        const matchYear = (yearFilter === 'all' || !yearFilter || !r.year) ? true : (r.year === yearFilter);
-        const matchMonth = (monthFilter === 'all' || !monthFilter) ? true : (r.month === monthFilter);
-        return matchYear && matchMonth;
-      };
-
-      const shipments = state.warehouseShipments.filter(filterRecord);
-      const sales = state.analysisData.filter(filterRecord);
-
-      const map = new Map();
-
-      for (let i = 0; i < shipments.length; i++) {
-        const s = shipments[i];
-        const year = s.year || 'نامشخص';
-        const key = `${year}|||${s.month}|||${normalizePersianText(s.centralStore || s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
-        let row = map.get(key);
-        if (!row) {
-          row = {
-            year: year,
-            month: s.month,
-            city: s.city || extractCityFromCentralStore(s.centralStore),
-            centralStore: s.centralStore || s.city || '',
-            branch: s.branch || 'مرکزی',
-            productName: s.productName || 'نامشخص',
-            barcode: s.barcode || 'فله',
-            shipped: 0,
-            sold: 0
-          };
-          map.set(key, row);
-        }
-        row.shipped += (s.quantity || 0);
-        if (s.barcode && s.barcode !== 'فله') row.barcode = s.barcode;
+      // ۱. تطبیق فرمت‌های تاریخ مثل 1404.12.23 یا 1404/05/10 یا 1403-01-20
+      const dateMatch = str.match(/(13\d{2}|14\d{2})[\.\/\-](0?[1-9]|1[0-2])[\.\/\-](0?[1-9]|[12]\d|3[01])/);
+      if (dateMatch) {
+        detectedYear = dateMatch[1];
+        const mIndex = parseInt(dateMatch[2], 10);
+        detectedMonth = MONTHS[mIndex - 1] || 'نامشخص';
+        return { year: detectedYear, month: detectedMonth };
       }
 
-      for (let i = 0; i < sales.length; i++) {
-        const r = sales[i];
-        const year = r.year || 'نامشخص';
-        const key = `${year}|||${r.month}|||${normalizePersianText(r.centralStore || r.city)}|||${normalizePersianText(r.branch)}|||${normalizePersianText(r.productName)}`;
-        let row = map.get(key);
-        if (!row) {
-          row = {
-            year: year,
-            month: r.month,
-            city: r.city || extractCityFromCentralStore(r.centralStore),
-            centralStore: r.centralStore || r.city || '',
-            branch: r.branch || 'مرکزی',
-            productName: r.productName || 'نامشخص',
-            barcode: r.barcode || 'فله',
-            shipped: 0,
-            sold: 0
-          };
-          map.set(key, row);
-        }
-        row.sold += (r.quantity || 0);
-        if (r.barcode && r.barcode !== 'فله') row.barcode = r.barcode;
-      }
+      // ۲. بررسی وجود سال ۴ رقمی
+      const yMatch = str.match(/(13\d{2}|14\d{2})/);
+      if (yMatch) detectedYear = yMatch[1];
 
-      const list = [];
-      map.forEach(item => {
-        const remain = Math.max(0, item.shipped - item.sold);
-        const sellThrough = item.shipped > 0 ? Math.round((item.sold / item.shipped) * 100) : (item.sold > 0 ? 100 : 0);
-
-        let status, badgeClass;
-        if (item.shipped === 0 && item.sold > 0) {
-          status = 'فروش خارج از حواله';
-          badgeClass = 'badge-purple';
-        } else if (sellThrough >= 85) {
-          status = 'تحقق عالی (شارژ مجدد)';
-          badgeClass = 'badge-success';
-        } else if (sellThrough >= 55) {
-          status = 'گردش خوب';
-          badgeClass = 'badge-info';
-        } else if (sellThrough >= 25) {
-          status = 'کندفروش';
-          badgeClass = 'badge-warning';
-        } else if (remain > 0) {
-          status = 'دپوی راکد';
-          badgeClass = 'badge-danger';
-        } else {
-          status = 'بدون حرکت';
-          badgeClass = 'badge-secondary';
-        }
-
-        item.remain = remain;
-        item.sellThrough = sellThrough;
-        item.status = status;
-        item.badgeClass = badgeClass;
-        list.push(item);
-      });
-
-      list.sort((a, b) => {
-        if (a.year !== b.year) return (b.year || '').localeCompare(a.year || '');
-        const diff = (MONTH_ORDER[a.month] || 99) - (MONTH_ORDER[b.month] || 99);
-        return diff !== 0 ? diff : b.remain - a.remain;
-      });
-
-      return list;
-    }
-
-    function renderAnalysisPage() {
-      reconcileProductNamesFromBarcodes();
-
-      const activeMonth = selectedAnalysisMonth || 'all';
-      const reconData = buildReconciliationData(activeMonth, selectedAnalysisYear);
-
-      let totalShipped = 0;
-      let totalSold = 0;
-      let recordsCount = 0;
-
-      const filterByYearAndMonth = (r) => {
-        const matchYear = (selectedAnalysisYear === 'all' || !selectedAnalysisYear || !r.year) ? true : (r.year === selectedAnalysisYear);
-        const matchMonth = (activeMonth === 'all') ? true : (r.month === activeMonth);
-        return matchYear && matchMonth;
-      };
-
-      const sales = state.analysisData.filter(filterByYearAndMonth);
-      const shipments = state.warehouseShipments.filter(filterByYearAndMonth);
-
-      for (let i = 0; i < shipments.length; i++) totalShipped += shipments[i].quantity || 0;
-      for (let i = 0; i < sales.length; i++) {
-        totalSold += sales[i].quantity || 0;
-        recordsCount++;
-      }
-
-      const totalDepo = Math.max(0, totalShipped - totalSold);
-      const overallST = totalShipped > 0 ? Math.round((totalSold / totalShipped) * 100) : 0;
-
-      document.getElementById('analysis-kpi-shipped').textContent = formatNumber(totalShipped);
-      document.getElementById('analysis-kpi-records-count').textContent = formatNumber(recordsCount);
-      document.getElementById('analysis-kpi-depo').textContent = formatNumber(totalDepo);
-      document.getElementById('analysis-kpi-sellthrough').textContent = `${formatNumber(overallST)}٪`;
-
-      buildYearAndMonthTabs();
-      populateProductSelector();
-      filterReconciliationData();
-      renderProductRankingAnalysis();
-      renderSpecificProductBreakdown(selectedBreakdownProductKey || document.getElementById('analysis-product-selector')?.value);
-      runDecisionSupportEngine(reconData);
-      renderPromotionTab(reconData, activeMonth);
-    }
-
-    function buildYearAndMonthTabs() {
-      // تفکیک سال‌ها
-      const yearSet = new Set();
-      state.warehouseShipments.forEach(s => s.year && s.year !== 'نامشخص' && yearSet.add(s.year));
-      state.analysisData.forEach(a => a.year && a.year !== 'نامشخص' && yearSet.add(a.year));
-      const yearList = Array.from(yearSet).sort((a,b) => b.localeCompare(a));
-
-      const yContainer = document.getElementById('analysis-year-tabs');
-      if (yContainer) {
-        let yHtml = `<button class="month-tab ${selectedAnalysisYear === 'all' ? 'active' : ''}" onclick="selectAnalysisYear('all', this)">همه سال‌ها</button>`;
-        yearList.forEach(y => {
-          yHtml += `<button class="month-tab ${selectedAnalysisYear === y ? 'active' : ''}" onclick="selectAnalysisYear('${y}', this)">سال ${y}</button>`;
-        });
-        yContainer.innerHTML = yHtml;
-      }
-
-      // تفکیک ماه‌ها
-      const monthSet = new Set();
-      const filterYear = (r) => (selectedAnalysisYear === 'all' || !selectedAnalysisYear || !r.year) ? true : (r.year === selectedAnalysisYear);
-
-      state.warehouseShipments.filter(filterYear).forEach(s => s.month && monthSet.add(s.month));
-      state.analysisData.filter(filterYear).forEach(a => a.month && monthSet.add(a.month));
-      const list = Array.from(monthSet).sort((a,b) => (MONTH_ORDER[a]||99) - (MONTH_ORDER[b]||99));
-
-      const renderTabGroup = (containerId, selected, clickFn) => {
-        const c = document.getElementById(containerId);
-        if (!c) return;
-        let html = `<button class="month-tab ${selected === 'all' || !selected ? 'active' : ''}" onclick="${clickFn}('all', this)">همه ماه‌ها</button>`;
-        list.forEach(m => {
-          html += `<button class="month-tab ${selected === m ? 'active' : ''}" onclick="${clickFn}('${m}', this)">${m}</button>`;
-        });
-        c.innerHTML = html;
-      };
-
-      renderTabGroup('analysis-month-tabs', selectedAnalysisMonth, 'selectAnalysisMonth');
-      renderTabGroup('reconciliation-month-tabs', selectedReconciliationMonth, 'filterReconciliationMonth');
-      renderTabGroup('ranking-month-tabs', selectedRankingMonth, 'selectRankingMonth');
-    }
-
-    function selectAnalysisYear(year) {
-      selectedAnalysisYear = year;
-      renderAnalysisPage();
-    }
-
-    function selectAnalysisMonth(month) {
-      selectedAnalysisMonth = month === 'all' ? null : month;
-      renderAnalysisPage();
-    }
-
-    function filterReconciliationMonth(month) {
-      selectedReconciliationMonth = month;
-      reconCurrentPage = 1;
-      buildYearAndMonthTabs();
-      filterReconciliationData();
-    }
-
-    function filterReconciliationData() {
-      let list = buildReconciliationData(selectedReconciliationMonth, selectedAnalysisYear);
-      const query = normalizePersianText(document.getElementById('reconciliation-search')?.value || '').toLowerCase();
-
-      if (query) {
-        list = list.filter(item => 
-          normalizePersianText(item.branch).toLowerCase().includes(query) ||
-          normalizePersianText(item.centralStore).toLowerCase().includes(query) ||
-          normalizePersianText(item.productName).toLowerCase().includes(query) ||
-          (item.year && item.year.includes(query)) ||
-          (item.barcode && String(item.barcode).includes(query))
-        );
-      }
-      cachedReconciliationList = list;
-      renderReconciliationTablePage();
-    }
-
-    function renderReconciliationTablePage() {
-      const tbody = document.getElementById('reconciliation-table-body');
-      const badge = document.getElementById('reconciliation-count-badge');
-      const pagination = document.getElementById('reconciliation-pagination');
-      if (!tbody) return;
-
-      const totalItems = cachedReconciliationList.length;
-      badge.textContent = `${formatNumber(totalItems)} ردیف`;
-
-      if (totalItems === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted" style="padding:24px;">داده‌ای یافت نشد</td></tr>';
-        pagination.innerHTML = '';
-        return;
-      }
-
-      const totalPages = Math.ceil(totalItems / RECON_PAGE_SIZE);
-      if (reconCurrentPage > totalPages) reconCurrentPage = totalPages;
-
-      const start = (reconCurrentPage - 1) * RECON_PAGE_SIZE;
-      const pageData = cachedReconciliationList.slice(start, start + RECON_PAGE_SIZE);
-
-      let rowsHtml = '';
-      for (let i = 0; i < pageData.length; i++) {
-        const item = pageData[i];
-        const bc = (item.barcode && item.barcode !== 'فله') ? `<code>${item.barcode}</code>` : `<span class="badge badge-purple">فله</span>`;
-        rowsHtml += `
-          <tr>
-            <td><span class="badge badge-secondary">${item.year || '—'}</span></td>
-            <td><strong>${item.month}</strong></td>
-            <td><strong>${item.city}</strong> <small style="color:#64748b;">(${item.centralStore})</small></td>
-            <td><strong>${item.branch}</strong></td>
-            <td><strong>${item.productName}</strong></td>
-            <td>${bc}</td>
-            <td><strong style="color:#0284c7;">${formatNumber(item.shipped)}</strong></td>
-            <td><strong style="color:#10b981;">${formatNumber(item.sold)}</strong></td>
-            <td><strong style="color:${item.remain > 0 ? '#ef4444' : '#64748b'};">${formatNumber(item.remain)}</strong></td>
-            <td><strong>${formatNumber(item.sellThrough)}٪</strong></td>
-            <td><span class="badge ${item.badgeClass}">${item.status}</span></td>
-          </tr>
-        `;
-      }
-      tbody.innerHTML = rowsHtml;
-
-      // Pagination
-      pagination.innerHTML = `
-        <div>نمایش ردیف ${formatNumber(start + 1)} تا ${formatNumber(Math.min(start + RECON_PAGE_SIZE, totalItems))} از ${formatNumber(totalItems)}</div>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary btn-sm" onclick="changeReconPage(-1)" ${reconCurrentPage <= 1 ? 'disabled' : ''}>صفحه قبل</button>
-          <span style="padding:4px 8px; font-weight:bold;">صفحه ${formatNumber(reconCurrentPage)} از ${formatNumber(totalPages)}</span>
-          <button class="btn btn-secondary btn-sm" onclick="changeReconPage(1)" ${reconCurrentPage >= totalPages ? 'disabled' : ''}>صفحه بعد</button>
-        </div>
-      `;
-    }
-
-    function changeReconPage(dir) {
-      reconCurrentPage += dir;
-      renderReconciliationTablePage();
-    }
-
-    function runDecisionSupportEngine(reconData) {
-      const insights = document.getElementById('ai-insights-container');
-      const prodContainer = document.getElementById('production-decisions-container');
-      const distContainer = document.getElementById('distribution-decisions-container');
-      if (!insights || !prodContainer || !distContainer) return;
-
-      if (!reconData || reconData.length === 0) {
-        insights.innerHTML = '<div class="ai-alert">اطلاعاتی برای ارزیابی ثبت نشده است.</div>';
-        prodContainer.innerHTML = '<div class="text-muted text-center" style="padding:15px;">داده کافی نیست</div>';
-        distContainer.innerHTML = '<div class="text-muted text-center" style="padding:15px;">داده کافی نیست</div>';
-        return;
-      }
-
-      const pMap = new Map();
-      for (let i = 0; i < reconData.length; i++) {
-        const r = reconData[i];
-        let p = pMap.get(r.productName);
-        if (!p) {
-          p = { name: r.productName, shipped: 0, sold: 0, remain: 0 };
-          pMap.set(r.productName, p);
-        }
-        p.shipped += r.shipped;
-        p.sold += r.sold;
-        p.remain += r.remain;
-      }
-
-      const products = Array.from(pMap.values());
-      const totalShipped = products.reduce((s, p) => s + p.shipped, 0);
-      const totalSold = products.reduce((s, p) => s + p.sold, 0);
-      const overallST = totalShipped > 0 ? Math.round((totalSold / totalShipped) * 100) : 0;
-
-      let html = '';
-      if (overallST < 40) {
-        html += `<div class="ai-alert critical"><span class="ai-alert-icon">🚨</span><div><strong>رسوب شدید بار:</strong> تحقق فروش کل شبکه تنها ${formatNumber(overallST)}٪ است. توزیع بارهای جدید را به شعب راکد متوقف کنید.</div></div>`;
-      } else {
-        html += `<div class="ai-alert good"><span class="ai-alert-icon">✅</span><div><strong>پوشش مناسب فروش:</strong> نرخ تحقق ${formatNumber(overallST)}٪ حاکی از جریان مستمر کالا در شعب است.</div></div>`;
-      }
-
-      const highDepo = products.filter(p => p.remain > 30).sort((a,b) => b.remain - a.remain).slice(0, 3);
-      if (highDepo.length) {
-        html += `<div class="ai-alert warning"><span class="ai-alert-icon">⚠️</span><div><strong>بیشترین دپوی شعب:</strong> ${highDepo.map(p => `«${p.name}» (${formatNumber(p.remain)} عدد)`).join('، ')}</div></div>`;
-      }
-      insights.innerHTML = html;
-
-      // Factory Production advice
-      let prodHtml = '';
-      const topSelling = products.slice().sort((a,b) => (b.sold / Math.max(b.shipped, 1)) - (a.sold / Math.max(a.shipped, 1)));
-      for (let i = 0; i < Math.min(topSelling.length, 5); i++) {
-        const p = topSelling[i];
-        const st = p.shipped > 0 ? Math.round((p.sold / p.shipped) * 100) : 0;
-        if (st >= 80 && p.sold > 15) {
-          prodHtml += `<div class="decision-card production-up">
-            <div class="decision-title">📈 افزایش تولید: ${p.name}</div>
-            <div class="decision-desc">نرخ جذب بازار ${formatNumber(st)}٪ با فروش قطعی ${formatNumber(p.sold)} عدد.</div>
-            <div class="decision-reason"><i class="fas fa-check"></i> اولویت تولید در شیفت بعدی کارخانه.</div>
-          </div>`;
-        } else if (st < 25 && p.remain > 20) {
-          prodHtml += `<div class="decision-card production-down">
-            <div class="decision-title">📉 توقف موقت خط: ${p.name}</div>
-            <div class="decision-desc">مانده در شعب ${formatNumber(p.remain)} عدد با تحقق ضعیف ${formatNumber(st)}٪.</div>
-            <div class="decision-reason"><i class="fas fa-hand-paper"></i> توقف شیفت برای ممانعت از انباشت موجودی.</div>
-          </div>`;
+      // ۳. بررسی نام ماه فارسی در متن
+      for (let i = 0; i < MONTHS.length; i++) {
+        const m = MONTHS[i];
+        if (str.includes(m)) {
+          detectedMonth = m;
+          break;
         }
       }
-      prodContainer.innerHTML = prodHtml || '<div class="text-muted text-center" style="padding:15px;">توصیه فوری برای تغییر خط تولید وجود ندارد.</div>';
 
-      // Logistics advice
-      let distHtml = '';
-      const worstBranches = reconData.filter(r => r.remain >= 15 && r.sellThrough < 30).sort((a,b) => b.remain - a.remain).slice(0, 6);
-      for (let i = 0; i < worstBranches.length; i++) {
-        const r = worstBranches[i];
-        distHtml += `<div class="decision-card sales-stop">
-          <div class="decision-title">🛑 توقف ارسال به ${r.branch} (${r.city})</div>
-          <div class="decision-desc">محصول: <strong>${r.productName}</strong> | مانده: ${formatNumber(r.remain)} عدد</div>
-          <div class="decision-reason"><i class="fas fa-arrows-alt"></i> پیشنهاد جابجایی بار به شعبه تشنه با پروموشن منطقه‌ای.</div>
-        </div>`;
-      }
-      distContainer.innerHTML = distHtml || '<div class="text-muted text-center" style="padding:15px;">وضعیت توزیع شعب متوازن است.</div>';
-    }
-
-    function selectRankingMonth(m) {
-      selectedRankingMonth = m;
-      buildMonthTabs();
-      renderProductRankingAnalysis();
-    }
-
-    function renderProductRankingAnalysis() {
-      let sales = state.analysisData;
-      let shipments = state.warehouseShipments;
-      if (selectedRankingMonth !== 'all') {
-        sales = sales.filter(s => s.month === selectedRankingMonth);
-        shipments = shipments.filter(s => s.month === selectedRankingMonth);
-      }
-
-      const pMap = new Map();
-      for (let i = 0; i < sales.length; i++) {
-        const r = sales[i];
-        let p = pMap.get(r.productName);
-        if (!p) { p = { productName: r.productName, barcode: r.barcode || 'فله', sold: 0, shipped: 0 }; pMap.set(r.productName, p); }
-        p.sold += (r.quantity || 0);
-        if (r.barcode && p.barcode === 'فله') p.barcode = r.barcode;
-      }
-
-      for (let i = 0; i < shipments.length; i++) {
-        const s = shipments[i];
-        let p = pMap.get(s.productName);
-        if (!p) { p = { productName: s.productName, barcode: s.barcode || 'فله', sold: 0, shipped: 0 }; pMap.set(s.productName, p); }
-        p.shipped += (s.quantity || 0);
-      }
-
-      const sorted = Array.from(pMap.values()).sort((a,b) => b.sold - a.sold);
-      const canvas = document.getElementById('analysis-product-ranking-chart');
-      if (canvas) {
-        if (productRankingChart) productRankingChart.destroy();
-        const top15 = sorted.slice(0, 15);
-        productRankingChart = new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: top15.map(p => p.productName),
-            datasets: [
-              {
-                label: 'فروش قطعی',
-                data: top15.map(p => p.sold),
-                backgroundColor: 'rgba(16, 185, 129, 0.85)',
-                borderRadius: 4
-              },
-              {
-                label: 'ارسالی در حواله',
-                data: top15.map(p => p.shipped),
-                backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                borderRadius: 4
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: 'top', labels: { font: { family: 'Vazirmatn' } } }
-            },
-            scales: {
-              x: { ticks: { font: { family: 'Vazirmatn', size: 10 } } },
-              y: { ticks: { font: { family: 'Vazirmatn' } } }
-            }
-          }
-        });
-      }
-
-      const tbody = document.getElementById('product-ranking-table-body');
-      if (!tbody) return;
-      if (sorted.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted" style="padding:20px;">داده‌ای یافت نشد</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = sorted.map((p, idx) => {
-        const remain = Math.max(0, p.shipped - p.sold);
-        const st = p.shipped > 0 ? Math.round((p.sold / p.shipped) * 100) : (p.sold > 0 ? 100 : 0);
-        return `
-          <tr>
-            <td><strong>#${idx + 1}</strong></td>
-            <td>${p.barcode !== 'فله' ? `<code>${p.barcode}</code>` : '<span class="badge badge-purple">فله</span>'}</td>
-            <td><strong>${p.productName}</strong></td>
-            <td><strong style="color:#0284c7;">${formatNumber(p.shipped)}</strong></td>
-            <td><strong style="color:#10b981;">${formatNumber(p.sold)}</strong></td>
-            <td><strong style="color:${remain > 0 ? '#ef4444' : '#64748b'};">${formatNumber(remain)}</strong></td>
-            <td><strong>${formatNumber(st)}٪</strong></td>
-            <td>${idx === 0 ? '<span class="badge badge-success">🥇 پرفروش</span>' : (idx < 3 ? '<span class="badge badge-info">عالی</span>' : '<span class="badge badge-secondary">عادی</span>')}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function populateProductSelector() {
-      const select = document.getElementById('analysis-product-selector');
-      if (!select) return;
-
-      const pCount = new Map();
-      for (let i = 0; i < state.analysisData.length; i++) {
-        const name = state.analysisData[i].productName;
-        if (name) pCount.set(name, (pCount.get(name) || 0) + (state.analysisData[i].quantity || 0));
-      }
-
-      const sortedNames = Array.from(pCount.keys()).sort((a,b) => pCount.get(b) - pCount.get(a));
-      if (sortedNames.length === 0) {
-        select.innerHTML = '<option value="">ابتدا داده‌ها را وارد نمایید</option>';
-        return;
-      }
-
-      select.innerHTML = sortedNames.map(name => `
-        <option value="${name}">${name} (کل فروش: ${formatNumber(pCount.get(name))} عدد)</option>
-      `).join('');
-
-      if (!selectedBreakdownProductKey || !pCount.has(selectedBreakdownProductKey)) {
-        selectedBreakdownProductKey = sortedNames[0];
-      }
-      select.value = selectedBreakdownProductKey;
-    }
-
-    function renderSpecificProductBreakdown(productName) {
-      if (!productName) return;
-      selectedBreakdownProductKey = productName;
-
-      const storeMap = new Map();
-      let totalSales = 0;
-      let foundBarcode = '';
-
-      for (let i = 0; i < state.analysisData.length; i++) {
-        const r = state.analysisData[i];
-        if (r.productName !== productName) continue;
-        const key = `${r.city}|||${r.branch}`;
-        let st = storeMap.get(key);
-        if (!st) {
-          st = { city: r.city, branch: r.branch, qty: 0, barcode: r.barcode };
-          storeMap.set(key, st);
+      // حالت ویژه کلمه "دی"
+      if (detectedMonth === 'نامشخص') {
+        const norm = normalizePersianText(str);
+        const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
+        if (tokens.some(t => t === 'دی') || norm === 'دی' || norm.startsWith('دی ') || norm.endsWith(' دی')) {
+          detectedMonth = 'دی';
         }
-        st.qty += (r.quantity || 0);
-        totalSales += (r.quantity || 0);
-        if (r.barcode && r.barcode !== 'فله') foundBarcode = r.barcode;
       }
 
-      const sorted = Array.from(storeMap.values()).sort((a,b) => b.qty - a.qty);
-      document.getElementById('selected-product-total-sales-badge').textContent = `فروش کل محصول: ${formatNumber(totalSales)} عدد`;
+      return { year: detectedYear, month: detectedMonth };
+    }
 
-      const canvas = document.getElementById('selected-product-stores-chart');
-      if (canvas) {
-        if (selectedProductStoresChart) selectedProductStoresChart.destroy();
-        const top15 = sorted.slice(0, 15);
-        selectedProductStoresChart = new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: top15.map(s => `${s.city} - ${s.branch}`),
-            datasets: [{
-              label: 'فروش شعبه',
-              data: top15.map(s => s.qty),
-              backgroundColor: 'rgba(37, 99, 235, 0.85)',
-              borderRadius: 4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: { ticks: { font: { family: 'Vazirmatn', size: 10 } } },
-              y: { ticks: { font: { family: 'Vazirmatn' } } }
-            }
-          }
-        });
+    function extractCityFromStoreName(storeName) {
+      if (!storeName) return 'نامشخص';
+      const clean = normalizePersianText(storeName);
+      const cities = [
+        'تهران', 'اصفهان', 'مشهد', 'شیراز', 'تبریز', 'کرج', 'اهواز', 'قم', 'کرمانشاه', 'ارومیه',
+        'رشت', 'زاهدان', 'همدان', 'کرمان', 'یزد', 'اردبیل', 'بندرعباس', 'اراک', 'زنجان', 'سنندج',
+        'قزوین', 'خرم‌آباد', 'گرگان', 'ساری', 'بجنورد', 'بوشهر', 'بیرجند', 'ایلام', 'شهرکرد', 'سمنان',
+        'یاسوج', 'کیش', 'قشم', 'کاشان', 'نیشابور', 'بابل', 'آمل', 'آبادان', 'خوی', 'شاهرود', 'بروجرد'
+      ];
+      for (const c of cities) {
+        if (clean.includes(c)) return c;
       }
-
-      const tbody = document.getElementById('selected-product-stores-table');
-      if (!tbody) return;
-      tbody.innerHTML = sorted.slice(0, 50).map((s, idx) => `
-        <tr>
-          <td><strong>#${idx + 1}</strong></td>
-          <td><strong>${s.city}</strong></td>
-          <td>${s.branch}</td>
-          <td><code>${foundBarcode || s.barcode || 'فله'}</code></td>
-          <td><strong style="color:#2563eb;">${formatNumber(s.qty)}</strong></td>
-          <td>${idx === 0 ? '<span class="badge badge-success">🥇 شعبه هدف</span>' : '<span class="badge badge-secondary">عادی</span>'}</td>
-        </tr>
-      `).join('');
+      return clean.replace(/^(فروشگاه\s*مرکزی|فروشگاه|شعبه\s*مرکزی|انبار)\s*/i, '').trim() || storeName;
     }
 
-    // Promotion & Margin Management
-    function setPromoSetting(field, val) {
-      state.promoSettings[field] = parseNumericValue(val);
-      saveToLocalStorage();
-      renderAnalysisPage();
-    }
+    // ============ خواندن و پردازش فایل‌های اکسل ============
+    function handleShipmentFileUpload(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
 
-    function setProductMargin(name, val) {
-      if (!state.margins[name]) state.margins[name] = {};
-      state.margins[name].margin = parseNumericValue(val);
-      saveToLocalStorage();
-      renderAnalysisPage();
-    }
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            let addedCount = 0;
 
-    function setProductPrice(name, val) {
-      if (!state.margins[name]) state.margins[name] = {};
-      state.margins[name].price = parseNumericValue(val);
-      saveToLocalStorage();
-      renderAnalysisPage();
-    }
+            workbook.SheetNames.forEach(sheetName => {
+              const sheet = workbook.Sheets[sheetName];
+              const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-    function renderPromotionTab(reconData, activeMonth) {
-      document.getElementById('promo-month-label').textContent = activeMonth === 'all' ? 'همه ماه‌ها' : activeMonth;
-      document.getElementById('promo-set-default').value = state.promoSettings.defaultMargin || 20;
-      document.getElementById('promo-set-share').value = state.promoSettings.maxShare || 50;
-      document.getElementById('promo-set-remain').value = state.promoSettings.minRemain || 20;
-      document.getElementById('promo-set-min').value = state.promoSettings.minDiscount || 3;
+              rows.forEach(row => {
+                const keys = Object.keys(row);
+                let pName = '', bCode = 'فله', qty = 0, dest = '', rawDate = '';
 
-      // Unique products
-      const pMap = new Map();
-      reconData.forEach(r => {
-        let p = pMap.get(r.productName);
-        if (!p) { p = { name: r.productName, barcode: r.barcode, remain: 0, sold: 0, branches: 0 }; pMap.set(r.productName, p); }
-        p.remain += r.remain;
-        p.sold += r.sold;
-        if (r.remain >= (state.promoSettings.minRemain || 20)) p.branches++;
-      });
+                keys.forEach(k => {
+                  const nk = normalizePersianText(k).toLowerCase();
+                  const val = row[k];
+                  if (nk.includes('نام کالا') || nk.includes('کالا مبدا') || nk.includes('محصول')) pName = String(val).trim();
+                  else if (nk.includes('کد کالا') || nk.includes('بارکد')) bCode = String(val).trim() || 'فله';
+                  else if (nk.includes('انبار مقصد') || nk.includes('مقصد') || nk.includes('شعبه')) dest = String(val).trim();
+                  else if (nk.includes('مقدار') || nk.includes('تعداد') || nk.includes('ارسال')) qty = parseNumericValue(val);
+                  else if (nk.includes('تاریخ')) rawDate = String(val).trim();
+                });
 
-      const list = Array.from(pMap.values());
-      const marginTbody = document.getElementById('margin-table-body');
-      if (marginTbody) {
-        marginTbody.innerHTML = list.slice(0, 100).map(p => {
-          const m = state.margins[p.name]?.margin ?? '';
-          const pr = state.margins[p.name]?.price ? Number(state.margins[p.name].price).toLocaleString('en-US') : '';
-          return `
-            <tr>
-              <td><strong>${p.name}</strong></td>
-              <td><code>${p.barcode || 'فله'}</code></td>
-              <td><input type="text" class="form-control" style="width:140px;" placeholder="مثلاً ۱۵۰,۰۰۰" value="${pr}" oninput="formatPriceInput(this)" onchange="setProductPrice('${p.name}', this.value)"></td>
-              <td><input type="number" class="form-control" style="width:90px;" placeholder="${state.promoSettings.defaultMargin}٪" value="${m}" onchange="setProductMargin('${p.name}', this.value)"></td>
-            </tr>
-          `;
-        }).join('');
-      }
+                if (!pName && !qty) return;
 
-      // به روزرسانی لیست فروشگاه‌ها/شعب در شبیه‌ساز پروموشن
-      populateSimulatorBranches(reconData);
-      runPromotionFinancialSimulator();
+                // پیشگیری از جابجایی بارکد به جای نام کالا
+                if (/^\d{11,16}$/.test(pName)) {
+                  if (bCode === 'فله' || !bCode) bCode = pName;
+                  pName = barcodeToNameMap.get(bCode) || `کالا با بارکد ${bCode}`;
+                } else if (pName && bCode && bCode !== 'فله') {
+                  barcodeToNameMap.set(bCode, pName);
+                }
 
-      // Stagnant recommendations
-      const stagnantProds = list.filter(p => p.remain >= state.promoSettings.minRemain);
-      const promoTbody = document.getElementById('promo-products-body');
-      if (promoTbody) {
-        promoTbody.innerHTML = stagnantProds.map(p => {
-          const margin = state.margins[p.name]?.margin || state.promoSettings.defaultMargin || 20;
-          const maxAllowedDiscount = Math.floor(margin * (state.promoSettings.maxShare / 100));
-          const recDiscount = Math.max(state.promoSettings.minDiscount, Math.min(15, maxAllowedDiscount));
-          return `
-            <tr>
-              <td><strong>${p.name}</strong></td>
-              <td>${formatNumber(margin)}٪</td>
-              <td><strong style="color:#ef4444;">${formatNumber(p.remain)}</strong></td>
-              <td>${formatNumber(p.branches)} شعبه</td>
-              <td><strong style="color:#10b981;">${formatNumber(recDiscount)}٪ تخفیف</strong></td>
-              <td><span class="badge badge-success">پیشنهاد پروموشن</span></td>
-            </tr>
-          `;
-        }).join('') || '<tr><td colspan="6" class="text-center text-muted" style="padding:15px;">محصول راکد با این شرایط یافت نشد</td></tr>';
-      }
+                const { year, month } = extractYearAndMonth(rawDate || file.name || sheetName);
+                const city = extractCityFromStoreName(dest);
 
-      const summary = document.getElementById('promo-summary-container');
-      if (summary) {
-        summary.innerHTML = `
-          <div class="ai-alert info">
-            <span class="ai-alert-icon">💡</span>
-            <div>تعداد <strong>${formatNumber(stagnantProds.length)}</strong> محصول دارای مانده بیش از ${formatNumber(state.promoSettings.minRemain)} عدد در شعب هستند که با اعمال تخفیف تا سقف حاشیه سود مجاز بدون زیان قابل آزادسازی سرمایه‌اند.</div>
-          </div>
-        `;
-      }
-    }
+                state.warehouseShipments.push({
+                  id: Math.random().toString(36).substring(2, 9),
+                  year,
+                  month,
+                  productName: pName,
+                  barcode: bCode,
+                  quantity: qty,
+                  branch: dest || 'مرکزی',
+                  centralStore: dest || city,
+                  city: city || 'نامشخص'
+                });
+                addedCount++;
+              });
+            });
 
-    // شبیه‌ساز مالی پروموشن قراردادی (اتکا، رفاه و...)
-    function populateSimulatorBranches(reconData) {
-      const select = document.getElementById('sim-target-branch');
-      if (!select) return;
-      const currentVal = select.value || 'all';
-
-      const branchSet = new Set();
-      reconData.forEach(r => {
-        const title = r.branch ? `${r.branch} (${r.city})` : r.city;
-        if (title) branchSet.add(title);
-      });
-
-      const list = Array.from(branchSet).sort();
-      let html = '<option value="all">همه شعب و کل کشور</option>';
-      list.forEach(b => {
-        html += `<option value="${b}">${b}</option>`;
-      });
-      select.innerHTML = html;
-      if (branchSet.has(currentVal)) select.value = currentVal;
-    }
-
-    function runPromotionFinancialSimulator() {
-      const discInput = document.getElementById('sim-discount-rate');
-      const branchSelect = document.getElementById('sim-target-branch');
-      const qtyBasisSelect = document.getElementById('sim-quantity-basis');
-      const tbody = document.getElementById('sim-table-body');
-      if (!discInput || !tbody) return;
-
-      const discountRate = parseFloat(discInput.value) || 0;
-      const targetBranch = branchSelect?.value || 'all';
-      const qtyBasis = qtyBasisSelect?.value || 'remain';
-
-      const activeMonth = selectedAnalysisMonth || 'all';
-      let recon = buildReconciliationData(activeMonth);
-
-      if (targetBranch !== 'all') {
-        recon = recon.filter(r => {
-          const title = r.branch ? `${r.branch} (${r.city})` : r.city;
-          return title === targetBranch;
-        });
-      }
-
-      // تجمیع اقلام
-      const productMap = new Map();
-      recon.forEach(r => {
-        let p = productMap.get(r.productName);
-        if (!p) {
-          p = { name: r.productName, remain: 0, sold: 0, shipped: 0 };
-          productMap.set(r.productName, p);
-        }
-        p.remain += r.remain;
-        p.sold += r.sold;
-        p.shipped += r.shipped;
-      });
-
-      const items = Array.from(productMap.values());
-      let totalRevenue = 0;
-      let totalDiscountGiven = 0;
-      let totalNetProfit = 0;
-      let weightedRemainingMarginSum = 0;
-      let totalCountEvaluated = 0;
-
-      let rowsHtml = '';
-      items.forEach(p => {
-        const userMargin = state.margins[p.name]?.margin;
-        const initialMargin = (userMargin !== undefined && userMargin !== null && userMargin !== '')
-          ? parseFloat(userMargin)
-          : (state.promoSettings.defaultMargin || 20);
-
-        const basePrice = parseFloat(state.margins[p.name]?.price) || 0;
-
-        // تعداد مبنا
-        let count = 0;
-        if (qtyBasis === 'remain') count = p.remain;
-        else if (qtyBasis === 'sold') count = p.sold;
-        else if (qtyBasis === 'shipped') count = p.shipped;
-
-        // محاسبات بهای تمام‌شده و تخفیف
-        const discountedPrice = basePrice * (1 - (discountRate / 100));
-        const costPrice = basePrice * (1 - (initialMargin / 100)); // بهای تمام‌شده برای کارخانه
-        const profitPerUnit = discountedPrice - costPrice; // سود ریالی بعد از تخفیف
-
-        // حاشیه سود جدید نسبت به قیمت فروش جدید
-        let newMarginPercent = 0;
-        if (discountedPrice > 0) {
-          newMarginPercent = (profitPerUnit / discountedPrice) * 100;
-        } else {
-          newMarginPercent = initialMargin - discountRate;
-        }
-
-        const lineDiscount = (basePrice * (discountRate / 100)) * count;
-        const lineRevenue = discountedPrice * count;
-        const lineProfit = profitPerUnit * count;
-
-        if (basePrice > 0 && count > 0) {
-          totalRevenue += lineRevenue;
-          totalDiscountGiven += lineDiscount;
-          totalNetProfit += lineProfit;
-          weightedRemainingMarginSum += newMarginPercent * lineRevenue;
-          totalCountEvaluated += lineRevenue;
-        }
-
-        // ارزیابی منطقی بودن تخفیف
-        let statusBadge = '';
-        if (basePrice === 0) {
-          statusBadge = '<span class="badge badge-secondary">قیمت ثبت نشده</span>';
-        } else if (newMarginPercent < 0) {
-          statusBadge = `<span class="badge badge-danger">🚨 زیان‌ده (${formatNumber(Math.round(newMarginPercent))}٪)</span>`;
-        } else if (newMarginPercent < 5) {
-          statusBadge = '<span class="badge badge-warning">⚠️ لب مرز سر‌به‌سر</span>';
-        } else {
-          statusBadge = '<span class="badge badge-success">✅ کاملاً سودآور</span>';
-        }
-
-        const priceDisplay = basePrice > 0 ? formatNumber(basePrice) : '<span style="color:#94a3b8;">تعیین نشده</span>';
-        const discPriceDisplay = basePrice > 0 ? formatNumber(Math.round(discountedPrice)) : '—';
-        const profitPerUnitDisplay = basePrice > 0 
-          ? `<strong style="color:${profitPerUnit >= 0 ? '#10b981' : '#ef4444'};">${formatNumber(Math.round(profitPerUnit))} تومان</strong>`
-          : '—';
-        const totalProfitDisplay = basePrice > 0 && count > 0
-          ? `<strong style="color:${lineProfit >= 0 ? '#10b981' : '#ef4444'};">${formatNumber(Math.round(lineProfit))} تومان</strong>`
-          : '—';
-
-        rowsHtml += `
-          <tr>
-            <td><strong>${p.name}</strong></td>
-            <td>${priceDisplay}</td>
-            <td>${formatNumber(initialMargin)}٪</td>
-            <td><strong>${discPriceDisplay}</strong></td>
-            <td><strong style="color:${newMarginPercent >= 5 ? '#10b981' : (newMarginPercent >= 0 ? '#f59e0b' : '#ef4444')};">${formatNumber(Math.round(newMarginPercent * 10) / 10)}٪</strong></td>
-            <td>${profitPerUnitDisplay}</td>
-            <td><strong>${formatNumber(count)}</strong> عدد</td>
-            <td>${totalProfitDisplay}</td>
-            <td>${statusBadge}</td>
-          </tr>
-        `;
-      });
-
-      tbody.innerHTML = rowsHtml || '<tr><td colspan="9" class="text-center text-muted" style="padding:18px;">داده‌ای برای شبیه‌سازی یافت نشد</td></tr>';
-
-      // نمایش KPIها
-      document.getElementById('sim-total-revenue').textContent = `${formatNumber(Math.round(totalRevenue))} تومان`;
-      document.getElementById('sim-total-discount-given').textContent = `${formatNumber(Math.round(totalDiscountGiven))} تومان`;
-      const netProfitEl = document.getElementById('sim-total-net-profit');
-      netProfitEl.textContent = `${formatNumber(Math.round(totalNetProfit))} تومان`;
-      netProfitEl.style.color = totalNetProfit >= 0 ? '#10b981' : '#ef4444';
-
-      const avgMargin = totalCountEvaluated > 0 ? (weightedRemainingMarginSum / totalCountEvaluated) : 0;
-      const avgMarginEl = document.getElementById('sim-avg-rem-margin');
-      avgMarginEl.textContent = `${formatNumber(Math.round(avgMargin * 10) / 10)}٪`;
-      avgMarginEl.style.color = avgMargin >= 5 ? '#10b981' : (avgMargin >= 0 ? '#f59e0b' : '#ef4444');
-    }
-
-    // Export to Excel for direct reporting
-    function exportReconciliationToExcel() {
-      if (!cachedReconciliationList || cachedReconciliationList.length === 0) {
-        showToast('داده‌ای برای خروجی اکسل وجود ندارد', 'error');
-        return;
-      }
-      const data = cachedReconciliationList.map(r => ({
-        'سال': r.year || '',
-        'ماه': r.month,
-        'فروشگاه مرکزی (شهر)': r.city,
-        'نام شعبه': r.branch,
-        'نام کالا': r.productName,
-        'بارکد': r.barcode,
-        'تعداد ارسالی حواله': r.shipped,
-        'تعداد فروش قطعی': r.sold,
-        'مانده دپو': r.remain,
-        'درصد تحقق': `${r.sellThrough}%`,
-        'ارزیابی': r.status
-      }));
-
-      const ws = XLSX.utils.json_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'تطبیق حواله و فروش');
-      XLSX.writeFile(wb, `Siskooh_Reconciliation_${Date.now()}.xlsx`);
-      showToast('فایل اکسل با موفقیت دانلود شد');
-    }
-
-    function clearAllAnalysisData() {
-      customConfirm('پاکسازی داده‌ها', 'آیا مایل به حذف تمام داده‌های بارگذاری شده حواله و فروش هستید؟', () => {
-        state.analysisData = [];
-        state.warehouseShipments = [];
-        selectedAnalysisMonth = null;
-        saveToLocalStorage();
-        renderAnalysisPage();
-        showToast('داده‌ها حذف شدند');
-      });
-    }
-
-    // JSON Backup / Restore for GitHub Static Site
-    function exportStateBackup() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-      const dlAnchor = document.createElement('a');
-      dlAnchor.setAttribute("href", dataStr);
-      dlAnchor.setAttribute("download", `siskooh_backup_${Date.now()}.json`);
-      dlAnchor.click();
-      dlAnchor.remove();
-    }
-
-    function importStateBackup() {
-      document.getElementById('backup-file-input').click();
-    }
-
-    function handleBackupRestore(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const parsed = JSON.parse(e.target.result);
-          if (parsed && Array.isArray(parsed.analysisData)) {
-            state = parsed;
             saveToLocalStorage();
-            renderAnalysisPage();
-            showToast('اطلاعات با موفقیت بازیابی شد');
-          } else {
-            showToast('فرمت فایل پشتیبان اشتباه است', 'error');
+            renderAllViews();
+            showToast(`فایل حواله «${file.name}» با ${formatNumber(addedCount)} ردیف بارگذاری شد`);
+          } catch (err) {
+            console.error(err);
+            showToast('خطا در پردازش فایل اکسل حواله', 'error');
           }
-        } catch (err) {
-          showToast('خطا در خواندن فایل', 'error');
-        }
-      };
-      reader.readAsText(file);
+        };
+        reader.readAsArrayBuffer(file);
+      });
       event.target.value = '';
     }
-
-    // File Upload Handlers (Worker / Fast Loop)
-    function importAnalysisFile() { document.getElementById('analysis-file-input').click(); }
-    function importShipmentFile() { document.getElementById('shipment-file-input').click(); }
 
     function handleAnalysisFileUpload(event) {
       const files = event.target.files;
@@ -2140,86 +965,57 @@
           try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            const monthFromFile = extractMonthFromText(file.name);
-            const yearFromFile = extractYearFromText(file.name);
+            let addedCount = 0;
 
-            const newRecords = [];
-            for (let s = 0; s < workbook.SheetNames.length; s++) {
-              const sheetName = workbook.SheetNames[s];
-              const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-              const sheetDefaultMonth = extractMonthFromText(sheetName) || monthFromFile;
-              const sheetDefaultYear = extractYearFromText(sheetName) || yearFromFile;
+            workbook.SheetNames.forEach(sheetName => {
+              const sheet = workbook.Sheets[sheetName];
+              const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-              for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
-                let rowExtractedMonth = '';
-                let rowExtractedYear = '';
+              rows.forEach(row => {
+                const keys = Object.keys(row);
+                let pName = '', bCode = 'فله', qty = 0, branch = '', store = '', rawDate = '';
 
-                for (const k in row) {
+                keys.forEach(k => {
                   const nk = normalizePersianText(k).toLowerCase();
                   const val = row[k];
-
-                  // استخراج سال و ماه از ستون تاریخ یا متن
-                  if (nk.includes('تاریخ') || nk.includes('ماه') || nk.includes('سال') || nk === 'date' || nk === 'year' || nk === 'month') {
-                    const ym = extractYearAndMonthFromDate(val);
-                    if (ym.month) rowExtractedMonth = ym.month;
-                    if (ym.year) rowExtractedYear = ym.year;
-                  }
-
-                  if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') {
-                    productName = String(val).trim();
-                  }
-                  else if (nk.includes('بارکد') || nk.includes('کد')) {
-                    barcode = String(val).trim() || 'فله';
-                  }
-                  else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('qty')) {
-                    qty = parseNumericValue(val);
-                  }
+                  if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('شرح')) pName = String(val).trim();
+                  else if (nk.includes('بارکد') || nk.includes('کد کالا')) bCode = String(val).trim() || 'فله';
+                  else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('مقدار')) qty = parseNumericValue(val);
                   else if (nk.includes('شعبه')) branch = String(val).trim();
-                  else if (nk.includes('مرکزی') || nk.includes('شهر') || nk.includes('فروشگاه')) {
-                    if (nk.includes('شهر')) city = String(val).trim();
-                    else centralStore = String(val).trim();
-                  }
+                  else if (nk.includes('فروشگاه') || nk.includes('مرکزی') || nk.includes('شهر')) store = String(val).trim();
+                  else if (nk.includes('تاریخ')) rawDate = String(val).trim();
+                });
+
+                if (!pName && !qty) return;
+
+                if (/^\d{11,16}$/.test(pName)) {
+                  if (bCode === 'فله' || !bCode) bCode = pName;
+                  pName = barcodeToNameMap.get(bCode) || `کالا با بارکد ${bCode}`;
+                } else if (pName && bCode && bCode !== 'فله') {
+                  barcodeToNameMap.set(bCode, pName);
                 }
 
-                // اصلاح هوشمند جابجایی بارکد و نام کالا
-                if (isBarcodeString(productName)) {
-                  if (barcode === 'فله' || !barcode) barcode = productName;
-                  if (state.barcodeMap && state.barcodeMap[barcode]) {
-                    productName = state.barcodeMap[barcode];
-                  }
-                } else if (barcode && barcode !== 'فله' && productName && productName !== 'نامشخص') {
-                  if (!state.barcodeMap) state.barcodeMap = {};
-                  state.barcodeMap[barcode] = productName;
-                }
+                const { year, month } = extractYearAndMonth(rawDate || file.name || sheetName);
+                const city = extractCityFromStoreName(store || branch);
 
-                const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
-                const finalYear = rowExtractedYear || sheetDefaultYear || '';
+                state.analysisData.push({
+                  id: Math.random().toString(36).substring(2, 9),
+                  year,
+                  month,
+                  productName: pName,
+                  barcode: bCode,
+                  quantity: qty,
+                  branch: branch || 'مرکزی',
+                  centralStore: store || city,
+                  city: city || 'نامشخص'
+                });
+                addedCount++;
+              });
+            });
 
-                if (productName || qty > 0) {
-                  if (!city && centralStore) city = extractCityFromCentralStore(centralStore);
-                  newRecords.push({
-                    year: finalYear,
-                    month: finalMonth,
-                    productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
-                    barcode: barcode || 'فله',
-                    quantity: qty || 0,
-                    branch: branch || 'مرکزی',
-                    centralStore: centralStore || city || '',
-                    city: city || 'نامشخص'
-                  });
-                }
-              }
-            }
-
-            state.analysisData.push(...newRecords);
-            reconcileProductNamesFromBarcodes();
             saveToLocalStorage();
-            renderAnalysisPage();
-
-            const distinctMonths = [...new Set(newRecords.map(r => r.month))].filter(m => m !== 'نامشخص');
-            showToast(`فایل فروش بارگذاری شد (${formatNumber(newRecords.length)} ردیف در ماه‌های: ${distinctMonths.join('، ')})`);
+            renderAllViews();
+            showToast(`فایل فروش «${file.name}» با ${formatNumber(addedCount)} ردیف بارگذاری شد`);
           } catch (err) {
             console.error(err);
             showToast('خطا در پردازش فایل اکسل فروش', 'error');
@@ -2230,123 +1026,663 @@
       event.target.value = '';
     }
 
-    function handleShipmentFileUpload(event) {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
+    // ============ ماتریس تطبیق حواله با فروش ============
+    function buildReconciliationData() {
+      let shipments = state.warehouseShipments;
+      let sales = state.analysisData;
 
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            let fallbackMonth = extractMonthFromText(file.name);
-            let fallbackYear = extractYearFromText(file.name);
-            processShipmentData(workbook, fallbackMonth, fallbackYear);
-          } catch (err) {
-            console.error(err);
-            showToast('خطا در پردازش فایل حواله', 'error');
-          }
-        };
-        reader.readAsArrayBuffer(file);
-      });
-      event.target.value = '';
-    }
-
-    function processShipmentData(workbook, fallbackMonth, fallbackYear = '') {
-      const newShipments = [];
-
-      for (let s = 0; s < workbook.SheetNames.length; s++) {
-        const sheetName = workbook.SheetNames[s];
-        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-        const sheetDefaultMonth = extractMonthFromText(sheetName) || fallbackMonth;
-        const sheetDefaultYear = extractYearFromText(sheetName) || fallbackYear;
-
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
-          let rowExtractedMonth = '';
-          let rowExtractedYear = '';
-
-          for (const k in row) {
-            const nk = normalizePersianText(k).toLowerCase();
-            const val = row[k];
-
-            // انطباق تاریخ یا ماه/سال حواله
-            if (nk.includes('تاریخ حواله') || nk.includes('تاریخ') || nk.includes('ماه') || nk.includes('سال') || nk === 'date') {
-              const ym = extractYearAndMonthFromDate(val);
-              if (ym.month) rowExtractedMonth = ym.month;
-              if (ym.year) rowExtractedYear = ym.year;
-            }
-            // نام کالا مبدا
-            else if (nk.includes('نام کالا مبدا') || nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا')) {
-              productName = String(val).trim();
-            }
-            // کد کالا مبدا
-            else if (nk.includes('کد کالا مبدا') || nk.includes('کد کالا') || nk.includes('بارکد') || nk.includes('کد')) {
-              barcode = String(val).trim() || 'فله';
-            }
-            // مقدار ارسالی حواله
-            else if (nk.includes('مقدار') || nk.includes('تعداد') || nk.includes('ارسال') || nk.includes('qty') || nk.includes('quantity')) {
-              qty = parseNumericValue(val);
-            }
-            // انبار مقصد
-            else if (nk.includes('انبار مقصد') || nk.includes('مقصد') || nk.includes('شعبه') || nk.includes('فروشگاه')) {
-              branch = String(val).trim();
-              centralStore = String(val).trim();
-            }
-            else if (nk.includes('مرکزی') || nk.includes('شهر')) {
-              if (nk.includes('شهر')) city = String(val).trim();
-              else centralStore = String(val).trim();
-            }
-          }
-
-          if (isBarcodeString(productName)) {
-            if (barcode === 'فله' || !barcode) barcode = productName;
-            if (state.barcodeMap && state.barcodeMap[barcode]) {
-              productName = state.barcodeMap[barcode];
-            }
-          } else if (barcode && barcode !== 'فله' && productName && productName !== 'نامشخص') {
-            if (!state.barcodeMap) state.barcodeMap = {};
-            state.barcodeMap[barcode] = productName;
-          }
-
-          const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
-          const finalYear = rowExtractedYear || sheetDefaultYear || '';
-
-          if (productName || qty > 0) {
-            if (!city && (centralStore || branch)) {
-              city = extractCityFromCentralStore(centralStore || branch);
-            }
-            newShipments.push({
-              year: finalYear,
-              month: finalMonth,
-              productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
-              barcode: barcode || 'فله',
-              quantity: qty || 0,
-              branch: branch || centralStore || 'مرکزی',
-              centralStore: centralStore || branch || city || '',
-              city: city || 'نامشخص'
-            });
-          }
-        }
+      if (selectedYear !== 'all') {
+        shipments = shipments.filter(s => s.year === selectedYear);
+        sales = sales.filter(s => s.year === selectedYear);
+      }
+      if (selectedMonth !== 'all') {
+        shipments = shipments.filter(s => s.month === selectedMonth);
+        sales = sales.filter(s => s.month === selectedMonth);
       }
 
-      state.warehouseShipments.push(...newShipments);
-      reconcileProductNamesFromBarcodes();
+      const map = new Map();
+
+      shipments.forEach(s => {
+        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
+        let row = map.get(key);
+        if (!row) {
+          row = {
+            year: s.year,
+            month: s.month,
+            city: s.city,
+            branch: s.branch,
+            productName: s.productName,
+            barcode: s.barcode,
+            shipped: 0,
+            sold: 0
+          };
+          map.set(key, row);
+        }
+        row.shipped += s.quantity;
+        if (s.barcode && s.barcode !== 'فله') row.barcode = s.barcode;
+      });
+
+      sales.forEach(s => {
+        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
+        let row = map.get(key);
+        if (!row) {
+          row = {
+            year: s.year,
+            month: s.month,
+            city: s.city,
+            branch: s.branch,
+            productName: s.productName,
+            barcode: s.barcode,
+            shipped: 0,
+            sold: 0
+          };
+          map.set(key, row);
+        }
+        row.sold += s.quantity;
+        if (s.barcode && s.barcode !== 'فله') row.barcode = s.barcode;
+      });
+
+      return Array.from(map.values()).map(r => {
+        const remain = Math.max(0, r.shipped - r.sold);
+        const sellThrough = r.shipped > 0 ? Math.round((r.sold / r.shipped) * 100) : (r.sold > 0 ? 100 : 0);
+
+        let status = 'متعادل', badgeClass = 'badge-secondary';
+        if (r.shipped === 0 && r.sold > 0) {
+          status = 'فروش خارج حواله'; badgeClass = 'badge-purple';
+        } else if (sellThrough >= 85) {
+          status = 'تحقق عالی — تشنه بار'; badgeClass = 'badge-success';
+        } else if (sellThrough < 35 && remain >= 15) {
+          status = 'راکد و دپوی بالا'; badgeClass = 'badge-danger';
+        } else if (sellThrough < 50) {
+          status = 'کندفروش'; badgeClass = 'badge-warning';
+        }
+
+        return { ...r, remain, sellThrough, status, badgeClass };
+      });
+    }
+
+    // ============ به‌روزرسانی رابط کاربری و صفحات ============
+    function renderAllViews() {
+      updateFilterTabs();
+
+      const reconData = buildReconciliationData();
+
+      // KPIهای اصلی
+      const totalShipped = reconData.reduce((acc, r) => acc + r.shipped, 0);
+      const totalSold = reconData.reduce((acc, r) => acc + r.sold, 0);
+      const totalDepo = Math.max(0, totalShipped - totalSold);
+      const overallST = totalShipped > 0 ? Math.round((totalSold / totalShipped) * 100) : 0;
+
+      document.getElementById('kpi-shipped').textContent = formatNumber(totalShipped);
+      document.getElementById('kpi-sold').textContent = formatNumber(totalSold);
+      document.getElementById('kpi-depo').textContent = formatNumber(totalDepo);
+      document.getElementById('kpi-sellthrough').textContent = `${formatNumber(overallST)}٪`;
+
+      renderDecisionEngine(reconData);
+      renderReconciliationTable();
+      renderProductsRanking(reconData);
+      renderBranchBreakdownTab(reconData);
+      renderPromotionTab(reconData);
+    }
+
+    function updateFilterTabs() {
+      // فیلتر سال
+      const years = new Set();
+      state.warehouseShipments.forEach(s => { if (s.year && s.year !== 'نامشخص') years.add(s.year); });
+      state.analysisData.forEach(s => { if (s.year && s.year !== 'نامشخص') years.add(s.year); });
+
+      const sortedYears = Array.from(years).sort().reverse();
+      let yHtml = `<button class="month-tab ${selectedYear === 'all' ? 'active' : ''}" onclick="selectYear('all', this)">همه سال‌ها</button>`;
+      sortedYears.forEach(y => {
+        yHtml += `<button class="month-tab ${selectedYear === y ? 'active' : ''}" onclick="selectYear('${y}', this)">${y}</button>`;
+      });
+      document.getElementById('year-tabs').innerHTML = yHtml;
+
+      // فیلتر ماه
+      const months = new Set();
+      state.warehouseShipments.forEach(s => { if (s.month && s.month !== 'نامشخص') months.add(s.month); });
+      state.analysisData.forEach(s => { if (s.month && s.month !== 'نامشخص') months.add(s.month); });
+
+      const sortedMonths = Array.from(months).sort((a, b) => (MONTH_ORDER[a] || 99) - (MONTH_ORDER[b] || 99));
+      let mHtml = `<button class="month-tab ${selectedMonth === 'all' ? 'active' : ''}" onclick="selectMonth('all', this)">همه ماه‌ها</button>`;
+      sortedMonths.forEach(m => {
+        mHtml += `<button class="month-tab ${selectedMonth === m ? 'active' : ''}" onclick="selectMonth('${m}', this)">${m}</button>`;
+      });
+      document.getElementById('month-tabs').innerHTML = mHtml;
+    }
+
+    function selectYear(y, btn) {
+      selectedYear = y;
+      document.querySelectorAll('#year-tabs .month-tab').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderAllViews();
+    }
+
+    function selectMonth(m, btn) {
+      selectedMonth = m;
+      document.querySelectorAll('#month-tabs .month-tab').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderAllViews();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.style.display = 'block';
+
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    // ============ تصمیم‌گیری تولید و توزیع ============
+    function renderDecisionEngine(reconData) {
+      const insights = document.getElementById('ai-insights-container');
+      const prodContainer = document.getElementById('production-decisions-container');
+      const distContainer = document.getElementById('distribution-decisions-container');
+
+      if (!reconData || reconData.length === 0) {
+        insights.innerHTML = '<div class="ai-alert info">داده‌ای برای تحلیل وجود ندارد؛ اکسل‌ها را بارگذاری فرمایید.</div>';
+        prodContainer.innerHTML = '<div class="text-muted text-center" style="padding:16px;">موردی یافت نشد</div>';
+        distContainer.innerHTML = '<div class="text-muted text-center" style="padding:16px;">موردی یافت نشد</div>';
+        return;
+      }
+
+      // تجمیع کالاها
+      const prodMap = new Map();
+      reconData.forEach(r => {
+        let p = prodMap.get(r.productName);
+        if (!p) { p = { name: r.productName, shipped: 0, sold: 0, remain: 0 }; prodMap.set(r.productName, p); }
+        p.shipped += r.shipped;
+        p.sold += r.sold;
+        p.remain += r.remain;
+      });
+
+      const prods = Array.from(prodMap.values());
+      const totalShipped = prods.reduce((acc, p) => acc + p.shipped, 0);
+      const totalSold = prods.reduce((acc, p) => acc + p.sold, 0);
+      const overallST = totalShipped > 0 ? Math.round((totalSold / totalShipped) * 100) : 0;
+
+      let insightHtml = '';
+      if (overallST >= 70) {
+        insightHtml += `<div class="ai-alert good"><span class="ai-alert-icon">✅</span><div><strong>وضعیت مطلوب:</strong> تحقق کل فروش ${formatNumber(overallST)}٪ است و جریان گردش کالاها در وضعیت سالمی قرار دارد.</div></div>`;
+      } else if (overallST >= 45) {
+        insightHtml += `<div class="ai-alert warning"><span class="ai-alert-icon">⚠️</span><div><strong>هشدار رسوب:</strong> تحقق فروش ${formatNumber(overallST)}٪ است. بخشی از کالاها در شعب دپو شده و گردش کندی دارند.</div></div>`;
+      } else {
+        insightHtml += `<div class="ai-alert critical"><span class="ai-alert-icon">🚨</span><div><strong>بحران دپو:</strong> تحقق فروش کمتر از ${formatNumber(overallST)}٪ است؛ ارسال بارهای جدید باید فوراً بازبینی شود.</div></div>`;
+      }
+      insights.innerHTML = insightHtml;
+
+      // توصیه‌های خط تولید
+      let prodHtml = '';
+      prods.sort((a, b) => (b.sold / Math.max(1, b.shipped)) - (a.sold / Math.max(1, a.shipped))).slice(0, 5).forEach(p => {
+        const st = p.shipped > 0 ? Math.round((p.sold / p.shipped) * 100) : 0;
+        if (st >= 80 && p.sold > 15) {
+          prodHtml += `<div style="padding:12px; margin-bottom:10px; background:#f0fdf4; border-radius:10px; border-right:4px solid #10b981;">
+            <strong>📈 افزایش تولید: ${p.name}</strong>
+            <div style="font-size:12px; color:#475569; margin-top:4px;">تحقق ${formatNumber(st)}٪ با فروش ${formatNumber(p.sold)} عدد؛ خط تولید را برای ماه بعد تقویت کنید.</div>
+          </div>`;
+        }
+      });
+      prods.filter(p => p.remain >= 25 && (p.sold / Math.max(1, p.shipped)) < 0.35).slice(0, 4).forEach(p => {
+        prodHtml += `<div style="padding:12px; margin-bottom:10px; background:#fef2f2; border-radius:10px; border-right:4px solid #ef4444;">
+          <strong>📉 توقف یا کاهش تولید: ${p.name}</strong>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">مانده دپوی کل ${formatNumber(p.remain)} عدد؛ تولید جدید را متوقف کنید تا بازار تخلیه شود.</div>
+        </div>`;
+      });
+      prodContainer.innerHTML = prodHtml || '<div class="text-muted text-center" style="padding:16px;">توصیه فوری برای تغییر برنامه تولید وجود ندارد.</div>';
+
+      // دستورات توزیع
+      let distHtml = '';
+      reconData.filter(r => r.remain >= 20 && r.sellThrough < 35).slice(0, 5).forEach(r => {
+        distHtml += `<div style="padding:12px; margin-bottom:10px; background:#fffbeb; border-radius:10px; border-right:4px solid #f59e0b;">
+          <strong>🛑 توقف ارسال به ${r.branch} (${r.city})</strong>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">کالای «${r.productName}» با مانده ${formatNumber(r.remain)} عدد در این شعبه راکد است. ارسال جدید قطع شود.</div>
+        </div>`;
+      });
+      reconData.filter(r => r.sellThrough >= 85 && r.sold >= 10).slice(0, 5).forEach(r => {
+        distHtml += `<div style="padding:12px; margin-bottom:10px; background:#eff6ff; border-radius:10px; border-right:4px solid #3b82f6;">
+          <strong>🚀 شارژ مجدد در ${r.branch} (${r.city})</strong>
+          <div style="font-size:12px; color:#475569; margin-top:4px;">کالای «${r.productName}» با تحقق ${formatNumber(r.sellThrough)}٪ به اتمام رسیده و تشنه بار است.</div>
+        </div>`;
+      });
+      distContainer.innerHTML = distHtml || '<div class="text-muted text-center" style="padding:16px;">دستور فوری توزیع در این بازه ثبت نشده است.</div>';
+    }
+
+    // ============ جدول تطبیق ============
+    function renderReconciliationTable() {
+      const tbody = document.getElementById('reconciliation-table-body');
+      const search = normalizePersianText(document.getElementById('reconciliation-search')?.value || '');
+      let list = buildReconciliationData();
+
+      if (search) {
+        list = list.filter(r =>
+          normalizePersianText(r.city).includes(search) ||
+          normalizePersianText(r.branch).includes(search) ||
+          normalizePersianText(r.productName).includes(search) ||
+          normalizePersianText(r.barcode).includes(search)
+        );
+      }
+
+      document.getElementById('reconciliation-count-badge').textContent = `${formatNumber(list.length)} ردیف`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted" style="padding:22px;">ردیفی یافت نشد</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.slice(0, 250).map(r => `
+        <tr>
+          <td>${r.year}</td>
+          <td><strong>${r.month}</strong></td>
+          <td><strong>${r.city}</strong></td>
+          <td>${r.branch}</td>
+          <td><strong>${r.productName}</strong></td>
+          <td><code>${r.barcode || 'فله'}</code></td>
+          <td><strong style="color:#0284c7;">${formatNumber(r.shipped)}</strong></td>
+          <td><strong style="color:#10b981;">${formatNumber(r.sold)}</strong></td>
+          <td><strong style="color:${r.remain > 0 ? '#ef4444' : '#64748b'};">${formatNumber(r.remain)}</strong></td>
+          <td><strong>${formatNumber(r.sellThrough)}٪</strong></td>
+          <td><span class="badge ${r.badgeClass}">${r.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // ============ رتبه‌بندی کالاها ============
+    function renderProductsRanking(reconData) {
+      const prodMap = new Map();
+      reconData.forEach(r => {
+        let p = prodMap.get(r.productName);
+        if (!p) { p = { name: r.productName, barcode: r.barcode, shipped: 0, sold: 0 }; prodMap.set(r.productName, p); }
+        p.shipped += r.shipped;
+        p.sold += r.sold;
+      });
+
+      const sorted = Array.from(prodMap.values()).sort((a, b) => b.sold - a.sold);
+
+      // نمودار میله‌ای
+      const canvas = document.getElementById('product-ranking-chart');
+      if (canvas) {
+        if (productRankingChart) productRankingChart.destroy();
+        const top15 = sorted.slice(0, 15);
+        productRankingChart = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: top15.map(p => p.name),
+            datasets: [
+              {
+                label: 'فروش قطعی',
+                data: top15.map(p => p.sold),
+                backgroundColor: 'rgba(16, 185, 129, 0.85)',
+                borderRadius: 6
+              },
+              {
+                label: 'ارسال حواله',
+                data: top15.map(p => p.shipped),
+                backgroundColor: 'rgba(59, 130, 246, 0.45)',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } }
+          }
+        });
+      }
+
+      const tbody = document.getElementById('product-ranking-table-body');
+      if (tbody) {
+        if (sorted.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted" style="padding:22px;">داده‌ای وجود ندارد</td></tr>';
+          return;
+        }
+        tbody.innerHTML = sorted.map((p, idx) => {
+          const remain = Math.max(0, p.shipped - p.sold);
+          const st = p.shipped > 0 ? Math.round((p.sold / p.shipped) * 100) : 0;
+          return `
+            <tr>
+              <td><strong>#${idx + 1}</strong></td>
+              <td><strong>${p.name}</strong></td>
+              <td><code>${p.barcode || 'فله'}</code></td>
+              <td><strong style="color:#0284c7;">${formatNumber(p.shipped)}</strong></td>
+              <td><strong style="color:#10b981;">${formatNumber(p.sold)}</strong></td>
+              <td><strong style="color:${remain > 0 ? '#ef4444' : '#64748b'};">${formatNumber(remain)}</strong></td>
+              <td><strong>${formatNumber(st)}٪</strong></td>
+              <td>${idx === 0 ? '<span class="badge badge-success">🥇 پرفروش‌ترین</span>' : (st >= 80 ? '<span class="badge badge-info">عالی</span>' : '<span class="badge badge-secondary">عادی</span>')}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    // ============ رفتار شعب و شهرها ============
+    function renderBranchBreakdownTab(reconData) {
+      const select = document.getElementById('branch-product-selector');
+      if (!select) return;
+
+      const products = Array.from(new Set(reconData.map(r => r.productName))).sort();
+      if (products.length === 0) {
+        select.innerHTML = '<option value="">کالایی یافت نشد</option>';
+        return;
+      }
+
+      select.innerHTML = products.map(p => `<option value="${p}">${p}</option>`).join('');
+      if (!selectedProductKey || !products.includes(selectedProductKey)) {
+        selectedProductKey = products[0];
+      }
+      select.value = selectedProductKey;
+      renderSpecificProductBreakdown(selectedProductKey);
+    }
+
+    function renderSpecificProductBreakdown(productName) {
+      if (!productName) return;
+      selectedProductKey = productName;
+
+      const recon = buildReconciliationData().filter(r => r.productName === productName);
+      const branchMap = new Map();
+      let totalSales = 0;
+
+      recon.forEach(r => {
+        const key = `${r.city} - ${r.branch}`;
+        branchMap.set(key, (branchMap.get(key) || 0) + r.sold);
+        totalSales += r.sold;
+      });
+
+      document.getElementById('selected-product-sales-badge').textContent = `فروش کل محصول: ${formatNumber(totalSales)} عدد`;
+
+      const sortedBranches = Array.from(branchMap.entries()).sort((a, b) => b[1] - a[1]);
+
+      const canvas = document.getElementById('branch-sales-chart');
+      if (canvas) {
+        if (branchSalesChart) branchSalesChart.destroy();
+        const top15 = sortedBranches.slice(0, 15);
+        branchSalesChart = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: top15.map(b => b[0]),
+            datasets: [{
+              label: 'فروش در شعبه',
+              data: top15.map(b => b[1]),
+              backgroundColor: 'rgba(37, 99, 235, 0.8)',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      const tbody = document.getElementById('branch-sales-table-body');
+      if (tbody) {
+        tbody.innerHTML = sortedBranches.map(([bName, qty], idx) => `
+          <tr>
+            <td><strong>#${idx + 1}</strong></td>
+            <td><strong>${bName.split(' - ')[0]}</strong></td>
+            <td>${bName.split(' - ')[1] || 'مرکزی'}</td>
+            <td><strong style="color:#2563eb;">${formatNumber(qty)}</strong> عدد</td>
+            <td>${idx < 3 ? '<span class="badge badge-success">کشش بسیار بالا</span>' : '<span class="badge badge-secondary">عادی</span>'}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // ============ پروموشن و شبیه‌ساز اتکا ============
+    function formatPriceInput(input) {
+      let val = input.value.replace(/[^\d]/g, '');
+      if (val) {
+        input.value = Number(val).toLocaleString('en-US');
+      } else {
+        input.value = '';
+      }
+    }
+
+    function setProductMargin(name, val) {
+      if (!state.margins[name]) state.margins[name] = {};
+      state.margins[name].margin = parseNumericValue(val);
       saveToLocalStorage();
-      renderAnalysisPage();
+      runPromotionSimulator();
+    }
+
+    function setProductPrice(name, val) {
+      if (!state.margins[name]) state.margins[name] = {};
+      state.margins[name].price = parseNumericValue(val);
+      saveToLocalStorage();
+      runPromotionSimulator();
+    }
+
+    function renderPromotionTab(reconData) {
+      // پر کردن سلکتور محصولات
+      const pMap = new Map();
+      reconData.forEach(r => {
+        let p = pMap.get(r.productName);
+        if (!p) { p = { name: r.productName, barcode: r.barcode }; pMap.set(r.productName, p); }
+      });
+      const pList = Array.from(pMap.values());
+
+      const prodSelect = document.getElementById('sim-product-select');
+      if (prodSelect) {
+        const cur = prodSelect.value;
+        prodSelect.innerHTML = pList.map(p => {
+          const m = state.margins[p.name]?.margin ?? state.promoSettings.defaultMargin;
+          return `<option value="${p.name}">${p.name} (حاشیه سود: ${formatNumber(m)}٪)</option>`;
+        }).join('') || '<option value="">کالایی وجود ندارد</option>';
+        if (cur && pList.some(p => p.name === cur)) prodSelect.value = cur;
+      }
+
+      // پر کردن سلکتور شهرها
+      const citySelect = document.getElementById('sim-target-city');
+      if (citySelect) {
+        const cities = Array.from(new Set(reconData.map(r => r.city).filter(c => c && c !== 'نامشخص'))).sort();
+        citySelect.innerHTML = '<option value="all">همه شهرها و شعب کشور</option>' +
+          cities.map(c => `<option value="${c}">فقط شهر ${c}</option>`).join('');
+      }
+
+      // جدول ورود دستی حاشیه سود اقلام
+      const marginTbody = document.getElementById('margin-table-body');
+      if (marginTbody) {
+        marginTbody.innerHTML = pList.map(p => {
+          const m = state.margins[p.name]?.margin ?? '';
+          const pr = state.margins[p.name]?.price ? Number(state.margins[p.name].price).toLocaleString('en-US') : '';
+          return `
+            <tr>
+              <td><strong>${p.name}</strong></td>
+              <td><code>${p.barcode || 'فله'}</code></td>
+              <td><input type="text" class="form-control" style="width:160px;" placeholder="مثلاً ۲۵۰,۰۰۰" value="${pr}" oninput="formatPriceInput(this)" onchange="setProductPrice('${p.name}', this.value)"></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <input type="number" step="0.5" class="form-control" style="width:100px; font-weight:800; color:#2563eb;" placeholder="${state.promoSettings.defaultMargin}" value="${m}" onchange="setProductMargin('${p.name}', this.value)">
+                  <span style="font-weight:bold; color:#64748b;">٪</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('') || '<tr><td colspan="4" class="text-center text-muted" style="padding:16px;">محصولی برای قیمت‌گذاری وجود ندارد</td></tr>';
+      }
+
+      runPromotionSimulator();
+    }
+
+    function runPromotionSimulator() {
+      const prodSelect = document.getElementById('sim-product-select');
+      const discInput = document.getElementById('sim-discount-rate');
+      const citySelect = document.getElementById('sim-target-city');
+      const adviceBox = document.getElementById('sim-strategic-advice');
+      const tbody = document.getElementById('sim-table-body');
+
+      if (!prodSelect || !tbody) return;
+      const productName = prodSelect.value;
+      if (!productName) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted" style="padding:16px;">محصولی انتخاب نشده است</td></tr>';
+        return;
+      }
+
+      const discountRate = parseFloat(discInput.value) || 0;
+      const targetCity = citySelect ? citySelect.value : 'all';
+
+      // حاشیه اولیه
+      const userMargin = state.margins[productName]?.margin;
+      const initialMargin = (userMargin !== undefined && userMargin !== null && userMargin !== '')
+        ? parseFloat(userMargin)
+        : state.promoSettings.defaultMargin;
+
+      // فرمول دقیق افت حاشیه سود
+      let newMargin = 0;
+      if (discountRate < 100) {
+        newMargin = (( (1 - discountRate/100) - (1 - initialMargin/100) ) / (1 - discountRate/100)) * 100;
+      } else {
+        newMargin = -100;
+      }
+      const marginDrop = initialMargin - newMargin;
+
+      document.getElementById('sim-initial-margin-val').textContent = `${formatNumber(initialMargin)}٪`;
       
-      const distinctMonths = [...new Set(newShipments.map(item => item.month))].filter(m => m !== 'نامشخص');
-      showToast(`فایل حواله بارگذاری شد و در ماه‌های (${distinctMonths.join('، ')}) تفکیک گردید`);
+      const newMarginEl = document.getElementById('sim-new-margin-val');
+      newMarginEl.textContent = `${formatNumber(Math.round(newMargin * 10) / 10)}٪`;
+      newMarginEl.style.color = newMargin >= 12 ? '#10b981' : (newMargin >= 0 ? '#f59e0b' : '#ef4444');
+
+      document.getElementById('sim-margin-drop-val').textContent = `${formatNumber(Math.round(marginDrop * 10) / 10)} درصد`;
+
+      const verdictEl = document.getElementById('sim-overall-verdict');
+      if (newMargin < 0) {
+        verdictEl.textContent = '🚨 زیان‌ده خالص (رد تخفیف)';
+        verdictEl.style.color = '#ef4444';
+      } else if (newMargin < 6) {
+        verdictEl.textContent = '⚠️ پرخطر (حاشیه بسیار کم)';
+        verdictEl.style.color = '#f59e0b';
+      } else {
+        verdictEl.textContent = '✅ حاشیه سود امن و موجه';
+        verdictEl.style.color = '#10b981';
+      }
+
+      // ارزیابی به تفکیک شهرها
+      let recon = buildReconciliationData().filter(r => r.productName === productName);
+      if (targetCity !== 'all') recon = recon.filter(r => r.city === targetCity);
+
+      let naturalCount = 0;
+      let stagnantCount = 0;
+
+      let rowsHtml = '';
+      recon.forEach(r => {
+        let naturallySelling = false;
+        let decisionBadge = '';
+        let reasoning = '';
+
+        if (r.shipped > 0 && r.sellThrough >= 65) {
+          naturallySelling = true;
+          naturalCount++;
+          decisionBadge = '<span class="badge badge-danger"><i class="fas fa-ban"></i> تخفیف ممنوع!</span>';
+          reasoning = `با تحقق <strong>${formatNumber(r.sellThrough)}٪</strong> کالا به راحتی جذب شده است؛ تخفیف دادن در اینجا هدر دادن بیهوده سود است.`;
+        } else if (r.remain >= 15 && r.sellThrough < 40) {
+          stagnantCount++;
+          if (newMargin > 5) {
+            decisionBadge = '<span class="badge badge-success"><i class="fas fa-check"></i> تخفیف هدفمند</span>';
+            reasoning = `مانده دپوی <strong>${formatNumber(r.remain)}</strong> عدد و تحقق ضعیف؛ تخفیف ${formatNumber(discountRate)}٪ باعث خروج کالا از رسوب می‌شود.`;
+          } else {
+            decisionBadge = '<span class="badge badge-warning"><i class="fas fa-truck"></i> ترانسفر بار</span>';
+            reasoning = `رسوب دارد اما تخفیف سود را می‌سوزاند؛ کالا را به شهرهای پرفروش منتقل کنید.`;
+          }
+        } else {
+          decisionBadge = '<span class="badge badge-secondary">حرکت عادی</span>';
+          reasoning = `گردش کالا متعادل است (${formatNumber(r.sellThrough)}٪)؛ نیاز به تخفیف ندارد.`;
+        }
+
+        const natBadge = naturallySelling
+          ? '<span class="badge badge-success">بله، تقاضای بالا</span>'
+          : (r.sellThrough < 30 ? '<span class="badge badge-danger">خیر، راکد</span>' : '<span class="badge badge-secondary">متوسط</span>');
+
+        rowsHtml += `
+          <tr>
+            <td><strong>${r.city}</strong></td>
+            <td>${r.branch}</td>
+            <td><strong style="color:#0284c7;">${formatNumber(r.shipped)}</strong></td>
+            <td><strong style="color:#10b981;">${formatNumber(r.sold)}</strong></td>
+            <td><strong style="color:${r.remain > 0 ? '#ef4444' : '#64748b'};">${formatNumber(r.remain)}</strong></td>
+            <td><strong>${formatNumber(r.sellThrough)}٪</strong></td>
+            <td>${natBadge}</td>
+            <td>${decisionBadge}</td>
+            <td style="font-size:11.5px; color:#475569; line-height:1.7;">${reasoning}</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = rowsHtml || '<tr><td colspan="9" class="text-center text-muted" style="padding:16px;">ردیفی برای این کالا در فیلتر انتخابی یافت نشد</td></tr>';
+
+      if (adviceBox) {
+        if (newMargin < 0) {
+          adviceBox.innerHTML = `
+            <div class="ai-alert critical">
+              <span class="ai-alert-icon">🛑</span>
+              <div><strong>تخفیف اکیداً رد می‌شود:</strong> تخفیف پیشنهادی (${formatNumber(discountRate)}٪) بیشتر از حاشیه سود شما (${formatNumber(initialMargin)}٪) است و به ازای هر فروش <strong>${formatNumber(Math.abs(Math.round(newMargin * 10) / 10))}٪ زیان خالص</strong> ثبت می‌شود!</div>
+            </div>
+          `;
+        } else if (naturalCount > 0 && stagnantCount > 0) {
+          adviceBox.innerHTML = `
+            <div class="ai-alert warning">
+              <span class="ai-alert-icon">⚡</span>
+              <div><strong>هشدار تفکیک بازار:</strong> در <strong>${formatNumber(naturalCount)}</strong> شهر/شعبه این محصول بدون تخفیف هم با سرعت به فروش می‌رسد. تخفیف سراسری به اتکا اشتباه است!
+              <br>👉 <strong>دستور کارشناسی:</strong> تخفیف را منحصراً به <strong>${formatNumber(stagnantCount)} کانون راکد</strong> ارائه دهید.</div>
+            </div>
+          `;
+        } else if (stagnantCount > 0) {
+          adviceBox.innerHTML = `
+            <div class="ai-alert good">
+              <span class="ai-alert-icon">🎯</span>
+              <div><strong>پروموشن منطقی است:</strong> در تمام شعب تقاضا افت کرده است؛ با این تخفیف، <strong>${formatNumber(Math.round(newMargin * 10) / 10)}٪ حاشیه امن</strong> باقی می‌ماند و بار انبارها آزاد می‌شود.</div>
+            </div>
+          `;
+        } else {
+          adviceBox.innerHTML = `
+            <div class="ai-alert info">
+              <span class="ai-alert-icon">ℹ️</span>
+              <div>گردش این کالا طبیعی و مطلوب است؛ نیازی به امتیاز تخفیف به اتکا وجود ندارد مگر آنکه حجم خرید فوق‌العاده‌ای پیشنهاد شود.</div>
+            </div>
+          `;
+        }
+      }
     }
 
-    function init() {
+    // ============ خروجی اکسل و پاکسازی ============
+    function exportReconciliationExcel() {
+      const data = buildReconciliationData();
+      if (data.length === 0) {
+        showToast('داده‌ای برای خروجی اکسل وجود ندارد', 'error');
+        return;
+      }
+      const wsData = [
+        ['سال', 'ماه', 'شهر (فروشگاه مرکزی)', 'نام شعبه', 'نام کالا', 'بارکد', 'تعداد ارسال حواله', 'تعداد فروش قطعی', 'مانده دپو', 'درصد تحقق', 'وضعیت تحلیل']
+      ];
+      data.forEach(r => {
+        wsData.push([r.year, r.month, r.city, r.branch, r.productName, r.barcode, r.shipped, r.sold, r.remain, `${r.sellThrough}%`, r.status]);
+      });
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Reconciliation');
+      XLSX.writeFile(wb, `Siskooh_Analysis_${selectedYear}_${selectedMonth}.xlsx`);
+      showToast('خروجی اکسل تطبیق با موفقیت دانلود شد');
+    }
+
+    function clearAllData() {
+      customConfirm('پاکسازی کل داده‌ها', 'آیا از حذف تمام اطلاعات حواله‌ها، فروش‌های ثبت‌شده و تنظیمات اطمینان دارید؟', () => {
+        state.analysisData = [];
+        state.warehouseShipments = [];
+        selectedYear = 'all';
+        selectedMonth = 'all';
+        saveToLocalStorage();
+        renderAllViews();
+        showToast('تمام اطلاعات با موفقیت پاکسازی شد');
+      });
+    }
+
+    // ============ شروع برنامه ============
+    document.addEventListener('DOMContentLoaded', () => {
       loadFromLocalStorage();
-      renderAnalysisPage();
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
+      renderAllViews();
+    });
   </script>
 </body>
 </html>
