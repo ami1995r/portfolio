@@ -846,9 +846,60 @@
       return isNaN(num) ? 0 : num;
     }
 
+    // تشخیص قوی ماه شمسی از هر نوع فیلد (تاریخ، متن، ستون اختصاصی ماه یا سریال اکسل)
+    function extractMonthFromShamsiDate(dateVal) {
+      if (dateVal === null || dateVal === undefined || dateVal === '') return '';
+      let str = normalizePersianText(String(dateVal)).trim();
+      str = str.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+
+      // 1. بررسی تطابق مستقیم یا قرار داشتن نام ماه در متن
+      for (let i = 0; i < MONTHS.length; i++) {
+        const m = MONTHS[i];
+        if (str === m || str.includes(m)) {
+          return m;
+        }
+      }
+
+      // 2. اگر عدد ترتیبی/سریال تاریخ اکسل باشد
+      if (/^\d{5}$/.test(str)) {
+        try {
+          const jsDate = new Date(Math.round((Number(str) - 25569) * 86400 * 1000));
+          const parts = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { month: 'numeric' }).format(jsDate);
+          const mNum = parseInt(parts, 10);
+          if (mNum >= 1 && mNum <= 12) return MONTHS[mNum - 1];
+        } catch (e) {}
+      }
+
+      // 3. فرمت‌های استاندارد سال/ماه/روز شمسی: 1404.01.20 یا 1404/03/15 یا 1404-06-25 یا 04/06/12
+      const dateMatch = str.match(/(?:1[34]\d{2}|\d{2})[\.\/\-_](\d{1,2})[\.\/\-_](\d{1,2})/);
+      if (dateMatch) {
+        const m = parseInt(dateMatch[1], 10);
+        if (m >= 1 && m <= 12) {
+          return MONTHS[m - 1];
+        }
+      }
+
+      // 4. فرمت برعکس روز/ماه/سال: 20.03.1404 یا 15/06/1404
+      const revMatch = str.match(/(\d{1,2})[\.\/\-_](\d{1,2})[\.\/\-_](?:1[34]\d{2})/);
+      if (revMatch) {
+        const m = parseInt(revMatch[2], 10);
+        if (m >= 1 && m <= 12) {
+          return MONTHS[m - 1];
+        }
+      }
+
+      // 5. اگر صرفاً عدد ماه ۱ تا ۱۲ باشد (مثلاً ستونی به اسم ماه که عدد ۱ تا ۱۲ نوشته)
+      if (/^(0?[1-9]|1[0-2])$/.test(str)) {
+        const mNum = parseInt(str, 10);
+        if (mNum >= 1 && mNum <= 12) return MONTHS[mNum - 1];
+      }
+
+      return '';
+    }
+
     function extractMonthFromText(text) {
       if (!text) return '';
-      const clean = text.replace(/\.(xlsx|xls|csv|json)$/i, '');
+      let clean = text.replace(/\.(xlsx|xls|csv|json)$/i, '');
       const norm = normalizePersianText(clean);
       const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
 
@@ -1630,29 +1681,40 @@
             for (let s = 0; s < workbook.SheetNames.length; s++) {
               const sheetName = workbook.SheetNames[s];
               const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-              const month = monthFromFile || extractMonthFromText(sheetName) || 'نامشخص';
+              const sheetDefaultMonth = extractMonthFromText(sheetName) || monthFromFile;
 
               for (let i = 0; i < rows.length; i++) {
                 const row = rows[i];
                 let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
+                let rowExtractedMonth = '';
 
                 for (const k in row) {
                   const nk = normalizePersianText(k).toLowerCase();
                   const val = row[k];
+
+                  // استخراج ماه از ستون تاریخ یا نام ماه در سطح سطر (تفکیک ردیف‌های ترکیبی)
+                  if (nk.includes('تاریخ') || nk.includes('ماه') || nk === 'date' || nk === 'month') {
+                    const detected = extractMonthFromShamsiDate(val);
+                    if (detected) rowExtractedMonth = detected;
+                  }
+
                   if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') productName = String(val).trim();
-                  else if (nk.includes('بارکد')) barcode = String(val).trim() || 'فله';
+                  else if (nk.includes('بارکد') || nk.includes('کد')) barcode = String(val).trim() || 'فله';
                   else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('qty')) qty = parseNumericValue(val);
                   else if (nk.includes('شعبه')) branch = String(val).trim();
-                  else if (nk.includes('مرکزی') || nk.includes('شهر')) {
+                  else if (nk.includes('مرکزی') || nk.includes('شهر') || nk.includes('فروشگاه')) {
                     if (nk.includes('شهر')) city = String(val).trim();
                     else centralStore = String(val).trim();
                   }
                 }
 
+                // اولویت تفکیک: ۱. ماه موجود در تاریخ همان سطر، ۲. ماه شیت اکسل، ۳. ماه نام فایل
+                const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
+
                 if (productName || qty > 0) {
                   if (!city && centralStore) city = extractCityFromCentralStore(centralStore);
                   newRecords.push({
-                    month,
+                    month: finalMonth,
                     productName: productName || 'نامشخص',
                     barcode: barcode || 'فله',
                     quantity: qty || 0,
@@ -1667,7 +1729,9 @@
             state.analysisData.push(...newRecords);
             saveToLocalStorage();
             renderAnalysisPage();
-            showToast(`فایل فروش با ${formatNumber(newRecords.length)} ردیف بارگذاری گردید`);
+
+            const distinctMonths = [...new Set(newRecords.map(r => r.month))].filter(m => m !== 'نامشخص');
+            showToast(`فایل فروش با ${formatNumber(newRecords.length)} ردیف بارگذاری شد (تفکیک در ماه‌های: ${distinctMonths.join('، ')})`);
           } catch (err) {
             console.error(err);
             showToast('خطا در پردازش فایل اکسل فروش', 'error');
@@ -1688,20 +1752,8 @@
           try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            let month = extractMonthFromText(file.name);
-
-            if (!month) {
-              pendingShipmentSheets = { workbook, fileName: file.name };
-              openModal('shipment-month-picker-modal');
-              document.getElementById('btn-confirm-shipment-month').onclick = () => {
-                const sel = document.getElementById('picker-shipment-month').value;
-                if (!sel) return;
-                processShipmentData(pendingShipmentSheets.workbook, sel);
-                closeModal('shipment-month-picker-modal');
-              };
-              return;
-            }
-            processShipmentData(workbook, month);
+            let fallbackMonth = extractMonthFromText(file.name);
+            processShipmentData(workbook, fallbackMonth);
           } catch (err) {
             console.error(err);
             showToast('خطا در پردازش فایل حواله', 'error');
@@ -1712,39 +1764,65 @@
       event.target.value = '';
     }
 
-    function processShipmentData(workbook, defaultMonth) {
+    function processShipmentData(workbook, fallbackMonth) {
       const newShipments = [];
+
       for (let s = 0; s < workbook.SheetNames.length; s++) {
         const sheetName = workbook.SheetNames[s];
         const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-        const month = extractMonthFromText(sheetName) || defaultMonth;
+        const sheetDefaultMonth = extractMonthFromText(sheetName) || fallbackMonth;
 
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
           let productName = '', barcode = 'فله', qty = 0, branch = '', centralStore = '', city = '';
+          let rowExtractedMonth = '';
 
           for (const k in row) {
             const nk = normalizePersianText(k).toLowerCase();
             const val = row[k];
-            if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') productName = String(val).trim();
-            else if (nk.includes('بارکد')) barcode = String(val).trim() || 'فله';
-            else if (nk.includes('تعداد') || nk.includes('ارسال') || nk.includes('qty')) qty = parseNumericValue(val);
-            else if (nk.includes('شعبه')) branch = String(val).trim();
+
+            // انطباق ستون تاریخ یا ماه حواله به صورت سطر به سطر
+            if (nk.includes('تاریخ حواله') || nk.includes('تاریخ') || nk.includes('ماه') || nk === 'date' || nk === 'month') {
+              const detected = extractMonthFromShamsiDate(val);
+              if (detected) rowExtractedMonth = detected;
+            }
+            // نام کالا مبدا
+            else if (nk.includes('نام کالا مبدا') || nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا')) {
+              productName = String(val).trim();
+            }
+            // کد کالا مبدا
+            else if (nk.includes('کد کالا مبدا') || nk.includes('کد کالا') || nk.includes('بارکد') || nk.includes('کد')) {
+              barcode = String(val).trim() || 'فله';
+            }
+            // مقدار ارسالی حواله
+            else if (nk.includes('مقدار') || nk.includes('تعداد') || nk.includes('ارسال') || nk.includes('qty') || nk.includes('quantity')) {
+              qty = parseNumericValue(val);
+            }
+            // انبار مقصد
+            else if (nk.includes('انبار مقصد') || nk.includes('مقصد') || nk.includes('شعبه') || nk.includes('فروشگاه')) {
+              branch = String(val).trim();
+              centralStore = String(val).trim();
+            }
             else if (nk.includes('مرکزی') || nk.includes('شهر')) {
               if (nk.includes('شهر')) city = String(val).trim();
               else centralStore = String(val).trim();
             }
           }
 
+          // اولویت قطعی با ماه تاریخی است که در همان سطر قید شده (تفکیک کامل فایل‌های چندماهه)
+          const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
+
           if (productName || qty > 0) {
-            if (!city && centralStore) city = extractCityFromCentralStore(centralStore);
+            if (!city && (centralStore || branch)) {
+              city = extractCityFromCentralStore(centralStore || branch);
+            }
             newShipments.push({
-              month,
+              month: finalMonth,
               productName: productName || 'نامشخص',
               barcode: barcode || 'فله',
               quantity: qty || 0,
-              branch: branch || 'مرکزی',
-              centralStore: centralStore || city || '',
+              branch: branch || centralStore || 'مرکزی',
+              centralStore: centralStore || branch || city || '',
               city: city || 'نامشخص'
             });
           }
@@ -1754,7 +1832,9 @@
       state.warehouseShipments.push(...newShipments);
       saveToLocalStorage();
       renderAnalysisPage();
-      showToast(`فایل حواله با ${formatNumber(newShipments.length)} ردیف افزوده شد`);
+      
+      const distinctMonths = [...new Set(newShipments.map(item => item.month))].filter(m => m !== 'نامشخص');
+      showToast(`فایل حواله بارگذاری شد؛ ردیف‌ها تفکیک و در ماه‌های (${distinctMonths.join('، ')}) قرار گرفتند`);
     }
 
     function init() {
