@@ -881,7 +881,8 @@
       analysisData: [],
       warehouseShipments: [],
       margins: {},
-      promoSettings: { maxShare: 50, minRemain: 20, minDiscount: 3, defaultMargin: 20 }
+      promoSettings: { maxShare: 50, minRemain: 20, minDiscount: 3, defaultMargin: 20 },
+      barcodeMap: {} // نگاشت بارکد به نام واقعی کالا
     };
 
     let selectedAnalysisMonth = null;
@@ -1056,10 +1057,65 @@
           state.warehouseShipments = parsed.warehouseShipments || [];
           state.margins = parsed.margins || {};
           state.promoSettings = Object.assign(state.promoSettings, parsed.promoSettings || {});
+          state.barcodeMap = parsed.barcodeMap || {};
         }
       } catch (e) {
         console.error('Failed to load storage:', e);
       }
+    }
+
+    // بررسی آیا متن ورودی صرفاً یک بارکد یا کد عددی است
+    function isBarcodeString(val) {
+      if (!val) return false;
+      const clean = String(val).replace(/[\s\-\_\.]/g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      // بارکدهای استاندارد معمولاً ۸، ۱۲، ۱۳، ۱۴ رقمی یا کدهای کالای بزرگ هستند
+      return /^\d{7,18}$/.test(clean);
+    }
+
+    // بازسازی و یکسان‌سازی خودکار نام کالاها از روی بارکد
+    function reconcileProductNamesFromBarcodes() {
+      if (!state.barcodeMap) state.barcodeMap = {};
+
+      // مرحله ۱: استخراج نام‌های معتبر برای هر بارکد
+      const collectNames = (list) => {
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          const bc = String(item.barcode || '').trim();
+          const name = String(item.productName || '').trim();
+          if (bc && bc !== 'فله' && name && !isBarcodeString(name) && name !== 'نامشخص') {
+            state.barcodeMap[bc] = name;
+          }
+        }
+      };
+
+      collectNames(state.analysisData);
+      collectNames(state.warehouseShipments);
+
+      // مرحله ۲: جایگزینی در ردیف‌هایی که به جای نام کالا، بارکد یا کد عددی ثبت شده است
+      const applyNames = (list) => {
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          const bc = String(item.barcode || '').trim();
+          const name = String(item.productName || '').trim();
+
+          if (isBarcodeString(name)) {
+            // اگر فیلد نام کالا بارکد بود و بارکد خالی بود، آن را به بارکد منتقل کن
+            if (!item.barcode || item.barcode === 'فله') {
+              item.barcode = name;
+            }
+            if (state.barcodeMap[name]) {
+              item.productName = state.barcodeMap[name];
+            } else if (bc && state.barcodeMap[bc]) {
+              item.productName = state.barcodeMap[bc];
+            }
+          } else if (bc && state.barcodeMap[bc] && (name === 'نامشخص' || !name)) {
+            item.productName = state.barcodeMap[bc];
+          }
+        }
+      };
+
+      applyNames(state.analysisData);
+      applyNames(state.warehouseShipments);
     }
 
     function showAnalysisTab(tab) {
@@ -1168,6 +1224,9 @@
     }
 
     function renderAnalysisPage() {
+      // قبل از رندر، تمام نام‌های کالا از روی دیکشنری بارکد تطبیق و یکسان‌سازی می‌شوند
+      reconcileProductNamesFromBarcodes();
+
       const activeMonth = selectedAnalysisMonth || 'all';
       const reconData = buildReconciliationData(activeMonth);
 
@@ -1936,14 +1995,32 @@
                     if (detected) rowExtractedMonth = detected;
                   }
 
-                  if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') productName = String(val).trim();
-                  else if (nk.includes('بارکد') || nk.includes('کد')) barcode = String(val).trim() || 'فله';
-                  else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('qty')) qty = parseNumericValue(val);
+                  if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('کالا') || nk === 'نام') {
+                    productName = String(val).trim();
+                  }
+                  else if (nk.includes('بارکد') || nk.includes('کد')) {
+                    barcode = String(val).trim() || 'فله';
+                  }
+                  else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('qty')) {
+                    qty = parseNumericValue(val);
+                  }
                   else if (nk.includes('شعبه')) branch = String(val).trim();
                   else if (nk.includes('مرکزی') || nk.includes('شهر') || nk.includes('فروشگاه')) {
                     if (nk.includes('شهر')) city = String(val).trim();
                     else centralStore = String(val).trim();
                   }
+                }
+
+                // اصلاح هوشمند جابجایی بارکد و نام کالا
+                if (isBarcodeString(productName)) {
+                  if (barcode === 'فله' || !barcode) barcode = productName;
+                  // در صورت وجود نام قبلی برای این بارکد از دیکشنری بارکدها استفاده کن
+                  if (state.barcodeMap && state.barcodeMap[barcode]) {
+                    productName = state.barcodeMap[barcode];
+                  }
+                } else if (barcode && barcode !== 'فله' && productName && productName !== 'نامشخص') {
+                  if (!state.barcodeMap) state.barcodeMap = {};
+                  state.barcodeMap[barcode] = productName;
                 }
 
                 // اولویت تفکیک: ۱. ماه موجود در تاریخ همان سطر، ۲. ماه شیت اکسل، ۳. ماه نام فایل
@@ -1953,7 +2030,7 @@
                   if (!city && centralStore) city = extractCityFromCentralStore(centralStore);
                   newRecords.push({
                     month: finalMonth,
-                    productName: productName || 'نامشخص',
+                    productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
                     barcode: barcode || 'فله',
                     quantity: qty || 0,
                     branch: branch || 'مرکزی',
@@ -1965,6 +2042,7 @@
             }
 
             state.analysisData.push(...newRecords);
+            reconcileProductNamesFromBarcodes();
             saveToLocalStorage();
             renderAnalysisPage();
 
@@ -2047,6 +2125,17 @@
             }
           }
 
+          // اصلاح هوشمند جابجایی بارکد و نام کالا
+          if (isBarcodeString(productName)) {
+            if (barcode === 'فله' || !barcode) barcode = productName;
+            if (state.barcodeMap && state.barcodeMap[barcode]) {
+              productName = state.barcodeMap[barcode];
+            }
+          } else if (barcode && barcode !== 'فله' && productName && productName !== 'نامشخص') {
+            if (!state.barcodeMap) state.barcodeMap = {};
+            state.barcodeMap[barcode] = productName;
+          }
+
           // اولویت قطعی با ماه تاریخی است که در همان سطر قید شده (تفکیک کامل فایل‌های چندماهه)
           const finalMonth = rowExtractedMonth || sheetDefaultMonth || 'نامشخص';
 
@@ -2056,7 +2145,7 @@
             }
             newShipments.push({
               month: finalMonth,
-              productName: productName || 'نامشخص',
+              productName: productName || (barcode !== 'فله' ? `کالا با بارکد ${barcode}` : 'نامشخص'),
               barcode: barcode || 'فله',
               quantity: qty || 0,
               branch: branch || centralStore || 'مرکزی',
@@ -2068,6 +2157,7 @@
       }
 
       state.warehouseShipments.push(...newShipments);
+      reconcileProductNamesFromBarcodes();
       saveToLocalStorage();
       renderAnalysisPage();
       
