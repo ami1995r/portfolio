@@ -6,7 +6,6 @@
   <title>مهندسی فروش و تطبیق حواله - شرکت صنعتی سیسکوه</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css">
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -357,6 +356,21 @@
     .text-center { text-align: center; }
     .text-muted { color: #94a3b8; }
 
+    .branch-mapping-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 12px;
+    }
+    .branch-mapping-row.matched { background: #f0fdf4; border-color: #86efac; }
+    .branch-mapping-row.unmatched { background: #fef2f2; border-color: #fecaca; }
+
     @media (max-width: 1024px) {
       .grid-4 { grid-template-columns: repeat(2, 1fr); }
       .grid-2 { grid-template-columns: 1fr; }
@@ -364,6 +378,7 @@
     @media (max-width: 640px) {
       .grid-4 { grid-template-columns: 1fr; }
       .main-wrapper { padding: 12px; }
+      .branch-mapping-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -378,7 +393,7 @@
       </div>
     </div>
     <div style="font-size:12px; color:#cbd5e1;">
-      نسخه جامع — تحلیل خودکار سال و ماه‌های شمسی
+      نسخه جامع ۳ — تطبیق هوشمند نام شعب
     </div>
   </div>
 
@@ -446,6 +461,7 @@
       <button class="tab" data-tab="products-ranking" onclick="switchTab('products-ranking')">🏆 رتبه‌بندی عملکرد کالاها</button>
       <button class="tab" data-tab="city-branch" onclick="switchTab('city-branch')">🏢 رفتار شهرها و شعب</button>
       <button class="tab" data-tab="promotion" onclick="switchTab('promotion')">🎁 پروموشن و شبیه‌ساز سود اتکا</button>
+      <button class="tab" data-tab="branch-mapping" onclick="switchTab('branch-mapping')">🔗 تنظیمات تطبیق شعب</button>
     </div>
 
     <!-- تب ۱: تصمیم‌گیری تولید و توزیع -->
@@ -490,7 +506,7 @@
                 <th>سال</th>
                 <th>ماه</th>
                 <th>فروشگاه مرکزی (شهر)</th>
-                <th>نام شعبه</th>
+                <th>نام شعبه (یکتا شده)</th>
                 <th>نام کالا</th>
                 <th>بارکد / کد کالا</th>
                 <th>تعداد ارسال شده</th>
@@ -590,7 +606,6 @@
     <!-- تب ۵: پروموشن و حاشیه سود -->
     <div id="tab-promotion" style="display:none;">
       
-      <!-- پنل تصمیم‌گیری و ارزیابی استراتژیک پروموشن -->
       <div class="card" style="margin-bottom: 20px; border-right: 5px solid #2563eb;">
         <div class="card-header">
           <div class="card-title">
@@ -619,7 +634,6 @@
           </div>
         </div>
 
-        <!-- کارت‌های KPI پروموشن -->
         <div class="grid-4" style="margin-bottom: 18px;">
           <div class="kpi-card kpi-blue">
             <div class="kpi-label">حاشیه سود اولیه کالا</div>
@@ -645,7 +659,6 @@
 
         <div id="sim-strategic-advice" style="margin-bottom: 16px;"></div>
 
-        <!-- جدول تفکیک شهرها -->
         <div class="card-title" style="margin: 12px 0; font-size:13.5px;">
           <i class="fas fa-map-location-dot" style="color:#10b981;"></i> تحلیل شهر به شهر: در کدام شهرها تخفیف بدهیم و در کدام شهرها تخفیف اشتباه است؟
         </div>
@@ -669,7 +682,6 @@
         </div>
       </div>
 
-      <!-- جدول تعیین دستی حاشیه سود اولیه کالاها -->
       <div class="card">
         <div class="card-header">
           <div class="card-title"><i class="fas fa-coins" style="color:#f59e0b;"></i> تعیین دستی حاشیه سود اولیه و قیمت پایه اقلام</div>
@@ -693,13 +705,68 @@
       </div>
     </div>
 
+    <!-- تب ۶: تنظیمات تطبیق شعب -->
+    <div id="tab-branch-mapping" style="display:none;">
+      <div class="card" style="margin-bottom: 20px; border-right: 5px solid #8b5cf6;">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-link" style="color:#8b5cf6;"></i>
+            <span>تنظیمات تطبیق هوشمند نام شعب</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-success" onclick="recalculateBranchMapping()"><i class="fas fa-sync"></i> محاسبه مجدد</button>
+            <button class="btn btn-secondary" onclick="resetManualOverrides()"><i class="fas fa-undo"></i> بازنشانی دستی</button>
+          </div>
+        </div>
+
+        <div class="ai-alert info" style="background:#eff6ff; color:#1e40af; border-color:#bfdbfe; border-radius:12px; padding:14px; margin-bottom:16px; font-size:12.5px;">
+          <span>ℹ️</span>
+          <div>
+            <strong>سیستم تطبیق هوشمند شعب:</strong>
+            نام‌های مختلف یک شعبه در حواله و فروش به صورت خودکار شناسایی می‌شوند.
+            الگوریتم با در نظر گرفتن شهر، نام شهید و توکن‌های متمایزکننده از خطای تطبیق کلمات عمومی مثل «رشت»، «مرکزی» و «تهران» جلوگیری می‌کند.
+            در صورت نیاز می‌توانید تطبیق‌ها را دستی اصلاح کنید.
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:18px;">
+          <div class="form-group">
+            <label class="form-label">⚙️ آستانه تطبیق خودکار (۰ تا ۱)</label>
+            <input type="number" step="0.05" min="0" max="1" class="form-control" id="mapping-threshold" value="0.75" onchange="onThresholdChange(this.value)">
+            <div style="font-size:11px; color:#64748b; margin-top:4px;">مقادیر بالاتر = تطبیق سخت‌گیرانه‌تر (پیشنهادی: ۰.۷۵)</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">🔍 جستجو در نتایج تطبیق</label>
+            <input type="text" class="form-control" id="mapping-search" placeholder="جستجوی نام شعبه..." oninput="renderBranchMappingTab()">
+          </div>
+          <div style="display:flex; gap:8px; align-items:flex-end;">
+            <span class="badge badge-success" style="padding:8px 12px;" id="mapping-stats-matched">تطبیق: ۰</span>
+            <span class="badge badge-danger" style="padding:8px 12px;" id="mapping-stats-unmatched">بدون تطبیق: ۰</span>
+          </div>
+        </div>
+
+        <div class="table-container" style="max-height:520px; overflow-y:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>نام شعبه در حواله</th>
+                <th>شعبه تطبیق‌یافته در فروش</th>
+                <th>میزان اطمینان</th>
+                <th>وضعیت</th>
+                <th>اصلاح دستی</th>
+              </tr>
+            </thead>
+            <tbody id="branch-mapping-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- اینپوت‌های مخفی فایل -->
   <input type="file" id="analysis-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleAnalysisFileUpload(event)" multiple>
   <input type="file" id="shipment-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleShipmentFileUpload(event)" multiple>
 
-  <!-- مودال تایید -->
   <div class="modal-overlay" id="confirm-modal">
     <div class="modal">
       <div class="modal-header">
@@ -717,16 +784,65 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // ============ ساختار داده و متغیرهای اصلی ============
+    // ============ ثابت‌ها و متغیرهای سراسری ============
     const MONTHS = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
     const MONTH_ORDER = { 'فروردین': 1, 'اردیبهشت': 2, 'خرداد': 3, 'تیر': 4, 'مرداد': 5, 'شهریور': 6, 'مهر': 7, 'آبان': 8, 'آذر': 9, 'دی': 10, 'بهمن': 11, 'اسفند': 12 };
-    const STORAGE_KEY = 'siskooh_sales_engine_v2';
+    const STORAGE_KEY = 'siskooh_sales_engine_v3';
+
+    // لیست جامع شهرها و استان‌ها برای جدا کردن از نام شعبه
+    const CITY_KEYWORDS = [
+      'تهران', 'مشهد', 'اصفهان', 'شیراز', 'تبریز', 'کرج', 'اهواز', 'قم',
+      'کرمانشاه', 'ارومیه', 'رشت', 'زاهدان', 'همدان', 'کرمان', 'یزد',
+      'اردبیل', 'بندرعباس', 'اراک', 'زنجان', 'سنندج', 'قزوین', 'خرم آباد', 'خرمآباد',
+      'گرگان', 'ساری', 'بجنورد', 'بوشهر', 'بیرجند', 'ایلام', 'شهرکرد', 'شهركرد',
+      'سمنان', 'یاسوج', 'کیش', 'قشم', 'کاشان', 'نیشابور', 'بابل', 'آمل',
+      'آبادان', 'خوی', 'شاهرود', 'بروجرد', 'ورامین', 'پاکدشت', 'شهرری', 'شهر ری', 'شهرری',
+      'املش', 'لاهیجان', 'فومن', 'منجیل', 'صومعه سرا', 'رودسر', 'لنگرود',
+      'آستانه اشرفیه', 'خمام', 'شلمان', 'کوچصفهان', 'بندر انزلی', 'انزلی',
+      'قصر فیروزه', 'شهر قدس', 'پردیس', 'دزفول', 'شوشتر', 'زابل', 'کنارک',
+      'پارس آباد', 'مراغه', 'مرند', 'سلماس', 'شاهین دژ', 'میاندوآب', 'میاندوآب',
+      'ابهر', 'ساوه', 'دلیجان', 'تویسرکان', 'رزن', 'بهار', 'ملایر', 'نهاوند',
+      'گنبد', 'گالیکش', 'مینودشت', 'رودهن', 'رباط کریم', 'شهریار', 'نسیم شهر',
+      'هوافضا', 'ویلاشهر', 'یافت آباد', 'آبشناسان', 'گرمدره', 'خاورشهر',
+      'دو هزار واحدی', 'بروجن', 'سیرجان', 'شهر بابک', 'ابرکوه', 'میبد',
+      'صفائیه', 'اروند', 'طبس', 'کاوه', 'سربیشه', 'قائمیه', 'نورآباد',
+      'کوهدشت', 'الیگودرز', 'ازنا', 'دورود', 'پلدختر', 'قصرشیرین',
+      'سرپل ذهاب', 'گیلان غرب', 'اسلام آباد', 'اسلامآباد', 'پاوه', 'جوانرود',
+      'سنقر', 'صحنه', 'هرسین', 'کنگاور', 'بیستون', 'تویسرکان',
+      'اسدآباد', 'کبودراهنگ', 'لالجین', 'رزن', 'فامنین', 'درگزین',
+      'قروه', 'دهگلان', 'بیجار', 'دیواندره', 'سقز', 'بانه', 'مریوان',
+      'کامیاران', 'سروآباد', 'پیرانشهر', 'مهاباد', 'بوکان', 'سردشت',
+      'تکاب', 'شاهین دژ', 'میاندوآب', 'چالدران', 'چایپاره', 'پلدشت',
+      'ماکو', 'شوط', 'خوی', 'سلماس', 'ارومیه', 'نقده', 'اشنویه',
+      'پیرانشهر', 'مکری', 'شهر بابک', 'بردسیر', 'رفسنجان', 'زرند',
+      'کوهبنان', 'راور', 'بم', 'جیرفت', 'کهنوج', 'منوجان', 'قلعه گنج',
+      'عنبرآباد', 'رودبار جنوب', 'فهرج', 'نرماشیر', 'ریگان', 'خاش',
+      'میرجاوه', 'سراوان', 'سیب سوران', 'مهرستان', 'سرباز', 'قصرقند',
+      'نیکشهر', 'ایرانشهر', 'چابهار', 'کنارک', 'دلگان', 'فنوج',
+      'هیرمند', 'نیمروز', 'هامون', 'زابل', 'زهک', 'شهرکی', 'هیرمند'
+    ];
+
+    // کلمات عمومی که نباید به تنهایی باعث تطبیق شوند
+    const GENERIC_STOPWORDS = [
+      'شهید', 'سردار', 'شهدای', 'مرکزی', 'شعبه', 'شعب', 'فروشگاه',
+      'مخازن', 'اتکا', 'اتکای', 'پخش', 'مرکز', 'انبار', 'بار',
+      'مقدم', 'تهران', 'مقدس', 'مقدسی', 'حرم', 'حرمی'
+    ];
+
+    // پیشوندهای عمومی که باید حذف شوند
+    const GENERIC_PREFIXES = ['اتکای', 'اتکا', 'فروشگاه', 'شعبه', 'شعب', 'مخازن', 'مرکز پخش', 'مرکز', 'پخش', 'انبار'];
+
+    // پسوندهای عمومی که باید حذف شوند
+    const GENERIC_SUFFIXES = ['تهران', 'شعب اتکا', 'مخازن تهران', 'مخازن اقدسی', 'مخازن نیازمند', 'شعب', 'فروشگاه', 'شعب اتکا'];
 
     let state = {
-      analysisData: [],          // فروش‌های قطعی شعب
-      warehouseShipments: [],    // حواله‌های ارسال بار
-      margins: {},               // حاشیه سود و قیمت هر محصول
-      promoSettings: { defaultMargin: 25, minRemain: 20, highSellThreshold: 65 }
+      analysisData: [],
+      warehouseShipments: [],
+      margins: {},
+      promoSettings: { defaultMargin: 25, minRemain: 20, highSellThreshold: 65 },
+      branchMappings: {},        // { shipmentBranch: { salesBranch, score, manual } }
+      mappingThreshold: 0.75,
+      manualOverrides: {}        // { shipmentBranch: salesBranch | null }
     };
 
     let selectedYear = 'all';
@@ -736,10 +852,9 @@
     let productRankingChart = null;
     let branchSalesChart = null;
 
-    // نگاشت معکوس بارکد به نام کالا جهت پیشگیری از خطای ثبت بارکد محض
     const barcodeToNameMap = new Map();
 
-    // ============ توابع کمکی ============
+    // ============ توابع کمکی پایه ============
     function normalizePersianText(str) {
       if (!str) return '';
       return String(str)
@@ -764,7 +879,9 @@
     }
 
     function formatNumber(num) {
-      return Number(num || 0).toLocaleString('fa-IR');
+      const n = Number(num);
+      if (!isFinite(n)) return '۰';
+      return n.toLocaleString('fa-IR');
     }
 
     function showToast(message, type = 'success') {
@@ -791,6 +908,185 @@
       if (!confirmed) confirmCallback = null;
     }
 
+    // ============ سیستم تطبیق هوشمند شعب ============
+    function normalizeBranchName(raw) {
+      if (!raw) return '';
+      let s = String(raw)
+        .replace(/ي/g, 'ی').replace(/ك/g, 'ک')
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/[()\[\]{}«»"']/g, ' ')
+        .replace(/[.,،:;،\-_\/\\]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      let tokens = s.split(' ').filter(Boolean);
+
+      // حذف پیشوندها از ابتدا
+      while (tokens.length > 1 && GENERIC_PREFIXES.includes(tokens[0])) {
+        tokens.shift();
+      }
+      // حذف پسوندها از انتها
+      while (tokens.length > 1 && GENERIC_SUFFIXES.includes(tokens[tokens.length - 1])) {
+        tokens.pop();
+      }
+
+      return tokens.join(' ').trim();
+    }
+
+    function extractCityTokens(normalized) {
+      const tokens = normalized.split(' ').filter(Boolean);
+      const cities = [];
+      const rest = [];
+      tokens.forEach(t => {
+        if (CITY_KEYWORDS.includes(t)) cities.push(t);
+        else rest.push(t);
+      });
+      return { cities, namePart: rest.join(' ').trim() };
+    }
+
+    function getSignificantTokens(namePart) {
+      return namePart.split(' ')
+        .filter(t => t.length >= 2)
+        .filter(t => !GENERIC_STOPWORDS.includes(t));
+    }
+
+    function smartBranchSimilarity(a, b) {
+      const na = normalizeBranchName(a);
+      const nb = normalizeBranchName(b);
+
+      if (!na || !nb) return 0;
+      if (na === nb) return 1;
+
+      const { cities: cA, namePart: nA } = extractCityTokens(na);
+      const { cities: cB, namePart: nB } = extractCityTokens(nb);
+
+      // قاعده ۱: شهرهای متفاوت → صفر
+      if (cA.length > 0 && cB.length > 0) {
+        const hasCommonCity = cA.some(c => cB.includes(c));
+        if (!hasCommonCity) return 0;
+      }
+
+      const sigA = getSignificantTokens(nA);
+      const sigB = getSignificantTokens(nB);
+
+      // قاعده ۲: هر دو نام مشخص دارند ولی هیچ توکن مشترکی نیست
+      if (sigA.length > 0 && sigB.length > 0) {
+        const exactCommon = sigA.filter(t => sigB.includes(t));
+        if (exactCommon.length === 0) {
+          // بررسی زیرمجموعه بودن (مثلاً «اقدسی» زیرمجموعه «اقدسی»)
+          const containment = sigA.some(t =>
+            sigB.some(u => {
+              if (u.length < 3 || t.length < 3) return false;
+              return u.includes(t) || t.includes(u);
+            })
+          );
+          if (!containment) return 0;
+        }
+      }
+
+      // قاعده ۳: اگر هر دو بدون نام مشخص و فقط با شهر → تطبیق متوسط
+      if (sigA.length === 0 && sigB.length === 0) {
+        if (cA.length > 0 && cB.length > 0 && cA.some(c => cB.includes(c))) {
+          return 0.7;
+        }
+        return 0.3;
+      }
+
+      // محاسبه امتیاز
+      let score = 0;
+      let totalWeight = 0;
+
+      // وزن شهر
+      const cityWeight = 0.35;
+      totalWeight += cityWeight;
+      if (cA.length > 0 && cB.length > 0 && cA.some(c => cB.includes(c))) {
+        score += cityWeight;
+      } else if (cA.length === 0 && cB.length === 0) {
+        score += cityWeight * 0.3;
+      }
+
+      // وزن توکن‌های مشخص
+      const nameWeight = 0.55;
+      totalWeight += nameWeight;
+      if (sigA.length > 0 && sigB.length > 0) {
+        const common = sigA.filter(t => sigB.includes(t)).length;
+        const maxLen = Math.max(sigA.length, sigB.length);
+        score += nameWeight * (common / maxLen);
+      } else if (sigA.length > 0 || sigB.length > 0) {
+        // یک طرف نام دارد، طرف دیگر ندارد
+        score += nameWeight * 0.15;
+      }
+
+      // وزن توکن‌های عمومی مشترک
+      const genericWeight = 0.1;
+      totalWeight += genericWeight;
+      const allTokensA = na.split(' ');
+      const allTokensB = nb.split(' ');
+      const commonAll = allTokensA.filter(t => allTokensB.includes(t)).length;
+      score += genericWeight * (commonAll / Math.max(allTokensA.length, allTokensB.length, 1));
+
+      return Math.min(1, score / totalWeight * 1.1);
+    }
+
+    function buildBranchMapping() {
+      const shipmentBranches = Array.from(new Set(
+        state.warehouseShipments.map(s => s.branch).filter(Boolean)
+      ));
+      const salesBranches = Array.from(new Set(
+        state.analysisData.map(s => s.branch).filter(Boolean)
+      ));
+
+      const mapping = {};
+      const threshold = state.mappingThreshold;
+
+      shipmentBranches.forEach(sb => {
+        // ۱. بررسی دستی
+        if (state.manualOverrides.hasOwnProperty(sb)) {
+          mapping[sb] = {
+            salesBranch: state.manualOverrides[sb],
+            score: 1,
+            manual: true
+          };
+          return;
+        }
+
+        // ۲. تطبیق دقیق نرمال‌شده
+        const normSb = normalizeBranchName(sb);
+        const exactMatch = salesBranches.find(x => normalizeBranchName(x) === normSb);
+        if (exactMatch) {
+          mapping[sb] = { salesBranch: exactMatch, score: 1, manual: false };
+          return;
+        }
+
+        // ۳. تطبیق فازی
+        let best = null;
+        let bestScore = 0;
+        salesBranches.forEach(x => {
+          const s = smartBranchSimilarity(sb, x);
+          if (s > bestScore) {
+            bestScore = s;
+            best = x;
+          }
+        });
+
+        if (bestScore >= threshold && best) {
+          mapping[sb] = { salesBranch: best, score: bestScore, manual: false };
+        } else {
+          mapping[sb] = { salesBranch: null, score: bestScore, manual: false };
+        }
+      });
+
+      state.branchMappings = mapping;
+      return mapping;
+    }
+
+    function getCanonicalBranchName(shipmentBranch) {
+      const m = state.branchMappings[shipmentBranch];
+      if (m && m.salesBranch) return m.salesBranch;
+      return shipmentBranch;
+    }
+
+    // ============ ذخیره و بازیابی ============
     function saveToLocalStorage() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -808,8 +1104,12 @@
           state.warehouseShipments = Array.isArray(parsed.warehouseShipments) ? parsed.warehouseShipments : [];
           state.margins = parsed.margins && typeof parsed.margins === 'object' ? parsed.margins : {};
           state.promoSettings = { ...state.promoSettings, ...(parsed.promoSettings || {}) };
+          state.branchMappings = parsed.branchMappings && typeof parsed.branchMappings === 'object' ? parsed.branchMappings : {};
+          state.manualOverrides = parsed.manualOverrides && typeof parsed.manualOverrides === 'object' ? parsed.manualOverrides : {};
+          if (typeof parsed.mappingThreshold === 'number') {
+            state.mappingThreshold = parsed.mappingThreshold;
+          }
 
-          // بازسازی دیکشنری بارکدها
           state.analysisData.forEach(r => {
             if (r.barcode && r.barcode !== 'فله' && r.productName && !r.productName.startsWith('کالا با بارکد')) {
               barcodeToNameMap.set(r.barcode, r.productName);
@@ -820,13 +1120,18 @@
               barcodeToNameMap.set(s.barcode, s.productName);
             }
           });
+
+          // اگر نقشه شعب خالی بود، بساز
+          if (Object.keys(state.branchMappings).length === 0) {
+            buildBranchMapping();
+          }
         }
       } catch (e) {
         console.warn('Load failed:', e);
       }
     }
 
-    // ============ استخراج هوشمند سال و ماه از تاریخ ============
+    // ============ استخراج تاریخ و شهر ============
     function extractYearAndMonth(inputStr) {
       if (!inputStr) return { year: 'نامشخص', month: 'نامشخص' };
       const str = toLatinDigits(String(inputStr)).trim();
@@ -834,7 +1139,6 @@
       let detectedYear = 'نامشخص';
       let detectedMonth = 'نامشخص';
 
-      // ۱. تطبیق فرمت‌های تاریخ مثل 1404.12.23 یا 1404/05/10 یا 1403-01-20
       const dateMatch = str.match(/(13\d{2}|14\d{2})[\.\/\-](0?[1-9]|1[0-2])[\.\/\-](0?[1-9]|[12]\d|3[01])/);
       if (dateMatch) {
         detectedYear = dateMatch[1];
@@ -843,11 +1147,9 @@
         return { year: detectedYear, month: detectedMonth };
       }
 
-      // ۲. بررسی وجود سال ۴ رقمی
       const yMatch = str.match(/(13\d{2}|14\d{2})/);
       if (yMatch) detectedYear = yMatch[1];
 
-      // ۳. بررسی نام ماه فارسی در متن
       for (let i = 0; i < MONTHS.length; i++) {
         const m = MONTHS[i];
         if (str.includes(m)) {
@@ -856,7 +1158,6 @@
         }
       }
 
-      // حالت ویژه کلمه "دی"
       if (detectedMonth === 'نامشخص') {
         const norm = normalizePersianText(str);
         const tokens = norm.split(/[\s_\-\.\/\(\)\[\]،,]+/);
@@ -883,7 +1184,7 @@
       return clean.replace(/^(فروشگاه\s*مرکزی|فروشگاه|شعبه\s*مرکزی|انبار)\s*/i, '').trim() || storeName;
     }
 
-    // ============ خواندن و پردازش فایل‌های اکسل ============
+    // ============ بارگذاری فایل‌ها ============
     function handleShipmentFileUpload(event) {
       const files = event.target.files;
       if (!files || files.length === 0) return;
@@ -902,21 +1203,21 @@
 
               rows.forEach(row => {
                 const keys = Object.keys(row);
-                let pName = '', bCode = 'فله', qty = 0, dest = '', rawDate = '';
+                let pName = '', bCode = 'فله', qty = 0, dest = '', rawDate = '', centralStore = '';
 
                 keys.forEach(k => {
                   const nk = normalizePersianText(k).toLowerCase();
                   const val = row[k];
                   if (nk.includes('نام کالا') || nk.includes('کالا مبدا') || nk.includes('محصول')) pName = String(val).trim();
                   else if (nk.includes('کد کالا') || nk.includes('بارکد')) bCode = String(val).trim() || 'فله';
-                  else if (nk.includes('انبار مقصد') || nk.includes('مقصد') || nk.includes('شعبه')) dest = String(val).trim();
+                  else if (nk.includes('انبار مقصد') || nk.includes('مقصد') || nk.includes('شعبه') || nk.includes('نام شعبه')) dest = String(val).trim();
+                  else if (nk.includes('فروشگاه مرکزی') || nk.includes('شهر')) centralStore = String(val).trim();
                   else if (nk.includes('مقدار') || nk.includes('تعداد') || nk.includes('ارسال')) qty = parseNumericValue(val);
                   else if (nk.includes('تاریخ')) rawDate = String(val).trim();
                 });
 
                 if (!pName && !qty) return;
 
-                // پیشگیری از جابجایی بارکد به جای نام کالا
                 if (/^\d{11,16}$/.test(pName)) {
                   if (bCode === 'فله' || !bCode) bCode = pName;
                   pName = barcodeToNameMap.get(bCode) || `کالا با بارکد ${bCode}`;
@@ -925,7 +1226,7 @@
                 }
 
                 const { year, month } = extractYearAndMonth(rawDate || file.name || sheetName);
-                const city = extractCityFromStoreName(dest);
+                const city = extractCityFromStoreName(centralStore || dest);
 
                 state.warehouseShipments.push({
                   id: Math.random().toString(36).substring(2, 9),
@@ -935,13 +1236,14 @@
                   barcode: bCode,
                   quantity: qty,
                   branch: dest || 'مرکزی',
-                  centralStore: dest || city,
+                  centralStore: centralStore || city,
                   city: city || 'نامشخص'
                 });
                 addedCount++;
               });
             });
 
+            buildBranchMapping();
             saveToLocalStorage();
             renderAllViews();
             showToast(`فایل حواله «${file.name}» با ${formatNumber(addedCount)} ردیف بارگذاری شد`);
@@ -981,7 +1283,7 @@
                   if (nk.includes('نام کالا') || nk.includes('محصول') || nk.includes('شرح')) pName = String(val).trim();
                   else if (nk.includes('بارکد') || nk.includes('کد کالا')) bCode = String(val).trim() || 'فله';
                   else if (nk.includes('تعداد') || nk.includes('فروش') || nk.includes('مقدار')) qty = parseNumericValue(val);
-                  else if (nk.includes('شعبه')) branch = String(val).trim();
+                  else if (nk.includes('نام شعبه') || nk.includes('شعبه')) branch = String(val).trim();
                   else if (nk.includes('فروشگاه') || nk.includes('مرکزی') || nk.includes('شهر')) store = String(val).trim();
                   else if (nk.includes('تاریخ')) rawDate = String(val).trim();
                 });
@@ -1013,6 +1315,7 @@
               });
             });
 
+            buildBranchMapping();
             saveToLocalStorage();
             renderAllViews();
             showToast(`فایل فروش «${file.name}» با ${formatNumber(addedCount)} ردیف بارگذاری شد`);
@@ -1026,7 +1329,7 @@
       event.target.value = '';
     }
 
-    // ============ ماتریس تطبیق حواله با فروش ============
+    // ============ ساخت ماتریس تطبیق با استفاده از نقشه شعب ============
     function buildReconciliationData() {
       let shipments = state.warehouseShipments;
       let sales = state.analysisData;
@@ -1040,17 +1343,24 @@
         sales = sales.filter(s => s.month === selectedMonth);
       }
 
+      // اطمینان از وجود نقشه
+      if (Object.keys(state.branchMappings).length === 0 && shipments.length > 0) {
+        buildBranchMapping();
+      }
+
       const map = new Map();
 
+      // ۱. ابتدا حواله‌ها (پایه)
       shipments.forEach(s => {
-        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
+        const canonicalBranch = getCanonicalBranchName(s.branch);
+        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.productName)}|||${normalizePersianText(canonicalBranch)}`;
         let row = map.get(key);
         if (!row) {
           row = {
             year: s.year,
             month: s.month,
             city: s.city,
-            branch: s.branch,
+            branch: canonicalBranch,
             productName: s.productName,
             barcode: s.barcode,
             shipped: 0,
@@ -1062,8 +1372,9 @@
         if (s.barcode && s.barcode !== 'فله') row.barcode = s.barcode;
       });
 
+      // ۲. فروش‌ها را روی همان کلید اضافه کن
       sales.forEach(s => {
-        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.city)}|||${normalizePersianText(s.branch)}|||${normalizePersianText(s.productName)}`;
+        const key = `${s.year}|||${s.month}|||${normalizePersianText(s.productName)}|||${normalizePersianText(s.branch)}`;
         let row = map.get(key);
         if (!row) {
           row = {
@@ -1101,13 +1412,12 @@
       });
     }
 
-    // ============ به‌روزرسانی رابط کاربری و صفحات ============
+    // ============ رندر کل نماها ============
     function renderAllViews() {
       updateFilterTabs();
 
       const reconData = buildReconciliationData();
 
-      // KPIهای اصلی
       const totalShipped = reconData.reduce((acc, r) => acc + r.shipped, 0);
       const totalSold = reconData.reduce((acc, r) => acc + r.sold, 0);
       const totalDepo = Math.max(0, totalShipped - totalSold);
@@ -1123,10 +1433,10 @@
       renderProductsRanking(reconData);
       renderBranchBreakdownTab(reconData);
       renderPromotionTab(reconData);
+      renderBranchMappingTab();
     }
 
     function updateFilterTabs() {
-      // فیلتر سال
       const years = new Set();
       state.warehouseShipments.forEach(s => { if (s.year && s.year !== 'نامشخص') years.add(s.year); });
       state.analysisData.forEach(s => { if (s.year && s.year !== 'نامشخص') years.add(s.year); });
@@ -1138,7 +1448,6 @@
       });
       document.getElementById('year-tabs').innerHTML = yHtml;
 
-      // فیلتر ماه
       const months = new Set();
       state.warehouseShipments.forEach(s => { if (s.month && s.month !== 'نامشخص') months.add(s.month); });
       state.analysisData.forEach(s => { if (s.month && s.month !== 'نامشخص') months.add(s.month); });
@@ -1173,6 +1482,8 @@
       document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
       const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
       if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'branch-mapping') renderBranchMappingTab();
     }
 
     // ============ تصمیم‌گیری تولید و توزیع ============
@@ -1188,7 +1499,6 @@
         return;
       }
 
-      // تجمیع کالاها
       const prodMap = new Map();
       reconData.forEach(r => {
         let p = prodMap.get(r.productName);
@@ -1205,15 +1515,14 @@
 
       let insightHtml = '';
       if (overallST >= 70) {
-        insightHtml += `<div class="ai-alert good"><span class="ai-alert-icon">✅</span><div><strong>وضعیت مطلوب:</strong> تحقق کل فروش ${formatNumber(overallST)}٪ است و جریان گردش کالاها در وضعیت سالمی قرار دارد.</div></div>`;
+        insightHtml += `<div class="ai-alert good"><span>✅</span><div><strong>وضعیت مطلوب:</strong> تحقق کل فروش ${formatNumber(overallST)}٪ است و جریان گردش کالاها در وضعیت سالمی قرار دارد.</div></div>`;
       } else if (overallST >= 45) {
-        insightHtml += `<div class="ai-alert warning"><span class="ai-alert-icon">⚠️</span><div><strong>هشدار رسوب:</strong> تحقق فروش ${formatNumber(overallST)}٪ است. بخشی از کالاها در شعب دپو شده و گردش کندی دارند.</div></div>`;
+        insightHtml += `<div class="ai-alert warning"><span>⚠️</span><div><strong>هشدار رسوب:</strong> تحقق فروش ${formatNumber(overallST)}٪ است. بخشی از کالاها در شعب دپو شده و گردش کندی دارند.</div></div>`;
       } else {
-        insightHtml += `<div class="ai-alert critical"><span class="ai-alert-icon">🚨</span><div><strong>بحران دپو:</strong> تحقق فروش کمتر از ${formatNumber(overallST)}٪ است؛ ارسال بارهای جدید باید فوراً بازبینی شود.</div></div>`;
+        insightHtml += `<div class="ai-alert critical"><span>🚨</span><div><strong>بحران دپو:</strong> تحقق فروش کمتر از ${formatNumber(overallST)}٪ است؛ ارسال بارهای جدید باید فوراً بازبینی شود.</div></div>`;
       }
       insights.innerHTML = insightHtml;
 
-      // توصیه‌های خط تولید
       let prodHtml = '';
       prods.sort((a, b) => (b.sold / Math.max(1, b.shipped)) - (a.sold / Math.max(1, a.shipped))).slice(0, 5).forEach(p => {
         const st = p.shipped > 0 ? Math.round((p.sold / p.shipped) * 100) : 0;
@@ -1232,7 +1541,6 @@
       });
       prodContainer.innerHTML = prodHtml || '<div class="text-muted text-center" style="padding:16px;">توصیه فوری برای تغییر برنامه تولید وجود ندارد.</div>';
 
-      // دستورات توزیع
       let distHtml = '';
       reconData.filter(r => r.remain >= 20 && r.sellThrough < 35).slice(0, 5).forEach(r => {
         distHtml += `<div style="padding:12px; margin-bottom:10px; background:#fffbeb; border-radius:10px; border-right:4px solid #f59e0b;">
@@ -1271,7 +1579,7 @@
         return;
       }
 
-      tbody.innerHTML = list.slice(0, 250).map(r => `
+      tbody.innerHTML = list.slice(0, 300).map(r => `
         <tr>
           <td>${r.year}</td>
           <td><strong>${r.month}</strong></td>
@@ -1300,7 +1608,6 @@
 
       const sorted = Array.from(prodMap.values()).sort((a, b) => b.sold - a.sold);
 
-      // نمودار میله‌ای
       const canvas = document.getElementById('product-ranking-chart');
       if (canvas) {
         if (productRankingChart) productRankingChart.destroy();
@@ -1310,25 +1617,11 @@
           data: {
             labels: top15.map(p => p.name),
             datasets: [
-              {
-                label: 'فروش قطعی',
-                data: top15.map(p => p.sold),
-                backgroundColor: 'rgba(16, 185, 129, 0.85)',
-                borderRadius: 6
-              },
-              {
-                label: 'ارسال حواله',
-                data: top15.map(p => p.shipped),
-                backgroundColor: 'rgba(59, 130, 246, 0.45)',
-                borderRadius: 6
-              }
+              { label: 'فروش قطعی', data: top15.map(p => p.sold), backgroundColor: 'rgba(16, 185, 129, 0.85)', borderRadius: 6 },
+              { label: 'ارسال حواله', data: top15.map(p => p.shipped), backgroundColor: 'rgba(59, 130, 246, 0.45)', borderRadius: 6 }
             ]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'top' } }
-          }
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
         });
       }
 
@@ -1402,18 +1695,9 @@
           type: 'bar',
           data: {
             labels: top15.map(b => b[0]),
-            datasets: [{
-              label: 'فروش در شعبه',
-              data: top15.map(b => b[1]),
-              backgroundColor: 'rgba(37, 99, 235, 0.8)',
-              borderRadius: 6
-            }]
+            datasets: [{ label: 'فروش در شعبه', data: top15.map(b => b[1]), backgroundColor: 'rgba(37, 99, 235, 0.8)', borderRadius: 6 }]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } }
-          }
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
       }
 
@@ -1431,7 +1715,7 @@
       }
     }
 
-    // ============ پروموشن و شبیه‌ساز اتکا ============
+    // ============ پروموشن ============
     function formatPriceInput(input) {
       let val = input.value.replace(/[^\d]/g, '');
       if (val) {
@@ -1456,7 +1740,6 @@
     }
 
     function renderPromotionTab(reconData) {
-      // پر کردن سلکتور محصولات
       const pMap = new Map();
       reconData.forEach(r => {
         let p = pMap.get(r.productName);
@@ -1474,7 +1757,6 @@
         if (cur && pList.some(p => p.name === cur)) prodSelect.value = cur;
       }
 
-      // پر کردن سلکتور شهرها
       const citySelect = document.getElementById('sim-target-city');
       if (citySelect) {
         const cities = Array.from(new Set(reconData.map(r => r.city).filter(c => c && c !== 'نامشخص'))).sort();
@@ -1482,20 +1764,20 @@
           cities.map(c => `<option value="${c}">فقط شهر ${c}</option>`).join('');
       }
 
-      // جدول ورود دستی حاشیه سود اقلام
       const marginTbody = document.getElementById('margin-table-body');
       if (marginTbody) {
         marginTbody.innerHTML = pList.map(p => {
           const m = state.margins[p.name]?.margin ?? '';
           const pr = state.margins[p.name]?.price ? Number(state.margins[p.name].price).toLocaleString('en-US') : '';
+          const safeName = p.name.replace(/'/g, '&#39;');
           return `
             <tr>
               <td><strong>${p.name}</strong></td>
               <td><code>${p.barcode || 'فله'}</code></td>
-              <td><input type="text" class="form-control" style="width:160px;" placeholder="مثلاً ۲۵۰,۰۰۰" value="${pr}" oninput="formatPriceInput(this)" onchange="setProductPrice('${p.name}', this.value)"></td>
+              <td><input type="text" class="form-control" style="width:160px;" placeholder="مثلاً ۲۵۰,۰۰۰" value="${pr}" oninput="formatPriceInput(this)" onchange="setProductPrice('${safeName}', this.value)"></td>
               <td>
                 <div style="display:flex; align-items:center; gap:6px;">
-                  <input type="number" step="0.5" class="form-control" style="width:100px; font-weight:800; color:#2563eb;" placeholder="${state.promoSettings.defaultMargin}" value="${m}" onchange="setProductMargin('${p.name}', this.value)">
+                  <input type="number" step="0.5" class="form-control" style="width:100px; font-weight:800; color:#2563eb;" placeholder="${state.promoSettings.defaultMargin}" value="${m}" onchange="setProductMargin('${safeName}', this.value)">
                   <span style="font-weight:bold; color:#64748b;">٪</span>
                 </div>
               </td>
@@ -1524,23 +1806,21 @@
       const discountRate = parseFloat(discInput.value) || 0;
       const targetCity = citySelect ? citySelect.value : 'all';
 
-      // حاشیه اولیه
       const userMargin = state.margins[productName]?.margin;
       const initialMargin = (userMargin !== undefined && userMargin !== null && userMargin !== '')
         ? parseFloat(userMargin)
         : state.promoSettings.defaultMargin;
 
-      // فرمول دقیق افت حاشیه سود
       let newMargin = 0;
       if (discountRate < 100) {
-        newMargin = (( (1 - discountRate/100) - (1 - initialMargin/100) ) / (1 - discountRate/100)) * 100;
+        newMargin = (((1 - discountRate / 100) - (1 - initialMargin / 100)) / (1 - discountRate / 100)) * 100;
       } else {
         newMargin = -100;
       }
       const marginDrop = initialMargin - newMargin;
 
       document.getElementById('sim-initial-margin-val').textContent = `${formatNumber(initialMargin)}٪`;
-      
+
       const newMarginEl = document.getElementById('sim-new-margin-val');
       newMarginEl.textContent = `${formatNumber(Math.round(newMargin * 10) / 10)}٪`;
       newMarginEl.style.color = newMargin >= 12 ? '#10b981' : (newMargin >= 0 ? '#f59e0b' : '#ef4444');
@@ -1559,14 +1839,13 @@
         verdictEl.style.color = '#10b981';
       }
 
-      // ارزیابی به تفکیک شهرها
       let recon = buildReconciliationData().filter(r => r.productName === productName);
       if (targetCity !== 'all') recon = recon.filter(r => r.city === targetCity);
 
       let naturalCount = 0;
       let stagnantCount = 0;
-
       let rowsHtml = '';
+
       recon.forEach(r => {
         let naturallySelling = false;
         let decisionBadge = '';
@@ -1615,30 +1894,30 @@
       if (adviceBox) {
         if (newMargin < 0) {
           adviceBox.innerHTML = `
-            <div class="ai-alert critical">
-              <span class="ai-alert-icon">🛑</span>
+            <div class="ai-alert critical" style="background:#fef2f2; color:#991b1b; border-color:#fecaca; border-radius:12px; padding:14px;">
+              <span>🛑</span>
               <div><strong>تخفیف اکیداً رد می‌شود:</strong> تخفیف پیشنهادی (${formatNumber(discountRate)}٪) بیشتر از حاشیه سود شما (${formatNumber(initialMargin)}٪) است و به ازای هر فروش <strong>${formatNumber(Math.abs(Math.round(newMargin * 10) / 10))}٪ زیان خالص</strong> ثبت می‌شود!</div>
             </div>
           `;
         } else if (naturalCount > 0 && stagnantCount > 0) {
           adviceBox.innerHTML = `
-            <div class="ai-alert warning">
-              <span class="ai-alert-icon">⚡</span>
+            <div class="ai-alert warning" style="background:#fffbeb; color:#92400e; border-color:#fde68a; border-radius:12px; padding:14px;">
+              <span>⚡</span>
               <div><strong>هشدار تفکیک بازار:</strong> در <strong>${formatNumber(naturalCount)}</strong> شهر/شعبه این محصول بدون تخفیف هم با سرعت به فروش می‌رسد. تخفیف سراسری به اتکا اشتباه است!
               <br>👉 <strong>دستور کارشناسی:</strong> تخفیف را منحصراً به <strong>${formatNumber(stagnantCount)} کانون راکد</strong> ارائه دهید.</div>
             </div>
           `;
         } else if (stagnantCount > 0) {
           adviceBox.innerHTML = `
-            <div class="ai-alert good">
-              <span class="ai-alert-icon">🎯</span>
+            <div class="ai-alert good" style="background:#f0fdf4; color:#065f46; border-color:#86efac; border-radius:12px; padding:14px;">
+              <span>🎯</span>
               <div><strong>پروموشن منطقی است:</strong> در تمام شعب تقاضا افت کرده است؛ با این تخفیف، <strong>${formatNumber(Math.round(newMargin * 10) / 10)}٪ حاشیه امن</strong> باقی می‌ماند و بار انبارها آزاد می‌شود.</div>
             </div>
           `;
         } else {
           adviceBox.innerHTML = `
-            <div class="ai-alert info">
-              <span class="ai-alert-icon">ℹ️</span>
+            <div class="ai-alert info" style="background:#eff6ff; color:#1e40af; border-color:#bfdbfe; border-radius:12px; padding:14px;">
+              <span>ℹ️</span>
               <div>گردش این کالا طبیعی و مطلوب است؛ نیازی به امتیاز تخفیف به اتکا وجود ندارد مگر آنکه حجم خرید فوق‌العاده‌ای پیشنهاد شود.</div>
             </div>
           `;
@@ -1646,7 +1925,131 @@
       }
     }
 
-    // ============ خروجی اکسل و پاکسازی ============
+    // ============ تنظیمات تطبیق شعب ============
+    function renderBranchMappingTab() {
+      const tbody = document.getElementById('branch-mapping-table-body');
+      if (!tbody) return;
+
+      const search = normalizePersianText(document.getElementById('mapping-search')?.value || '');
+      const mapping = state.branchMappings || {};
+      const entries = Object.entries(mapping);
+
+      const salesBranchesList = Array.from(new Set(
+        state.analysisData.map(s => s.branch).filter(Boolean)
+      )).sort();
+
+      let matchedCount = 0;
+      let unmatchedCount = 0;
+
+      entries.forEach(([sb, info]) => {
+        if (info.salesBranch) matchedCount++;
+        else unmatchedCount++;
+      });
+
+      document.getElementById('mapping-stats-matched').textContent = `تطبیق: ${formatNumber(matchedCount)}`;
+      document.getElementById('mapping-stats-unmatched').textContent = `بدون تطبیق: ${formatNumber(unmatchedCount)}`;
+
+      let filtered = entries;
+      if (search) {
+        filtered = entries.filter(([sb, info]) =>
+          normalizePersianText(sb).includes(search) ||
+          normalizePersianText(info.salesBranch || '').includes(search)
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted" style="padding:22px;">موردی برای نمایش وجود ندارد. ابتدا فایل‌ها را بارگذاری کنید.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(([sb, info]) => {
+        const scorePct = Math.round((info.score || 0) * 100);
+        const scoreColor = scorePct >= 90 ? '#10b981' : (scorePct >= 75 ? '#f59e0b' : '#ef4444');
+        const statusBadge = info.salesBranch
+          ? `<span class="badge badge-success">${info.manual ? 'دستی' : 'خودکار'}</span>`
+          : '<span class="badge badge-danger">بدون تطبیق</span>';
+
+        const options = salesBranchesList.map(s =>
+          `<option value="${s.replace(/"/g, '&quot;')}" ${s === info.salesBranch ? 'selected' : ''}>${s}</option>`
+        ).join('');
+
+        return `
+          <tr>
+            <td><strong>${sb}</strong></td>
+            <td>${info.salesBranch || '<span class="text-muted">—</span>'}</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="flex:1; height:8px; background:#f1f5f9; border-radius:4px; overflow:hidden; min-width:60px;">
+                  <div style="width:${scorePct}%; height:100%; background:${scoreColor};"></div>
+                </div>
+                <span style="font-size:11px; font-weight:800; color:${scoreColor};">${scorePct}٪</span>
+              </div>
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <select class="form-control" style="font-size:11.5px; padding:5px 8px;" onchange="setManualOverride('${sb.replace(/'/g, '&#39;')}', this.value)">
+                <option value="">— عدم تطبیق —</option>
+                ${options}
+              </select>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setManualOverride(shipmentBranch, salesBranch) {
+      if (!salesBranch) {
+        state.manualOverrides[shipmentBranch] = null;
+        if (state.branchMappings[shipmentBranch]) {
+          state.branchMappings[shipmentBranch] = { salesBranch: null, score: 0, manual: true };
+        }
+      } else {
+        state.manualOverrides[shipmentBranch] = salesBranch;
+        state.branchMappings[shipmentBranch] = { salesBranch: salesBranch, score: 1, manual: true };
+      }
+      saveToLocalStorage();
+      renderAllViews();
+      showToast('تطبیق دستی با موفقیت ذخیره شد');
+    }
+
+    function recalculateBranchMapping() {
+      // پاک کردن دستی‌ها
+      state.manualOverrides = {};
+      state.branchMappings = {};
+      buildBranchMapping();
+      saveToLocalStorage();
+      renderAllViews();
+      showToast('تطبیق‌ها بر اساس الگوریتم هوشمند مجدداً محاسبه شد');
+    }
+
+    function resetManualOverrides() {
+      customConfirm('بازنشانی تطبیق‌های دستی', 'آیا از حذف تمام تطبیق‌های دستی اطمینان دارید؟', () => {
+        state.manualOverrides = {};
+        buildBranchMapping();
+        saveToLocalStorage();
+        renderAllViews();
+        showToast('تطبیق‌های دستی بازنشانی شد');
+      });
+    }
+
+    function onThresholdChange(val) {
+      const v = parseFloat(val);
+      if (isNaN(v) || v < 0 || v > 1) {
+        showToast('آستانه باید بین ۰ و ۱ باشد', 'error');
+        return;
+      }
+      state.mappingThreshold = v;
+      // حفظ دستی‌ها، محاسبه مجدد بقیه
+      const manual = { ...state.manualOverrides };
+      state.branchMappings = {};
+      buildBranchMapping();
+      state.manualOverrides = manual;
+      saveToLocalStorage();
+      renderAllViews();
+      showToast(`آستانه تطبیق به ${Math.round(v * 100)}٪ تنظیم شد`);
+    }
+
+    // ============ خروجی و پاکسازی ============
     function exportReconciliationExcel() {
       const data = buildReconciliationData();
       if (data.length === 0) {
@@ -1654,7 +2057,7 @@
         return;
       }
       const wsData = [
-        ['سال', 'ماه', 'شهر (فروشگاه مرکزی)', 'نام شعبه', 'نام کالا', 'بارکد', 'تعداد ارسال حواله', 'تعداد فروش قطعی', 'مانده دپو', 'درصد تحقق', 'وضعیت تحلیل']
+        ['سال', 'ماه', 'شهر (فروشگاه مرکزی)', 'نام شعبه (یکتا شده)', 'نام کالا', 'بارکد', 'تعداد ارسال حواله', 'تعداد فروش قطعی', 'مانده دپو', 'درصد تحقق', 'وضعیت تحلیل']
       ];
       data.forEach(r => {
         wsData.push([r.year, r.month, r.city, r.branch, r.productName, r.barcode, r.shipped, r.sold, r.remain, `${r.sellThrough}%`, r.status]);
@@ -1670,6 +2073,8 @@
       customConfirm('پاکسازی کل داده‌ها', 'آیا از حذف تمام اطلاعات حواله‌ها، فروش‌های ثبت‌شده و تنظیمات اطمینان دارید؟', () => {
         state.analysisData = [];
         state.warehouseShipments = [];
+        state.branchMappings = {};
+        state.manualOverrides = {};
         selectedYear = 'all';
         selectedMonth = 'all';
         saveToLocalStorage();
@@ -1678,9 +2083,13 @@
       });
     }
 
-    // ============ شروع برنامه ============
+    // ============ شروع ============
     document.addEventListener('DOMContentLoaded', () => {
       loadFromLocalStorage();
+
+      const threshInput = document.getElementById('mapping-threshold');
+      if (threshInput) threshInput.value = state.mappingThreshold;
+
       renderAllViews();
     });
   </script>
